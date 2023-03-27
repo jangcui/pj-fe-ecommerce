@@ -3,7 +3,13 @@ import Home from '~/pages/Home'
 import Products from '~/pages/Products'
 import Some from '~/pages/Some'
 
-const publicRouter = [
+interface Route {
+   path: string
+   component: React.ComponentType<any>
+   layout?: React.ComponentType<any> | null
+}
+
+const publicRouter: Route[] = [
    { path: config.routes.home, component: Home },
    { path: config.routes.products, component: Products },
    { path: config.routes.some, component: Some, layout: null },

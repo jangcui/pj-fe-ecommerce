@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { publicRouter } from './routes/routes'
-import { Fragment, FC } from 'react'
+import { Fragment, ComponentType } from 'react'
 import DefaultLayout from './layouts/DefaultLayout'
 
-const App: FC = () => {
+function App() {
    return (
       <>
          <Router>
@@ -11,20 +11,21 @@ const App: FC = () => {
                <Routes>
                   {publicRouter.map((route, i) => {
                      const Page = route.component
-                     let Layout = DefaultLayout
-                     if (route.layout) {
-                        Layout = route.layout
-                     } else if (route.layout === null) {
+                     let Layout: ComponentType<any> = DefaultLayout
+                     if (route.layout === null) {
                         Layout = Fragment
+                     } else if (route.layout) {
+                        Layout = route.layout
                      }
-
                      return (
                         <Route
                            key={i}
                            path={route.path}
                            element={
                               <>
-                                 <Page />
+                                 <Layout>
+                                    <Page />
+                                 </Layout>
                               </>
                            }
                         />

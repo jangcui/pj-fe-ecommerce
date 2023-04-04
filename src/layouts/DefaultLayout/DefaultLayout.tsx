@@ -5,7 +5,6 @@ const cx = classNames.bind(styles)
 
 import Header from '../components/Header'
 import Footer from '../components/Footer/Footer'
-import Sidebar from '../components/Sidebar/Sidebar'
 
 function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
    return (

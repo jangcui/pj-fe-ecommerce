@@ -3,9 +3,23 @@ import styles from './Header.module.scss'
 import { CompareIcon, DropIcon, FilterIcon, LikeIcon, SearchIcon, UserIcon } from '~/components/Icon'
 import images from '~/assets/images'
 import Image from '~/components/Image'
+import { useEffect, useState } from 'react'
 const cx = classNames.bind(styles)
 
 function Header() {
+   const [isScroll, setIsScroll] = useState(false)
+   useEffect(() => {
+      window.scrollTo(0, 50)
+   }, [])
+   useEffect(() => {
+      const onScroll = () => {
+         window.pageYOffset >= 100 ? setIsScroll(true) : setIsScroll(false)
+      }
+      window.removeEventListener('scroll', onScroll)
+      window.addEventListener('scroll', onScroll, { passive: true })
+      return () => window.removeEventListener('scroll', onScroll)
+   }, [])
+
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container')}>
@@ -15,7 +29,7 @@ function Header() {
                   <span>Hotline: +84 84 666 9107</span>
                </div>
             </div>
-            <div className={cx('content')}>
+            <div className={cx('content', isScroll && 'fixed')}>
                <div className={cx('content-main')}>
                   <div className={cx('trademark')}>
                      <h1>Digitic.</h1>
@@ -55,10 +69,10 @@ function Header() {
                      <DropIcon width={'10px'} height={'10px'} className={cx('drop-icon')} />
                   </div>
                   <div className={cx('menu-option')}>
-                     <span>home</span>
-                     <span>our store</span>
-                     <span>blogs</span>
-                     <span>contact</span>
+                     <p>home</p>
+                     <p>our store</p>
+                     <p>blogs</p>
+                     <p>contact</p>
                   </div>
                </div>
             </div>

@@ -2,6 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './Footer.module.scss'
 import Image from '~/components/Image'
 import images from '~/assets/images'
+import Marquee from 'react-fast-marquee'
 import { FaceBookIcon, GitHubIcon, GmailIcon } from '~/components/Icon'
 import { Link } from 'react-router-dom'
 const cx = classNames.bind(styles)
@@ -12,8 +13,10 @@ function Footer() {
          <div className={cx('container')}>
             <div className={cx('logo')}>
                <div className={cx('wrap-logo')}>
-                  <Image src={images.logo} className={cx('img')} />
-                  <h1>Digitic.</h1>
+                  <Marquee gradientWidth={0} className={cx('marquee')} direction="right">
+                     <Image src={images.logo} className={cx('img')} />
+                     <h1>Digitic.</h1>
+                  </Marquee>
                </div>
                <div className={cx('wrap-icon')}>
                   <Link to="https://github.com/jangcui?tab=repositories">

@@ -14,6 +14,8 @@
       .logo {
          color: #f3bd69;
          margin-top: 12px;
+         width: 200px;
+         overflow: hidden;
 
          .wrap-icon {
             display: flex;
@@ -24,7 +26,11 @@
             display: flex;
             align-items: flex-end;
             border-bottom: 1px solid #ccc;
+            width: 400px;
 
+            .marquee {
+               width: 100%;
+            }
             .img {
                width: 66px;
                height: 66px;

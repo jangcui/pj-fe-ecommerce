@@ -1,0 +1,54 @@
+.wrapper {
+   background-color: #ffffff;
+   color: #000;
+   padding: 16px 14px;
+   width: 100%;
+
+   .container {
+      border-radius: 6px;
+      cursor: pointer;
+      overflow: hidden;
+
+      &:hover .img {
+         transform: scale(1.03);
+         transition: all 0.2s;
+      }
+
+      .img {
+         transition: all 0.5s;
+      }
+      .date {
+         color: #91969b;
+         font-size: 14px;
+         margin: 8px 0;
+      }
+      .title {
+         word-break: break-word;
+         text-overflow: ellipsis;
+         overflow: hidden;
+         white-space: nowrap;
+         margin: 8px 0;
+      }
+      .content {
+         word-break: break-all;
+         text-overflow: ellipsis;
+         overflow: hidden;
+         line-height: 24px;
+         word-spacing: 4px;
+         text-transform: capitalize;
+         color: #777777;
+         display: -webkit-box;
+         -webkit-box-orient: vertical;
+         -webkit-line-clamp: 4;
+         margin: 8px 0;
+      }
+      .btn {
+         background-color: var(--text-color);
+         color: #fff;
+         padding: 8px 16px;
+         margin: 8px 0;
+         border-radius: 14px;
+         font-size: 16px;
+      }
+   }
+}

@@ -1,0 +1,123 @@
+.wrapper {
+   background-color: #ffffff;
+   color: #000;
+   width: 100%;
+
+   .container {
+      position: relative;
+      padding: 16px 14px;
+      overflow: hidden;
+      z-index: 2;
+      transition: all 0.2s;
+
+      .wrap-button {
+         position: absolute;
+         bottom: 0;
+         right: 0;
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+         padding: 16px 14px;
+         visibility: hidden;
+         opacity: 0;
+         transition: all 0.2s;
+
+         .buy {
+            background-color: #dd551b;
+         }
+         .add {
+            background-color: #232f3e;
+         }
+         button {
+            padding: 12px 10px;
+            font-size: 16px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 10px;
+
+            &:hover {
+               opacity: 0.8;
+            }
+         }
+      }
+
+      &:hover .collection-img {
+         transform: scale(1.04);
+      }
+      &:hover .wrap-button {
+         visibility: unset;
+         opacity: 1;
+         transition: all 0.2s;
+      }
+      &:hover::before {
+         content: '';
+         position: absolute;
+         border-radius: 6px;
+         top: 0;
+         right: 0;
+         bottom: 0;
+         left: 0;
+         border: 1px solid #dd551b;
+      }
+      .collection-img {
+         width: 100%;
+         transition: all 0.2s;
+      }
+      .collection-info {
+         margin-top: 12px;
+
+         .slug {
+            display: flex;
+            margin-top: 14px;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-inline: 4px;
+
+            p {
+               color: var(--slug-color);
+            }
+         }
+         .title {
+            margin-top: 12px;
+            font-size: 32px;
+            font-weight: 600;
+         }
+         .description {
+            word-break: break-word;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+            max-width: 200px;
+            white-space: nowrap;
+            color: #545252bd;
+         }
+
+         .price {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            p {
+               margin-left: 4px;
+               font-weight: 700;
+               color: #cb1c22;
+               line-height: normal;
+            }
+         }
+         .sold {
+            margin-top: 12px;
+            color: #a7a7b1;
+            line-height: 16px;
+            font-size: 14px;
+         }
+         .rating {
+            margin-top: 12px;
+         }
+      }
+      &:hover {
+         cursor: pointer;
+      }
+   }
+}

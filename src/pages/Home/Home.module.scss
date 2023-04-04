@@ -1,5 +1,41 @@
 .wrapper {
-   width: 100%;
-   height: 100vh;
    display: flex;
+   width: 100%;
+   align-items: center;
+   flex-direction: column;
+   padding: 10px 0px;
+   // background-color: #f8f9fa;
+   background-color: #f8f9fa;
+
+   h1 {
+      color: var(--text-color);
+      margin: 8px 0;
+   }
+   section {
+      margin-bottom: 50px;
+   }
+   .container {
+      max-width: 80%;
+
+      .marquee {
+         padding: 25px 0;
+         border-radius: 6px;
+      }
+
+      .collection {
+         display: grid;
+         grid-template-columns: repeat(5, 1fr);
+      }
+      .special {
+         display: grid;
+         grid-template-columns: repeat(3, 1fr);
+         grid-gap: 10px;
+      }
+      .blogs {
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         grid-row-gap: 20px;
+         grid-column-gap: 10px;
+      }
+   }
 }

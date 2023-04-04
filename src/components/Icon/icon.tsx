@@ -2,6 +2,7 @@ type props = {
    width?: string
    height?: string
    className?: string
+   style?: React.CSSProperties
 }
 
 export const SearchIcon = ({ width = '24px', height = '24px', className }: props) => (
@@ -144,6 +145,54 @@ export const FaceBookIcon = ({ width = '24px', height = '24px', className }: pro
       ></path>
    </svg>
 )
+
+// export const StarIcon = ({ width = '24px', height = '24px', className, style }: props) => (
+//    <svg
+//       className={className}
+//       width={width}
+//       height={height}
+//       id="Layer_1"
+//       style={{ backgroundColor: 'white', ...style }}
+//       version="1.1"
+//       viewBox="0 0 512 512"
+//       xmlns="http://www.w3.org/2000/svg"
+//    >
+//       <path d="M480,207H308.6L256,47.9L203.4,207H32l140.2,97.9L117.6,464L256,365.4L394.4,464l-54.7-159.1L480,207z M362.6,421.2  l-106.6-76l-106.6,76L192,298.7L84,224h131l41-123.3L297,224h131l-108,74.6L362.6,421.2z" />
+//    </svg>
+// )
+export const StarIcon = ({ width = '24px', height = '24px', className }: props) => (
+   <svg className={className} width={width} height={height} viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" fillRule="evenodd">
+         <path
+            d="M30.757 1.144 38.2 16.948a1.968 1.968 0 0 0 1.475 1.123l16.644 2.534a2.08 2.08 0 0 1 1.086 3.502L45.362 36.408a2.115 2.115 0 0 0-.563 1.818l2.843 17.37a1.98 1.98 0 0 1-2.843 2.164l-14.887-8.201a1.88 1.88 0 0 0-1.824 0l-14.887 8.2a1.98 1.98 0 0 1-2.843-2.163l2.843-17.37a2.115 2.115 0 0 0-.563-1.818L.594 24.107a2.08 2.08 0 0 1 1.086-3.502l16.644-2.534a1.968 1.968 0 0 0 1.475-1.123l7.444-15.804a1.92 1.92 0 0 1 3.514 0Z"
+            fill="#000000"
+            className="fill-f6ab27"
+         ></path>
+         <path
+            d="M17.148 38.872a6.124 6.124 0 0 0-1.654-5.264L6.07 23.983l12.857-1.957a5.966 5.966 0 0 0 4.49-3.37L29 6.802l5.581 11.85a5.969 5.969 0 0 0 4.492 3.374l12.857 1.957-9.426 9.627a6.125 6.125 0 0 0-1.652 5.264l2.184 13.348-11.194-6.167a5.88 5.88 0 0 0-5.683 0l-11.195 6.167 2.184-13.35Z"
+            fill="#ffffff"
+            className="fill-f4cd1e"
+         ></path>
+      </g>
+   </svg>
+)
+export const StarActiveIcon = ({ width = '24px', height = '24px', className }: props) => (
+   <svg className={className} width={width} height={height} viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" fillRule="evenodd">
+         <path
+            d="M30.757 1.144 38.2 16.948a1.968 1.968 0 0 0 1.475 1.123l16.644 2.534a2.08 2.08 0 0 1 1.086 3.502L45.362 36.408a2.115 2.115 0 0 0-.563 1.818l2.843 17.37a1.98 1.98 0 0 1-2.843 2.164l-14.887-8.201a1.88 1.88 0 0 0-1.824 0l-14.887 8.2a1.98 1.98 0 0 1-2.843-2.163l2.843-17.37a2.115 2.115 0 0 0-.563-1.818L.594 24.107a2.08 2.08 0 0 1 1.086-3.502l16.644-2.534a1.968 1.968 0 0 0 1.475-1.123l7.444-15.804a1.92 1.92 0 0 1 3.514 0Z"
+            fill="#ffb300"
+            className="fill-f6ab27"
+         ></path>
+         <path
+            d="M17.148 38.872a6.124 6.124 0 0 0-1.654-5.264L6.07 23.983l12.857-1.957a5.966 5.966 0 0 0 4.49-3.37L29 6.802l5.581 11.85a5.969 5.969 0 0 0 4.492 3.374l12.857 1.957-9.426 9.627a6.125 6.125 0 0 0-1.652 5.264l2.184 13.348-11.194-6.167a5.88 5.88 0 0 0-5.683 0l-11.195 6.167 2.184-13.35Z"
+            fill="#ffb300"
+            className="fill-f4cd1e"
+         ></path>
+      </g>
+   </svg>
+)
+
 export const GmailIcon = ({ width = '24px', height = '24px', className }: props) => (
    <svg
       className={className}
@@ -178,5 +227,59 @@ export const GmailIcon = ({ width = '24px', height = '24px', className }: props)
          d="M24.3872 12.5568C27.2336 12.5568 29.7894 13.5155 31.7987 15.3982L37.3595 9.94866C34.0018 6.88281 29.6131 5 24.3872 5C16.8082 5 10.2517 9.25777 7.06152 15.4674L13.5388 20.39C15.0633 15.8991 19.3375 12.5568 24.3872 12.5568Z"
          fill="#EA4335"
       ></path>
+   </svg>
+)
+export const LikeIconActive = ({ width = '24px', height = '24px', className }: props) => (
+   <svg
+      width={width}
+      className={className}
+      height={height}
+      data-e2e=""
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+   >
+      <g clipPath="url(#HeartFill_clip0)">
+         <g filter="url(#HeartFill_filter0_d)">
+            <path
+               fillRule="evenodd"
+               clipRule="evenodd"
+               d="M7.5 2.25C10.5 2.25 12 4.25 12 4.25C12 4.25 13.5 2.25 16.5 2.25C20 2.25 22.5 4.99999 22.5 8.5C22.5 12.5 19.2311 16.0657 16.25 18.75C14.4095 20.4072 13 21.5 12 21.5C11 21.5 9.55051 20.3989 7.75 18.75C4.81949 16.0662 1.5 12.5 1.5 8.5C1.5 4.99999 4 2.25 7.5 2.25Z"
+            ></path>
+         </g>
+         <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M2.40179 12.1998C3.58902 14.6966 5.7592 16.9269 7.74989 18.75C9.5504 20.3989 10.9999 21.5 11.9999 21.5C12.9999 21.5 14.4094 20.4072 16.2499 18.75C19.231 16.0657 22.4999 12.5 22.4999 8.49997C22.4999 8.41258 22.4983 8.32566 22.4952 8.23923C20.5671 13.6619 13.6787 18.5 11.75 18.5C10.3127 18.5 5.61087 15.8131 2.40179 12.1998Z"
+            fillOpacity="0.03"
+         ></path>
+      </g>
+      <defs>
+         <filter
+            id="HeartFill_filter0_d"
+            x="-0.9"
+            y="1.05"
+            width="25.8"
+            height="24.05"
+            filterUnits="userSpaceOnUse"
+            colorInterpolationFilters="sRGB"
+         >
+            <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
+            <feColorMatrix
+               in="SourceAlpha"
+               type="matrix"
+               values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+               result="hardAlpha"
+            ></feColorMatrix>
+            <feOffset dy="1.2"></feOffset>
+            <feGaussianBlur stdDeviation="1.2"></feGaussianBlur>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"></feColorMatrix>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
+         </filter>
+         <clipPath id="HeartFill_clip0">
+            <rect width="24" height="24" fill="white"></rect>
+         </clipPath>
+      </defs>
    </svg>
 )

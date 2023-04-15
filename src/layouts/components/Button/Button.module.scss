@@ -1,0 +1,49 @@
+.wrapper {
+   display: inline-flex;
+   align-items: center;
+   color: currentcolor;
+   justify-content: center;
+   cursor: pointer;
+   background-color: var(--white);
+   border-radius: 4px;
+   border: 1px solid transparent;
+   user-select: none;
+
+   &.disable {
+      pointer-events: none;
+      opacity: 0.5;
+   }
+}
+.primary {
+   background-color: #232f3e;
+   cursor: pointer;
+   color: var(--white);
+   border-radius: 16px;
+}
+.secondary {
+   cursor: pointer;
+   color: var(--white);
+   border-radius: 8px;
+   background-color: #dd551b;
+}
+.text {
+   border: unset;
+   text-decoration: none;
+   background-color: transparent;
+   color: #000;
+   cursor: pointer;
+}
+.title {
+   display: flex;
+   align-items: center;
+}
+.icon + .title,
+.title + .icon {
+   margin: 0 4px;
+}
+
+.icon {
+   display: flex;
+   text-align: center;
+   align-items: center;
+}

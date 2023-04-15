@@ -1,0 +1,119 @@
+.wrapper {
+   padding: 16px 30px;
+   padding-bottom: unset;
+   width: 100%;
+
+   .section {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-color-gray);
+      display: flex;
+      justify-content: space-between;
+      row-gap: 20px;
+
+      .block {
+         width: calc(50% - 12px);
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+
+         .quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .btn-delete {
+               &:hover {
+                  color: var(--slug-color);
+               }
+            }
+            .btn-counter {
+               background-color: var(--white);
+               padding: 6px 10px;
+               display: flex;
+               gap: 10px;
+               align-items: center;
+
+               p {
+                  color: var(--text-color);
+                  font-size: 16px;
+                  margin-right: 4px;
+               }
+               span {
+                  display: flex;
+                  flex-direction: column;
+                  row-gap: 6px;
+
+                  .icon-btn {
+                     opacity: 0.9;
+                     border: 1px solid var(--text-color);
+                     padding: 4px;
+                     &:hover {
+                        opacity: 1;
+                     }
+                  }
+               }
+            }
+         }
+         .product-detail {
+            display: flex;
+
+            .info {
+               display: flex;
+               justify-content: flex-start;
+               align-items: center;
+               column-gap: 12px;
+
+               .content {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+
+                  p {
+                     font-size: 14px;
+                     flex: 1;
+                     color: var(--text-gray);
+                     margin: 4px 0;
+                  }
+               }
+            }
+
+            .img {
+               width: 100px;
+            }
+         }
+         .price {
+            font-weight: 600;
+         }
+      }
+
+      .country {
+         padding-left: 30px;
+         margin-top: 30px;
+      }
+      .btn-foot {
+         padding: 12px 20px;
+         border-radius: 30px;
+         margin-bottom: 20px;
+      }
+      .text-foot {
+         color: var(--text-gray);
+         font-size: 12px;
+         margin: 16px 0;
+
+         span {
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 4px;
+            color: var(--text-color);
+         }
+      }
+      .sum {
+         margin-top: 50px;
+         text-align: end;
+
+         .btn-foot {
+            width: 100%;
+         }
+      }
+   }
+}

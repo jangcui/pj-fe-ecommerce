@@ -3,9 +3,8 @@
    width: 100%;
    align-items: center;
    flex-direction: column;
+   justify-content: space-between;
    padding: 10px 0px;
-   // background-color: #f8f9fa;
-   background-color: #f8f9fa;
 
    h1 {
       color: var(--text-color);
@@ -15,7 +14,7 @@
       margin-bottom: 50px;
    }
    .container {
-      max-width: 80%;
+      width: 80%;
 
       .marquee {
          padding: 25px 0;

@@ -4,6 +4,9 @@ import { CompareIcon, DropIcon, FilterIcon, LikeIcon, SearchIcon, UserIcon } fro
 import images from '~/assets/images'
 import Image from '~/components/Image'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import config from '~/config/config'
+import Button from '../Button/Button'
 const cx = classNames.bind(styles)
 
 function Header() {
@@ -32,27 +35,31 @@ function Header() {
             <div className={cx('content', isScroll && 'fixed')}>
                <div className={cx('content-main')}>
                   <div className={cx('trademark')}>
-                     <h1>Digitic.</h1>
+                     <Button text to={config.routes.home}>
+                        <h1 className={cx('logo')}>Digitic.</h1>
+                     </Button>
                   </div>
                   <div className={cx('input-form')}>
                      <input type="text" placeholder={'Search products hear ...'} />
                      <SearchIcon className={cx('icon-search')} />
                   </div>
                   <div className={cx('option-wrapper')}>
-                     <div className={cx('option')}>
+                     <Button text to={config.routes.compare} className={cx('option')}>
                         <CompareIcon width={'46px'} height={'46px'} className={cx('icon-option')} />{' '}
                         <p>Compare Products</p>
-                     </div>
-                     <div className={cx('option')}>
+                     </Button>
+                     <Button text to={config.routes.wishlist} className={cx('option')}>
                         <LikeIcon width={'46px'} height={'46px'} className={cx('icon-option')} />{' '}
-                        <p>Favourite Wishlist </p>
-                     </div>
-                     <div className={cx('option')}>
+                        <p>Favorite Wishlist </p>
+                     </Button>
+                     <Button text to={config.routes.login} className={cx('option')}>
                         <UserIcon width={'46px'} height={'46px'} className={cx('icon-option')} />{' '}
                         <p>Log In My Account</p>
-                     </div>
+                     </Button>
                      <div className={cx('option')}>
-                        <Image src={images.logo} className={cx('img')} />
+                        <Link to={config.routes.cart}>
+                           <Image src={images.logo} className={cx('img')} />
+                        </Link>
                         <div className={cx('option-content')}>
                            <span className={cx('quantity')}>20</span>
                            <span className={cx('total')}>$300</span>
@@ -62,17 +69,27 @@ function Header() {
                </div>
             </div>
             <div className={cx('menu')}>
-               <div className={cx('menu-main')}>
-                  <div className={cx('menu-drop')}>
-                     <FilterIcon />
-                     <p>SHOP CATEGORIES</p>
-                     <DropIcon width={'10px'} height={'10px'} className={cx('drop-icon')} />
-                  </div>
+               <div className={cx('menu-container')}>
+                  <Button
+                     leftIcon={<FilterIcon />}
+                     rightIcon={<DropIcon width={'14px'} height={'14px'} />}
+                     className={cx('menu-drop')}
+                  >
+                     SHOP CATEGORIES
+                  </Button>
                   <div className={cx('menu-option')}>
-                     <p>home</p>
-                     <p>our store</p>
-                     <p>blogs</p>
-                     <p>contact</p>
+                     <Button text className={cx('btn')} to={config.routes.home}>
+                        home
+                     </Button>
+                     <Button text className={cx('btn')} to={config.routes.store}>
+                        our store
+                     </Button>
+                     <Button text className={cx('btn')} to={config.routes.blogs}>
+                        blogs
+                     </Button>
+                     <Button text className={cx('btn')} to={config.routes.contact}>
+                        contact
+                     </Button>
                   </div>
                </div>
             </div>

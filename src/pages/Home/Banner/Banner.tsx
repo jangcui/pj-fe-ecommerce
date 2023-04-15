@@ -3,7 +3,6 @@ import styles from './Banner.module.scss'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import Image from '~/components/Image/Image'
-import { useEffect, useState } from 'react'
 import 'swiper/css/bundle'
 
 const cx = classNames.bind(styles)

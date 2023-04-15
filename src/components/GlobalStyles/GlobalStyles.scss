@@ -3,13 +3,17 @@
 
 :root {
    --text-color: #3b4149;
+   --border-color-gray: #d6d6d6;
+   --text-gray: #99a2aa;
+   --gray: #524b4b;
    --black: #161823;
    --bg-header: #131921;
-   --white: #fff;
+   --white: #ffff;
    --font-family: 'Roboto', sans-serif;
    --default-layout-width: 1150px;
-
+   --orange-color: #f3bd69;
    --slug-color: #dd551b;
+   --bg-color: #f8f9fa;
 }
 
 * {
@@ -53,12 +57,12 @@ html *::-webkit-scrollbar-track {
 button,
 textarea,
 input,
-[tabIndex] {
+Link [tabIndex] {
    border: none;
    outline: none;
 }
 
 a[href] {
+   border: none;
    text-decoration: none;
-   color: var(--text-color);
 }

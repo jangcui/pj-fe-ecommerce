@@ -2,6 +2,7 @@ import classNames from 'classnames/bind'
 import { StarRating } from 'star-rating-react-ts'
 import styles from './SpecialProducts.module.scss'
 import Image from '~/components/Image/Image'
+import Button from '~/layouts/components/Button/Button'
 
 const cx = classNames.bind(styles)
 
@@ -46,7 +47,9 @@ function SpecialProducts() {
                      </div>
                   </div>
                </div>
-               <button className={cx('btn')}>Add to cart</button>
+               <Button primary className={cx('btn')}>
+                  Add to cart
+               </Button>
             </div>
          </div>
       </div>

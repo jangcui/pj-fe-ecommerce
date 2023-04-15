@@ -94,23 +94,7 @@ export const FilterIcon = ({ width = '24px', height = '24px', className }: props
       </g>
    </svg>
 )
-export const DropIcon = ({ width = '24px', height = '24px', className }: props) => (
-   <svg
-      className={className}
-      width={width}
-      height={height}
-      aria-hidden="true"
-      focusable="false"
-      role="img"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 384 512"
-   >
-      <path
-         fill="currentColor"
-         d="M361 215C375.3 223.8 384 239.3 384 256C384 272.7 375.3 288.2 361 296.1L73.03 472.1C58.21 482 39.66 482.4 24.52 473.9C9.377 465.4 0 449.4 0 432V80C0 62.64 9.377 46.63 24.52 38.13C39.66 29.64 58.21 29.99 73.03 39.04L361 215z"
-      ></path>
-   </svg>
-)
+
 export const GitHubIcon = ({ width = '24px', height = '24px', className }: props) => (
    <svg
       className={className}
@@ -145,6 +129,46 @@ export const FaceBookIcon = ({ width = '24px', height = '24px', className }: pro
       ></path>
    </svg>
 )
+export const PlusIcon = ({ width = '16px', height = '16px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      enableBackground="new 0 0 10 10"
+      viewBox="0 0 10 10"
+      x="0"
+      y="0"
+   >
+      <polygon points="10 4.5 5.5 4.5 5.5 0 4.5 0 4.5 4.5 0 4.5 0 5.5 4.5 5.5 4.5 10 5.5 10 5.5 5.5 10 5.5"></polygon>
+   </svg>
+)
+export const MinusIcon = ({ width = '16px', height = '16px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      enableBackground="new 0 0 10 10"
+      viewBox="0 0 10 10"
+      x="0"
+      y="0"
+   >
+      <polygon points="4.5 4.5 3.5 4.5 0 4.5 0 5.5 3.5 5.5 4.5 5.5 10 5.5 10 4.5"></polygon>
+   </svg>
+)
+export const DeleteIcon = ({ width = '20px', height = '20px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      stroke="currentColor"
+      fill="currentColor"
+      strokeWidth="0"
+      viewBox="0 0 1024 1024"
+      xmlns="http://www.w3.org/2000/svg"
+   >
+      <path d="M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zm-200 0H360v-72h304v72z"></path>
+   </svg>
+)
 
 // export const StarIcon = ({ width = '24px', height = '24px', className, style }: props) => (
 //    <svg
@@ -170,29 +194,87 @@ export const StarIcon = ({ width = '24px', height = '24px', className }: props) 
          ></path>
          <path
             d="M17.148 38.872a6.124 6.124 0 0 0-1.654-5.264L6.07 23.983l12.857-1.957a5.966 5.966 0 0 0 4.49-3.37L29 6.802l5.581 11.85a5.969 5.969 0 0 0 4.492 3.374l12.857 1.957-9.426 9.627a6.125 6.125 0 0 0-1.652 5.264l2.184 13.348-11.194-6.167a5.88 5.88 0 0 0-5.683 0l-11.195 6.167 2.184-13.35Z"
-            fill="#ffffff"
-            className="fill-f4cd1e"
-         ></path>
-      </g>
-   </svg>
-)
-export const StarActiveIcon = ({ width = '24px', height = '24px', className }: props) => (
-   <svg className={className} width={width} height={height} viewBox="0 0 58 58" xmlns="http://www.w3.org/2000/svg">
-      <g fill="none" fillRule="evenodd">
-         <path
-            d="M30.757 1.144 38.2 16.948a1.968 1.968 0 0 0 1.475 1.123l16.644 2.534a2.08 2.08 0 0 1 1.086 3.502L45.362 36.408a2.115 2.115 0 0 0-.563 1.818l2.843 17.37a1.98 1.98 0 0 1-2.843 2.164l-14.887-8.201a1.88 1.88 0 0 0-1.824 0l-14.887 8.2a1.98 1.98 0 0 1-2.843-2.163l2.843-17.37a2.115 2.115 0 0 0-.563-1.818L.594 24.107a2.08 2.08 0 0 1 1.086-3.502l16.644-2.534a1.968 1.968 0 0 0 1.475-1.123l7.444-15.804a1.92 1.92 0 0 1 3.514 0Z"
-            fill="#ffb300"
-            className="fill-f6ab27"
-         ></path>
-         <path
-            d="M17.148 38.872a6.124 6.124 0 0 0-1.654-5.264L6.07 23.983l12.857-1.957a5.966 5.966 0 0 0 4.49-3.37L29 6.802l5.581 11.85a5.969 5.969 0 0 0 4.492 3.374l12.857 1.957-9.426 9.627a6.125 6.125 0 0 0-1.652 5.264l2.184 13.348-11.194-6.167a5.88 5.88 0 0 0-5.683 0l-11.195 6.167 2.184-13.35Z"
-            fill="#ffb300"
+            fill="var(--white)fff"
             className="fill-f4cd1e"
          ></path>
       </g>
    </svg>
 )
 
+export const DropIcon = ({ width = '16px', height = '16px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 448 512"
+   >
+      <path d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"></path>
+   </svg>
+)
+export const Sort1Icon = ({ width = '18px', height = '18px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="list-ul"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+   >
+      <path
+         fill="currentColor"
+         d="M64 144a48 48 0 1 0 0-96 48 48 0 1 0 0 96zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm48-208a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"
+         className=""
+      ></path>
+   </svg>
+)
+
+export const Sort2Icon = ({ width = '18px', height = '18px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="grid-2"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+   >
+      <path
+         fill="currentColor"
+         d="M224 80c0-26.5-21.5-48-48-48H80C53.5 32 32 53.5 32 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80zm0 256c0-26.5-21.5-48-48-48H80c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336zM288 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z"
+         className=""
+      ></path>
+   </svg>
+)
+
+export const Sort3Icon = ({ width = '18px', height = '18px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="grid"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 448 512"
+   >
+      <path
+         fill="currentColor"
+         d="M0 72C0 49.9 17.9 32 40 32H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V72zM0 232c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V232zM128 392v48c0 22.1-17.9 40-40 40H40c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40H88c22.1 0 40 17.9 40 40zM160 72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V72zM288 232v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM160 392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H200c-22.1 0-40-17.9-40-40V392zM448 72v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V72c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40zM320 232c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V232zM448 392v48c0 22.1-17.9 40-40 40H360c-22.1 0-40-17.9-40-40V392c0-22.1 17.9-40 40-40h48c22.1 0 40 17.9 40 40z"
+         className=""
+      ></path>
+   </svg>
+)
 export const GmailIcon = ({ width = '24px', height = '24px', className }: props) => (
    <svg
       className={className}
@@ -226,6 +308,78 @@ export const GmailIcon = ({ width = '24px', height = '24px', className }: props)
          clipRule="evenodd"
          d="M24.3872 12.5568C27.2336 12.5568 29.7894 13.5155 31.7987 15.3982L37.3595 9.94866C34.0018 6.88281 29.6131 5 24.3872 5C16.8082 5 10.2517 9.25777 7.06152 15.4674L13.5388 20.39C15.0633 15.8991 19.3375 12.5568 24.3872 12.5568Z"
          fill="#EA4335"
+      ></path>
+   </svg>
+)
+export const CloseIcon = ({ width = '24px', height = '24px', className }: props) => (
+   <svg
+      className={className}
+      width={width}
+      height={height}
+      viewBox="0 0 48 48"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+   >
+      <path
+         fillRule="evenodd"
+         clipRule="evenodd"
+         d="M21.1718 23.9999L10.2931 13.1212C9.90261 12.7307 9.90261 12.0975 10.2931 11.707L11.7074 10.2928C12.0979 9.90228 12.731 9.90228 13.1216 10.2928L24.0002 21.1715L34.8789 10.2928C35.2694 9.90228 35.9026 9.90228 36.2931 10.2928L37.7073 11.707C38.0979 12.0975 38.0979 12.7307 37.7073 13.1212L26.8287 23.9999L37.7073 34.8786C38.0979 35.2691 38.0979 35.9023 37.7073 36.2928L36.2931 37.707C35.9026 38.0975 35.2694 38.0975 34.8789 37.707L24.0002 26.8283L13.1216 37.707C12.731 38.0975 12.0979 38.0975 11.7074 37.707L10.2931 36.2928C9.90261 35.9023 9.90261 35.2691 10.2931 34.8786L21.1718 23.9999Z"
+      ></path>
+   </svg>
+)
+export const EyeSlashIcon = ({ width = '20px', height = '20px', className }: props) => (
+   <svg
+      width={width}
+      height={height}
+      className={className}
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="far"
+      data-icon="eye-slash"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 640 512"
+   >
+      <path
+         fill="currentColor"
+         d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zm151 118.3C226 97.7 269.5 80 320 80c65.2 0 118.8 29.6 159.9 67.7C518.4 183.5 545 226 558.6 256c-12.6 28-36.6 66.8-70.9 100.9l-53.8-42.2c9.1-17.6 14.2-37.5 14.2-58.7c0-70.7-57.3-128-128-128c-32.2 0-61.7 11.9-84.2 31.5l-46.1-36.1zM394.9 284.2l-81.5-63.9c4.2-8.5 6.6-18.2 6.6-28.3c0-5.5-.7-10.9-2-16c.7 0 1.3 0 2 0c44.2 0 80 35.8 80 80c0 9.9-1.8 19.4-5.1 28.2zm9.4 130.3C378.8 425.4 350.7 432 320 432c-65.2 0-118.8-29.6-159.9-67.7C121.6 328.5 95 286 81.4 256c8.3-18.4 21.5-41.5 39.4-64.8L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5l-41.9-33zM192 256c0 70.7 57.3 128 128 128c13.3 0 26.1-2 38.2-5.8L302 334c-23.5-5.4-43.1-21.2-53.7-42.3l-56.1-44.2c-.2 2.8-.3 5.6-.3 8.5z"
+      ></path>
+   </svg>
+)
+export const EyeIcon = ({ width = '20px', height = '20px', className }: props) => (
+   <svg
+      width={width}
+      height={height}
+      className={className}
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="eye"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 576 512"
+   >
+      <path
+         fill="currentColor"
+         d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+      ></path>
+   </svg>
+)
+
+export const ArrowBackIcon = ({ width = '20px', height = '20px', className }: props) => (
+   <svg
+      width={width}
+      height={height}
+      className={className}
+      stroke="currentColor"
+      fill="currentColor"
+      strokeWidth="0"
+      viewBox="0 0 16 16"
+      xmlns="http://www.w3.org/2000/svg"
+   >
+      <path
+         fillRule="evenodd"
+         d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
       ></path>
    </svg>
 )

@@ -1,14 +1,14 @@
 import classNames from 'classnames/bind'
 import Marquee from 'react-fast-marquee'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import styles from './Home.module.scss'
 import Image from '~/components/Image'
-import Collection from './Collection'
 import Category from './Category'
-import Blogs from './Blogs/Blogs'
 import Banner from './Banner/Banner'
 import SpecialProducts from './SpecialProducts/SpecialProducts'
+import ChangeTitle from '~/components/ChangeTitle'
+import Collection from '~/components/Collection'
+import BlogComp from '~/components/BlogComp'
 const cx = classNames.bind(styles)
 
 type Item = {
@@ -42,6 +42,7 @@ const ITEM_MARQUEE: Item[] = [
 function Home() {
    return (
       <div className={cx('wrapper')}>
+         <ChangeTitle title={'E-commerce'} />
          <div className={cx('container')}>
             <section className={cx('banner')}>
                <Banner />
@@ -82,15 +83,15 @@ function Home() {
 
             <h1>Blogs</h1>
             <section className={cx('blogs')}>
-               <Blogs />
-               <Blogs />
-               <Blogs />
-               <Blogs />
-               <Blogs />
-               <Blogs />
-               <Blogs />
-               <Blogs />
-               <Blogs />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
+               <BlogComp />
             </section>
          </div>
       </div>

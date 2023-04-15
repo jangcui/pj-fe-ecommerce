@@ -12,7 +12,7 @@
       display: flex;
 
       .logo {
-         color: #f3bd69;
+         color: var(--orange-color);
          margin-top: 12px;
          width: 200px;
          overflow: hidden;
@@ -47,7 +47,7 @@
             flex-direction: column;
 
             h3 {
-               color: #fff;
+               color: var(--white);
             }
 
             span {

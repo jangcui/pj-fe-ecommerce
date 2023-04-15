@@ -1,0 +1,49 @@
+.wrapper {
+   display: flex;
+   width: 100%;
+   align-items: center;
+   flex-direction: column;
+   justify-content: space-between;
+   padding: 36px 0;
+
+   .container {
+      width: 80%;
+      display: flex;
+
+      .filter-list {
+         flex-basis: 25%;
+         max-width: 25%;
+         margin-right: 14px;
+
+         .filter-block {
+            display: flex;
+            flex-direction: column;
+            border: 4px;
+            padding: 18px 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            background-color: var(--white);
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+            .title {
+               font-size: 20px;
+               margin-bottom: 16px;
+            }
+            .option {
+               display: flex;
+               flex-direction: column;
+               color: var(--gray);
+            }
+         }
+      }
+      .blogs {
+         flex: 1;
+         display: flex;
+         flex-wrap: wrap;
+         justify-content: space-between;
+
+         .item {
+            width: 49%;
+         }
+      }
+   }
+}

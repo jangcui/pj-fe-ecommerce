@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './Collection.module.scss'
-import { LikeIcon } from '~/components/Icon'
+import { AddCartIcon, CompareIcon, EyeIcon, LikeIcon } from '~/components/Icon'
 import Image from '~/components/Image/Image'
 import { StarRating } from 'star-rating-react-ts'
 import Button from '~/layouts/components/Button/Button'
@@ -18,16 +18,22 @@ function Collection() {
                src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2023/1/31/638107846050335072_iphone-13-dd-1.jpg"
             />
             <div className={cx('wrap-btn')}>
-               <Button to={config.routes.product} secondary className={cx('btn')}>
-                  buy now
+               <Button text to={config.routes.compare} secondary className={cx('btn')}>
+                  <CompareIcon width={'20px'} height={'20px'} />
                </Button>
-               <Button className={cx('btn')} primary>
-                  Add to cart
+               <Button text to={config.routes.product} secondary className={cx('btn')}>
+                  <EyeIcon width={'20px'} height={'20px'} />
+               </Button>
+               <Button text to={config.routes.cart} className={cx('btn')}>
+                  <AddCartIcon width={'20px'} height={'20px'} />
                </Button>
             </div>
             <div className={cx('collection-info')}>
                <div className={cx('slug')}>
-                  <p>Slug</p> <LikeIcon />
+                  <p>Slug</p>
+                  <Button text to={config.routes.wishlist} className={cx('btn')}>
+                     <LikeIcon width={'20px'} height={'20px'} />
+                  </Button>
                </div>
                <h2 className={cx('title')}>title</h2>
                <p className={cx('description')}>

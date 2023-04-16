@@ -15,23 +15,17 @@
 
       .wrap-btn {
          position: absolute;
-         bottom: 20%;
          right: 0;
-         left: 0;
          display: flex;
-         align-items: center;
-         justify-content: space-between;
-         visibility: hidden;
-         padding-inline: 8px;
-         opacity: 1;
+         z-index: 9;
+         gap: 20px;
+         right: -30px;
+         top: 65%;
+         flex-direction: column;
          transition: all 0.2s;
 
          .btn {
-            font-size: 14px;
-            padding: 10px;
-            width: 48%;
-            opacity: 0;
-            transition: all 0.2s;
+            color: var(--text-color);
          }
       }
 
@@ -41,7 +35,8 @@
       &:hover .wrap-btn {
          visibility: unset;
          opacity: 1;
-         transition: all 0.6s;
+         right: 10px;
+         transition: all 0.2s;
 
          .btn {
             opacity: 1;
@@ -61,18 +56,20 @@
          opacity: 0;
       }
       &:hover::before {
-         background-color: rgba(211, 209, 209, 0.804);
+         background-color: rgba(245, 245, 245, 0.498);
          transition: background-color 0.4s;
          opacity: 1;
       }
       .collection-img {
          width: 100%;
          transition: all 0.2s;
+         padding: 10px;
       }
       .collection-info {
          margin-top: 12px;
 
          .slug {
+            position: relative;
             display: flex;
             margin-top: 14px;
             justify-content: space-between;
@@ -82,10 +79,15 @@
             p {
                color: var(--slug-color);
             }
+            .btn {
+               right: 0;
+               z-index: 11;
+               position: absolute;
+            }
          }
          .title {
             margin-top: 12px;
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 600;
          }
          .description {

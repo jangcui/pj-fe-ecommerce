@@ -1,7 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, HashRouter } from 'react-router-dom'
 import { publicRouter } from './routes/routes'
 import { Fragment, ComponentType } from 'react'
 import DefaultLayout from './layouts/DefaultLayout'
+import Admin from './pages/Admin/Admin'
+import Dashboard from './pages/Admin/admin-pages/Dashboard/Dashboard'
+import Blogs from './pages/Admin/admin-pages/Blogs/BlogList'
 
 function App() {
    return (

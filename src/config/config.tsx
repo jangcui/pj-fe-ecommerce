@@ -12,6 +12,7 @@ const routes = {
    forgotPwd: '/forgot-password',
    checkout: '/checkout',
    cart: '/cart',
+   admin: '/admin/*',
    signup: '/signup',
    notfound: '*',
 }

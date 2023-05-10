@@ -88,34 +88,34 @@ function SingleProduct() {
                      </div>
                      <input className={cx('input')} type="text" placeholder="Write a review" />
                      <>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Type:</span>
                            <span className={cx('value')}>Headsets</span>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Brand:</span>
                            <span className={cx('value')}>Havells</span>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Categories:</span>
                            <span className={cx('value')}>
                               airpods, camera&apos;s, Computer & Laptop, headphones, mini speaker, our, Portable
                               Speaker, smartphones, Smart television, Smartwatches
                            </span>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Tags:</span>
                            <span className={cx('value')}>headphones, laptop, oppo, mobile, speaker</span>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>SKU:</span>
                            <span className={cx('value')}>SKU027</span>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Availability:</span>
                            <span className={cx('value')}>541 in stock</span>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Size</span>
                            <div className={cx('size')}>
                               <p className={cx('active')}>S</p>
@@ -123,7 +123,7 @@ function SingleProduct() {
                               <p>XL</p>
                            </div>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Color</span>
                            <div className={cx('color')}>
                               <p />
@@ -131,7 +131,7 @@ function SingleProduct() {
                               <p />
                            </div>
                         </div>
-                        <div className={cx('filed')}>
+                        <div className={cx('field')}>
                            <span className={cx('name')}>Quantity:</span>
                            <div className={cx('option')}>
                               <div className={cx('wrap-input')}>

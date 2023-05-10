@@ -36,12 +36,34 @@
 .title {
    display: flex;
    align-items: center;
+
+   .icon-loading {
+      top: 10px;
+      right: 20px;
+      width: 20px;
+      height: 20px;
+      animation: rotation 0.8s linear infinite;
+
+      @keyframes rotation {
+         from {
+            transform: rotate(0deg);
+         }
+         to {
+            transform: rotate(360deg);
+         }
+      }
+   }
 }
 .icon + .title,
 .title + .icon {
    margin: 0 4px;
 }
-
+.disable {
+   pointer-events: none;
+   opacity: 0.5;
+   cursor: not-allowed;
+   min-width: 100px;
+}
 .icon {
    display: flex;
    text-align: center;

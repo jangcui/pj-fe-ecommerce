@@ -11,6 +11,7 @@ import {
 } from 'react-icons/ai'
 import { SiBrandfolder, SiBlogger } from 'react-icons/si'
 import { FaClipboardList, FaBlogger, FaBlog, FaListAlt } from 'react-icons/fa'
+import { RiCoupon2Line, RiCoupon4Fill, RiCoupon3Line } from 'react-icons/ri'
 import { TbBrandShopee } from 'react-icons/tb'
 import { BiCategoryAlt, BiCategory, BiColorFill } from 'react-icons/bi'
 import { BsCartPlus, BsCartCheck } from 'react-icons/bs'
@@ -22,14 +23,18 @@ import styles from './Admin.module.scss'
 import Button from '~/layouts/components/Button'
 import Image from '~/components/Image/Image'
 import Dashboard from './admin-pages/Dashboard'
-import { AddBlog, AddBlogCate, BlogCateList, BlogList } from './admin-pages/Blogs'
+import { Blog, BlogList } from './admin-pages/Blogs'
 import Order from './admin-pages/Order'
 import Enquires from './admin-pages/Enquires'
 import Customers from './admin-pages/Customers'
-import { Color, ColorList } from './admin-pages/Colors'
 import { Brand, BrandList } from './admin-pages/Brands'
-import { Categories, CategoriesList } from './admin-pages/Categories'
+import { ProdCategory, ProdCategoriesList } from './admin-pages/ProductCategories'
 import { Product, ProductList } from './admin-pages/Products'
+import ChangeTitle from '~/components/ChangeTitle'
+import Color from './admin-pages/Colors/Color'
+import ColorList from './admin-pages/Colors/ColorList'
+import { BlogCateList, BlogCategory } from './admin-pages/BlogCategories'
+import { Coupon, CouponList } from './admin-pages/Coupon'
 
 const cx = classNames.bind(styles)
 
@@ -40,6 +45,8 @@ const Admin: React.FC = () => {
 
    return (
       <>
+         <ChangeTitle title={'Admin'} />
+
          <Layout className={cx('wrapper')}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                <div className={cx('logo')}>
@@ -148,6 +155,23 @@ const Admin: React.FC = () => {
                         ],
                      },
                      {
+                        key: 'marketing',
+                        icon: <RiCoupon2Line className={cx('icon')} />,
+                        label: 'Marketing',
+                        children: [
+                           {
+                              key: 'coupon',
+                              icon: <RiCoupon4Fill className={cx('icon')} />,
+                              label: 'Add Coupon',
+                           },
+                           {
+                              key: 'coupon-list',
+                              icon: <RiCoupon3Line className={cx('icon')} />,
+                              label: 'Coupon List',
+                           },
+                        ],
+                     },
+                     {
                         key: 'enquiries',
                         icon: <FaListAlt className={cx('icon')} />,
                         label: 'Enquires',
@@ -195,14 +219,22 @@ const Admin: React.FC = () => {
                      <Route path="product" element={<Product />} />
                      <Route path="product-list" element={<ProductList />} />
                      <Route path="color" element={<Color />} />
+                     <Route path="color/:colorId" element={<Color />} />
                      <Route path="color-list" element={<ColorList />} />
-                     <Route path="blog" element={<AddBlog />} />
+                     <Route path="coupon" element={<Coupon />} />
+                     <Route path="coupon/:couponId" element={<Coupon />} />
+                     <Route path="coupon-list" element={<CouponList />} />
+                     <Route path="blog" element={<Blog />} />
+                     <Route path="blog/:blogId" element={<Blog />} />
                      <Route path="blog-list" element={<BlogList />} />
                      <Route path="brand" element={<Brand />} />
+                     <Route path="brand/:brandId" element={<Brand />} />
                      <Route path="brand-list" element={<BrandList />} />
-                     <Route path="category" element={<Categories />} />
-                     <Route path="category-list" element={<CategoriesList />} />
-                     <Route path="blog-category" element={<AddBlogCate />} />
+                     <Route path="category" element={<ProdCategory />} />
+                     <Route path="category/:categoryId" element={<ProdCategory />} />
+                     <Route path="category-list" element={<ProdCategoriesList />} />
+                     <Route path="blog-category" element={<BlogCategory />} />
+                     <Route path="blog-category/:blogCateId" element={<BlogCategory />} />
                      <Route path="blog-category-list" element={<BlogCateList />} />
                      <Route path="enquiries" element={<Enquires />} />
                   </Routes>

@@ -1,99 +1,297 @@
 import classNames from 'classnames/bind'
-import 'react-rte/lib/RichTextEditor.css'
-import { useState, FormEvent } from 'react'
-import RichTextEditor, { EditorValue } from 'react-rte'
-import { InboxOutlined } from '@ant-design/icons'
-import type { UploadProps } from 'antd'
-import { message, Upload } from 'antd'
-
+import type { SelectProps } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
+import { useFormik } from 'formik'
+import { Select as SelectMulti } from 'antd'
+import Dropzone from 'react-dropzone'
+import 'react-widgets/styles.css'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import * as Yup from 'yup'
 import styles from './Products.module.scss'
 import InputCustom from '~/components/InputCustom'
 import Button from '~/layouts/components/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { StuffType } from '~/types/stuffStage'
+import { addProducts } from '~/features/products/productsSlice'
+import { AiOutlineClose, AiOutlineFileImage } from 'react-icons/ai'
+import { uploadImgs } from '~/features/upload/uploadSlice'
+import Image from '~/components/Image/Image'
+import { ImgType } from '~/types/imageStage'
+import { toast } from 'react-toastify'
+import { getBrands } from '~/features/brands/brandService'
+import { getColors } from '~/features/colors/colorService'
+import { getProdCates } from '~/features/prodCategories/productCateService'
 
-const { Dragger } = Upload
 const cx = classNames.bind(styles)
 
-const props: UploadProps = {
-   name: 'file',
-   multiple: true,
-   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-   onChange(info) {
-      const { status } = info.file
-      if (status !== 'uploading') {
-         console.log(info.file, info.fileList)
-      }
-      if (status === 'done') {
-         message.success(`${info.file.name} file uploaded successfully.`)
-      } else if (status === 'error') {
-         message.error(`${info.file.name} file upload failed.`)
-      }
-   },
-   onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files)
-   },
-}
+const userSchema = Yup.object().shape({
+   title: Yup.string().required('Title is required'),
+   description: Yup.string().required('Description is required'),
+   brand: Yup.string().required('Brand is required'),
+   tags: Yup.string().required('Tags is required'),
+   category: Yup.string().required('Category is required'),
+   price: Yup.number().positive().integer().required('Price is required'),
+   quantity: Yup.number().positive().integer().required('Quantity is required'),
+   color: Yup.array().min(1, 'At least 1 ').required('Color is required'),
+   images: Yup.array().required('Images is required'),
+})
+
 function Product() {
-   const [valueRte, setValueRte] = useState<EditorValue>(RichTextEditor.createEmptyValue())
-   const [valueTitle, setValueTitle] = useState<string>('')
-   const [valuePrice, setValuePrice] = useState<number>(0)
+   const dispatch = useDispatch<AppDispatch>()
+   const [imgConvert, setImgConvert] = useState<string[]>([])
+   const [files, setFiles] = useState<File[]>([])
 
-   const handleValueRte = (value: EditorValue): void => {
-      setValueRte(value)
-      console.log(value)
+   const brandState = useSelector((state: RootState) => state.brands.stuff)
+   const prodCateState = useSelector((state: RootState) => state.prodCates.stuff)
+   const colorState = useSelector((state: RootState) => state.colors.stuff)
+   const newProduct = useSelector((state: RootState) => state.products)
+   const { isError, isLoading, isSuccess, createdProduct } = newProduct
+   const [color, setColor] = useState<string[]>([])
+
+   const colorOpt: SelectProps['options'] = []
+   colorState?.forEach((color) => {
+      colorOpt.push({
+         label: color.title,
+         value: color.title,
+      })
+   })
+   useEffect(() => {
+      if (isSuccess) {
+         toast.success('Product Added Successfully!')
+      }
+      if (isError) {
+         toast.error('Something went wrong')
+      }
+      console.log('err:', isError, 'loading: ', isLoading, 'success: ', isSuccess, createdProduct)
+   }, [isError, isLoading, isSuccess, createdProduct])
+
+   useEffect(() => {
+      dispatch(getBrands())
+      dispatch(getProdCates())
+      dispatch(getColors())
+   }, [dispatch])
+
+   useEffect(() => {
+      formik.values.color = color
+   }, [color])
+
+   const onDrop = useCallback((acceptedFiles: File[]) => {
+      const file = acceptedFiles[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+         const url = reader.result as string
+         setImgConvert((prev) => [...prev, url])
+      }
+      setFiles((prev) => [...prev, file])
+   }, [])
+
+   const checkFilesExistence = () => {
+      return files && files.length > 0
    }
 
-   const handleValueTitle = (newValue: string) => {
-      setValueTitle(newValue)
-      console.log(newValue)
+   const formik = useFormik({
+      initialValues: {
+         title: '',
+         description: '',
+         brand: '',
+         tags: '',
+         price: 0,
+         quantity: 0,
+         category: '',
+         color: [''],
+         images: [],
+      },
+      validationSchema: userSchema,
+      onSubmit: async (values) => {
+         const hasFiles = checkFilesExistence()
+         if (hasFiles) {
+            const response = await dispatch(uploadImgs(files))
+            const imgValue = response.payload
+            const updatedValues = {
+               ...values,
+               images: imgValue,
+            }
+            dispatch(addProducts(updatedValues))
+         } else {
+            dispatch(addProducts(values))
+         }
+         // an other way:
+         // if (hasFiles) {
+         //    //    const response = await dispatch(uploadImgs(files));
+         //  //     const imgValue = response.payload
+         //    const updatedValues = Object.assign({}, values, { images: imageState });
+         //  //    dispatch(addProducts(updatedValues));
+         //  } else {
+         //  //    dispatch(addProducts(values));
+         //    //  }
+         setFiles([])
+         setImgConvert([])
+         setColor([''])
+         formik.resetForm()
+      },
+   })
+   const handleColor = (value: string[]) => {
+      setColor(value)
    }
 
-   const handleValuePrice = (newValue: number) => {
-      setValuePrice(newValue)
-   }
-
-   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-   }
    return (
       <div className={cx('wrapper')}>
          <h1 className={cx('title')}>Add Product</h1>
-         <div className={cx('upload')}></div>
-         <form className={cx('form')} action="" onSubmit={handleSubmit}>
-            <InputCustom
-               value={valueTitle}
-               onChange={handleValueTitle}
-               className={cx('input')}
-               placeholder="Enter Blog Title"
-            />
-            <RichTextEditor className={cx('editor')} value={valueRte} onChange={handleValueRte} />
-            <InputCustom
-               value={valuePrice}
-               onChange={handleValuePrice}
-               className={cx('input')}
-               placeholder="Enter Your Price"
-            />
-            <select name="" id="" className={cx('form-select')}>
-               <option value="">Select Brand</option>
-            </select>{' '}
-            <select name="" id="" className={cx('form-select')}>
-               <option value="">Select Category</option>
-            </select>{' '}
-            <select name="" id="" className={cx('form-select')}>
-               <option value="">Select Color</option>
-            </select>
-            <div className={cx('upload')}>
-               <Dragger {...props}>
-                  <p className="ant-upload-drag-icon">
-                     <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                  <p className="ant-upload-hint">
-                     Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                     banned files.
-                  </p>
-               </Dragger>
+         <form className={cx('form')} action="" onSubmit={formik.handleSubmit}>
+            <div className={cx('field')}>
+               <InputCustom
+                  type={'text'}
+                  value={formik.values.title}
+                  onChange={formik.handleChange('title')}
+                  className={cx('input')}
+                  onBlur={formik.handleBlur('title')}
+                  name="title"
+                  placeholder={'Enter Blog Title'}
+               />
+               <span className={cx('err')}>{formik.touched.title && formik.errors.title}</span>
             </div>
-            <Button className={cx('form-btn')} primary>
+            <div className={cx('field')}>
+               <ReactQuill
+                  className={cx('editor')}
+                  value={formik.values.description}
+                  onBlur={() => formik.handleBlur('description')}
+                  onChange={formik.handleChange('description')}
+               />
+               <span className={cx('err')}>{formik.touched.description && formik.errors.description}</span>
+            </div>
+            <div className={cx('field')}>
+               <InputCustom
+                  type={'number'}
+                  value={+formik.values.price}
+                  name={'price'}
+                  className={cx('input')}
+                  onChange={formik.handleChange('price')}
+                  onBlur={formik.handleBlur('price')}
+                  placeholder="Enter Your Price"
+               />
+               <span className={cx('err')}>{formik.touched.price && formik.errors.price}</span>
+            </div>
+            <div className={cx('field')}>
+               <select
+                  name={'brand'}
+                  id=""
+                  className={cx('form-select')}
+                  value={formik.values.brand}
+                  onChange={formik.handleChange('brand')}
+                  onBlur={formik.handleBlur('brand')}
+               >
+                  <option>Select Brand</option>
+                  {brandState &&
+                     brandState.map((el: StuffType, index: number) => (
+                        <option key={index} value={el.title}>
+                           {el.title}
+                        </option>
+                     ))}
+               </select>
+               <span className={cx('err')}>{formik.touched.brand && formik.errors.brand}</span>
+            </div>
+            <div className={cx('field')}>
+               <select
+                  name={'category'}
+                  id=""
+                  value={formik.values.category}
+                  onChange={formik.handleChange('category')}
+                  onBlur={formik.handleBlur('category')}
+                  className={cx('form-select')}
+               >
+                  <option>Select Category</option>
+                  {prodCateState &&
+                     prodCateState.map((el: StuffType, index: number) => (
+                        <option key={index} value={el.title}>
+                           {el.title}
+                        </option>
+                     ))}
+               </select>
+               <span className={cx('err')}>{formik.touched.category && formik.errors.category}</span>
+            </div>
+            <div className={cx('field')}>
+               <select
+                  name={'tags'}
+                  id=""
+                  className={cx('form-select')}
+                  value={formik.values.tags}
+                  onChange={formik.handleChange('tags')}
+                  onBlur={formik.handleBlur('tags')}
+               >
+                  <option value="" disabled>
+                     Select Tags
+                  </option>
+                  <option value="feature">Feature</option>
+                  <option value="popular">Popular</option>
+                  <option value="special">Special</option>
+               </select>
+               <span className={cx('err')}>{formik.touched.tags && formik.errors.tags}</span>
+            </div>
+
+            <div className={cx('field')}>
+               <SelectMulti
+                  mode="multiple"
+                  className={cx('select-multi')}
+                  allowClear
+                  placeholder="Please select"
+                  value={color}
+                  onChange={(value) => handleColor(value)}
+                  options={colorOpt}
+               />
+               <span className={cx('err')}>{formik.touched.color && formik.errors.color}</span>
+            </div>
+            <div className={cx('field')}>
+               <InputCustom
+                  type={'number'}
+                  value={+formik.values.quantity}
+                  onChange={formik.handleChange('quantity')}
+                  className={cx('input')}
+                  name={'quantity'}
+                  onBlur={formik.handleBlur('quantity')}
+                  placeholder={'Enter Quantity'}
+               />
+               <span className={cx('err')}>{formik.touched.quantity && formik.errors.quantity}</span>
+            </div>
+            <div className={cx('field')}>
+               <Dropzone onDrop={onDrop} maxFiles={10}>
+                  {({ getRootProps, getInputProps }) => (
+                     <section>
+                        <div {...getRootProps()} className={cx('upload')}>
+                           <input {...getInputProps()} />
+                           <p>Drag drop some files here, or click to select files</p>
+                           <AiOutlineFileImage className={cx('icon')} />
+                        </div>
+                     </section>
+                  )}
+               </Dropzone>
+            </div>
+            <div className={cx('field')}>
+               <div className={cx('img-container')}>
+                  {imgConvert?.map((url: string, index) => (
+                     <div className={cx('wrap-img')} key={index}>
+                        <AiOutlineClose
+                           className={cx('icon-remove')}
+                           onClick={() => {
+                              setFiles((prev) => {
+                                 prev.splice(index, 1)
+                                 return [...prev]
+                              })
+                              setImgConvert((prev) => {
+                                 prev.splice(index, 1)
+                                 return [...prev]
+                              })
+                           }}
+                        />
+                        <Image className={cx('img-product')} src={url} />
+                     </div>
+                  ))}
+               </div>
+            </div>
+
+            <Button className={cx('form-btn')} primary type={'submit'}>
                Add Product
             </Button>
          </form>

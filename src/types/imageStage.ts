@@ -1,7 +1,7 @@
 export interface ImgType {
    url: string
-   asset_id: string
-   public_id: string
+   asset_id?: string
+   public_id?: string
 }
 
 export interface ImgStageType {

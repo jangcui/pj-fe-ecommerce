@@ -1,14 +1,17 @@
 import classNames from 'classnames/bind'
 import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { getProducts } from '~/features/products/productsSlice'
+import { useEffect, useState } from 'react'
 import styles from './Products.module.scss'
 import Button from '~/layouts/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { AppDispatch, RootState } from '~/store/store'
 import { ProductType } from '~/types/productStage'
+import { ParamsType } from '~/types/paramsStage'
+import { toast } from 'react-toastify'
+import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import { deleteProduct, getProducts } from '~/features/products/productsService'
 
 const cx = classNames.bind(styles)
 
@@ -60,14 +63,34 @@ const columns: any = [
 
 function ProductList() {
    const dispatch = useDispatch<AppDispatch>()
-   const productData = useSelector((state: RootState) => state.products.product)
-   const params = {
+   const productData = useSelector((state: RootState) => state.products.productList)
+   const [productId, setProductId] = useState<string>('')
+
+   const params: ParamsType = {
       sort: true,
    }
    useEffect(() => {
       dispatch(getProducts(params))
-   }, [])
+   }, [dispatch])
 
+   const [open, setOpen] = useState(false)
+
+   const showModal = (value?: string) => {
+      setOpen(true)
+      if (value) {
+         setProductId(value)
+      }
+   }
+
+   const hideModal = () => {
+      setOpen(false)
+   }
+   const handleDelete = async (id: string) => {
+      hideModal()
+      await dispatch(deleteProduct(id))
+      await dispatch(getProducts(params))
+      toast.success('Deleted!')
+   }
    const data1: DataType[] = []
    for (let i = 0; i < productData.length; i++) {
       if (productData[i].role !== 'admin') {
@@ -81,11 +104,11 @@ function ProductList() {
             price: productData[i].price,
             action: (
                <>
-                  <Button text to={'/'}>
-                     <AiFillDelete className={cx('icon')} />
-                  </Button>
-                  <Button text to={'/'}>
+                  <Button text to={`/admin/product/${productData[i]._id}`}>
                      <BiEdit className={cx('icon')} />
+                  </Button>
+                  <Button text onClick={() => showModal(productData[i]._id)}>
+                     <AiFillDelete className={cx('icon')} />
                   </Button>
                </>
             ),
@@ -100,6 +123,12 @@ function ProductList() {
             <div className={cx('content')}>
                <Table columns={columns} dataSource={data1} />
             </div>
+            <ModalCustom
+               title={'This blog will be delete?'}
+               open={open}
+               onOk={() => handleDelete(productId)}
+               onCancel={hideModal}
+            />
          </div>
       </div>
    )

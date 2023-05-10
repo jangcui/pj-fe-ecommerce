@@ -217,6 +217,7 @@ const Admin: React.FC = () => {
                      <Route path="customer" element={<Customers />} />
                      <Route path="order" element={<Order />} />
                      <Route path="product" element={<Product />} />
+                     <Route path="product/:productId" element={<Product />} />
                      <Route path="product-list" element={<ProductList />} />
                      <Route path="color" element={<Color />} />
                      <Route path="color/:colorId" element={<Color />} />

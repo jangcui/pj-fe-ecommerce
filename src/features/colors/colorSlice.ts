@@ -27,7 +27,6 @@ export const colorSlice = createSlice({
    },
    extraReducers: (builder) => {
       builder
-      builder
          .addCase(getColors.pending, (state) => {
             state.isLoading = true
          })
@@ -103,7 +102,6 @@ export const colorSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
-         .addDefaultCase(() => initialState)
    },
 })
 

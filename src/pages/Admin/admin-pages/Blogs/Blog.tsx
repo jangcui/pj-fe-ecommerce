@@ -22,7 +22,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { resetState } from '~/features/blogs/blogsSlice'
 import { toast } from 'react-toastify'
 import { getBlogCates } from '~/features/blogCategories/blogCateService'
-import { BlogType } from '~/types/blogStage'
+
 const cx = classNames.bind(styles)
 
 const userSchema = Yup.object().shape({
@@ -37,8 +37,9 @@ function CreateBlog() {
    const blogCateState = useSelector((state: RootState) => state.blogCates.stuff)
    const blogState = useSelector((state: RootState) => state.blogs)
    const { isError, isLoading, isSuccess, blog, blogUpdate, blogCreate } = blogState
+
    const [imgConvert, setImgConvert] = useState<string[]>([])
-   const [imgUrl, setImgUrl] = useState<string[]>([])
+   const [imgUrl, setImgUrl] = useState<ImgType[]>([])
    const [files, setFiles] = useState<File[]>([])
 
    const navigate = useNavigate()
@@ -51,11 +52,12 @@ function CreateBlog() {
    useEffect(() => {
       if (isSuccess && Object.keys(blogCreate).length) {
          toast.success('Blog Added Successfully!')
+         // navigate('/admin/blog-list')
          dispatch(resetState())
       }
       if (isSuccess && Object.keys(blogUpdate).length) {
          toast.success('Blog Updated Successfully!')
-         navigate('/admin/blog-list')
+         // navigate('/admin/blog-list')
          dispatch(resetState())
       }
       if (isError) {
@@ -69,49 +71,44 @@ function CreateBlog() {
          dispatch(getBlog(blogId))
       } else {
          dispatch(resetState())
+         setImgConvert([])
+         setFiles([])
       }
-   }, [blogId, dispatch, blogCateState])
+   }, [blogId, dispatch])
 
    useEffect(() => {
       if (blog.images) {
-         setImgUrl(blog.images.map((item: ImgType) => item.url))
+         setImgUrl(blog.images.map((item: ImgType) => item))
          setImgConvert(blog.images.map((item: ImgType) => item.url))
       }
    }, [blog])
 
-   console.log(imgUrl)
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
          title: blog?.title || '',
          description: blog?.description || '',
          category: blog?.category || '',
-         images: blog.images || [],
+         images: blog?.images || [],
       },
       validationSchema: userSchema,
       onSubmit: async (values) => {
          if (files && files.length > 0) {
             const response = await dispatch(uploadImgs(files))
-            const imgValue = response.payload
-            console.log(imgValue)
-            setImgUrl([...imgUrl, imgValue?.map((item: ImgType) => item.url)])
-            // dispatch(createBlog(updatedValues))
-         }
-         const updatedValues = {
-            ...values,
-            images: imgUrl,
-         }
-         console.log(updatedValues)
-
-         if (blogId !== undefined) {
-            // dispatch(updateABlog({ id: blogId, body: values }))
+            const imgValue = await response.payload
+            formik.values.images = [...imgUrl, ...imgValue.map((item: ImgType) => item)]
+            setImgUrl([...imgUrl, ...imgValue.map((item: ImgType) => item)])
          } else {
-            // } else {
-            //    // dispatch(createBlog(values))
-            // }
-            // setFiles([])
-            // setImgConvert([])
-            // formik.resetForm()
+            formik.values.images = imgUrl
+         }
+         if (blogId !== undefined) {
+            dispatch(updateABlog({ id: blogId, body: values }))
+            setFiles([])
+         } else {
+            dispatch(createBlog(values))
+            setFiles([])
+            setImgConvert([])
+            formik.resetForm()
          }
       },
    })
@@ -184,6 +181,7 @@ function CreateBlog() {
                </Dropzone>
             </div>
             <div className={cx('field')}>
+               {imgConvert && <p>Images product appear in here:</p>}
                <div className={cx('img-container')}>
                   {imgConvert?.map((url: string, index) => (
                      <div className={cx('wrap-img')} key={index}>

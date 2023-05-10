@@ -1,15 +1,28 @@
-import { EnquiryType } from '~/types/enquiryState'
-import httpRequest from '~/untils/httpRequest'
+import { createAsyncThunk } from '@reduxjs/toolkit'
+import * as httpRequest from '~/untils/httpRequest'
 
-export const getEnquiries = async () => {
-   const res = await httpRequest.get<EnquiryType[]>('enquiry')
-   if (res) {
-      return res.data
-   } else {
-      console.log('error')
+export const getEnquiries = createAsyncThunk('enquiry/get-all', async (__, thunkAPI) => {
+   try {
+      const response = await httpRequest.get('enquiry', {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      if (error.name === 'AxiosError' && error.response.status === 422) {
+         return thunkAPI.rejectWithValue(error.response.data)
+      }
+      throw error
    }
-}
-const enquiryService = {
-   getEnquiries,
-}
-export default enquiryService
+})
+
+export const deleteEnquiry = createAsyncThunk('enquiry/delete', async (id: string, thunkAPI) => {
+   try {
+      const response = await httpRequest.Delete(`enquiry/${id}`)
+      return response
+   } catch (error: any) {
+      if (error.name === 'AxiosError' && error.response.status === 422) {
+         return thunkAPI.rejectWithValue(error.response.data)
+      }
+      throw error
+   }
+})

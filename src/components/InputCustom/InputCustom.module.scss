@@ -27,11 +27,17 @@
          }
       }
    }
-   .icon {
+
+   .hidden {
       position: absolute;
       right: 10px;
       z-index: 10;
       top: 50%;
       cursor: pointer;
+
+      .icon {
+         width: 24px;
+         height: 24px;
+      }
    }
 }

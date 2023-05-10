@@ -1,22 +1,17 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAction, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import enquiryService from './enquiryService'
 import { EnquiryStageType } from '~/types/enquiryState'
+import { deleteEnquiry, getEnquiries } from './enquiryService'
 
-export const getEnquiries = createAsyncThunk('enquiry', async (thunkAPI) => {
-   try {
-      return await enquiryService.getEnquiries()
-   } catch (err) {
-      return console.log(thunkAPI)
-   }
-})
 const initialState: EnquiryStageType = {
-   enquiry: [],
+   enquiries: [],
+   enquiry: {},
    isError: false,
    isLoading: false,
    isSuccess: false,
    message: '',
 }
+export const resetEnquiryState = createAction('Reset_Enquiry_State')
 
 export const enquirySlice = createSlice({
    name: 'enquiry',
@@ -31,7 +26,7 @@ export const enquirySlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.enquiry = action.payload
+            state.enquiries = action.payload
          })
          .addCase(getEnquiries.rejected, (state, action) => {
             state.isError = true
@@ -39,6 +34,22 @@ export const enquirySlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
+         .addCase(deleteEnquiry.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(deleteEnquiry.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.enquiry = action.payload
+         })
+         .addCase(deleteEnquiry.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(resetEnquiryState, () => initialState)
    },
 })
 

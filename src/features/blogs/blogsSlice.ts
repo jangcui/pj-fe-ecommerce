@@ -13,7 +13,7 @@ const initialState: BlogStageType = {
    isSuccess: false,
    message: '',
 }
-export const resetState = createAction('Reset_State')
+export const resetBlogState = createAction('Reset_Blog_State')
 export const blogSlice = createSlice({
    name: 'blogs',
    initialState,
@@ -95,7 +95,7 @@ export const blogSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
-         .addDefaultCase(() => initialState)
+         .addCase(resetBlogState, () => initialState)
    },
 })
 

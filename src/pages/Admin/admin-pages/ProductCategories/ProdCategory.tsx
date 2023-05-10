@@ -11,7 +11,7 @@ import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createProdCate, getProdCate, updateAProdCate } from '~/features/prodCategories/productCateService'
-import { resetState } from '~/features/prodCategories/prodCateSlice'
+import { resetProdCateState } from '~/features/prodCategories/prodCateSlice'
 
 const cx = classNames.bind(styles)
 
@@ -29,16 +29,16 @@ function Categories() {
    useEffect(() => {
       if (isSuccess && Object.keys(itemCreate).length) {
          toast.success('Product Category Added Successfully!')
-         dispatch(resetState())
+         dispatch(resetProdCateState())
       }
       if (isSuccess && Object.keys(itemUpdate).length) {
          toast.success('Product Category Updated Successfully!')
          navigate('/admin/category-list')
-         dispatch(resetState())
+         dispatch(resetProdCateState())
       }
       if (isError) {
          toast.error('Something went wrong')
-         dispatch(resetState())
+         dispatch(resetProdCateState())
       }
    }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
 
@@ -46,7 +46,7 @@ function Categories() {
       if (categoryId !== undefined) {
          dispatch(getProdCate(categoryId))
       } else {
-         dispatch(resetState())
+         dispatch(resetProdCateState())
       }
    }, [categoryId, dispatch])
 
@@ -63,8 +63,8 @@ function Categories() {
                formik.values.title = result.payload.title
             }
          } else {
-            formik.resetForm()
             await dispatch(createProdCate(values))
+            formik.resetForm()
          }
       },
    })

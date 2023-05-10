@@ -9,7 +9,7 @@ import Button from '~/layouts/components/Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
-import { resetState } from '~/features/colors/colorSlice'
+import { resetColorState } from '~/features/colors/colorSlice'
 import { createColor, getColor, updateAColor } from '~/features/colors/colorService'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -27,18 +27,19 @@ function Color() {
    const { isError, isLoading, isSuccess, itemCreate, name, itemUpdate } = colorState
 
    useEffect(() => {
-      if (isSuccess && Object.keys(itemCreate).length) {
-         toast.success('Color Added Successfully!')
-         dispatch(resetState())
-      }
       if (isSuccess && Object.keys(itemUpdate).length) {
          toast.success('Color Updated Successfully!')
          navigate('/admin/color-list')
-         dispatch(resetState())
+         dispatch(resetColorState())
       }
+      if (isSuccess && Object.keys(itemCreate).length) {
+         toast.success('Color Added Successfully!')
+         dispatch(resetColorState())
+      }
+
       if (isError) {
          toast.error('Something went wrong')
-         dispatch(resetState())
+         dispatch(resetColorState())
       }
    }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
 
@@ -46,7 +47,7 @@ function Color() {
       if (colorId !== undefined) {
          dispatch(getColor(colorId))
       } else {
-         dispatch(resetState())
+         dispatch(resetColorState())
       }
    }, [colorId, dispatch])
 

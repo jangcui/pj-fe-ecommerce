@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { CouponType } from '~/types/couponStage'
+import { ParamsType } from '~/types/paramsStage'
+import { ProductType } from '~/types/productStage'
 import * as httpRequest from '~/untils/httpRequest'
 
-export const getCoupon = createAsyncThunk('coupon/get', async (id: string, thunkAPI) => {
+export const getAProduct = createAsyncThunk('product/get', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.get(`coupon/${id}`, {
+      const response = await httpRequest.get(`product/${id}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -15,9 +16,10 @@ export const getCoupon = createAsyncThunk('coupon/get', async (id: string, thunk
       throw error
    }
 })
-export const getCoupons = createAsyncThunk('coupon/get-all', async (__, thunkAPI) => {
+export const getProducts = createAsyncThunk('product/get-all', async (config: ParamsType, thunkAPI) => {
    try {
-      const response = await httpRequest.get('coupon', {
+      const response = await httpRequest.get('product', {
+         params: config,
          signal: thunkAPI.signal,
       })
       return response
@@ -28,9 +30,9 @@ export const getCoupons = createAsyncThunk('coupon/get-all', async (__, thunkAPI
       throw error
    }
 })
-export const createCoupon = createAsyncThunk('coupon/create', async (data: CouponType, thunkAPI) => {
+export const createProduct = createAsyncThunk('product/create', async (data: ProductType, thunkAPI) => {
    try {
-      const response = await httpRequest.post('coupon', data, {
+      const response = await httpRequest.post('product', data, {
          signal: thunkAPI.signal,
       })
       return response
@@ -41,12 +43,11 @@ export const createCoupon = createAsyncThunk('coupon/create', async (data: Coupo
       throw error
    }
 })
-
-export const updateACoupon = createAsyncThunk(
-   'coupon/update',
-   async ({ id, body }: { id: string; body: CouponType }, thunkAPI) => {
+export const updateAProduct = createAsyncThunk(
+   'product/update',
+   async ({ id, body }: { id: string; body: ProductType }, thunkAPI) => {
       try {
-         const response = await httpRequest.put(`coupon/${id}`, body, {
+         const response = await httpRequest.put(`product/${id}`, body, {
             signal: thunkAPI.signal,
          })
          return response
@@ -59,9 +60,9 @@ export const updateACoupon = createAsyncThunk(
    },
 )
 
-export const deleteCoupon = createAsyncThunk('coupon/delete', async (id: string | any, thunkAPI) => {
+export const deleteProduct = createAsyncThunk('product/delete', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.Delete(`coupon/${id}`)
+      const response = await httpRequest.Delete(`product/${id}`)
       return response
    } catch (error: any) {
       if (error.name === 'AxiosError' && error.response.status === 422) {

@@ -14,7 +14,6 @@ import Button from '~/layouts/components/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { StuffType } from '~/types/stuffStage'
-import { addProducts } from '~/features/products/productsSlice'
 import { AiOutlineClose, AiOutlineFileImage } from 'react-icons/ai'
 import { uploadImgs } from '~/features/upload/uploadSlice'
 import Image from '~/components/Image/Image'
@@ -23,6 +22,9 @@ import { toast } from 'react-toastify'
 import { getBrands } from '~/features/brands/brandService'
 import { getColors } from '~/features/colors/colorService'
 import { getProdCates } from '~/features/prodCategories/productCateService'
+import { createProduct, getAProduct, updateAProduct } from '~/features/products/productsService'
+import { useNavigate, useParams } from 'react-router-dom'
+import { resetProductState } from '~/features/products/productsSlice'
 
 const cx = classNames.bind(styles)
 
@@ -40,15 +42,65 @@ const userSchema = Yup.object().shape({
 
 function Product() {
    const dispatch = useDispatch<AppDispatch>()
-   const [imgConvert, setImgConvert] = useState<string[]>([])
-   const [files, setFiles] = useState<File[]>([])
 
    const brandState = useSelector((state: RootState) => state.brands.stuff)
    const prodCateState = useSelector((state: RootState) => state.prodCates.stuff)
    const colorState = useSelector((state: RootState) => state.colors.stuff)
+   const uploadState = useSelector((state: RootState) => state.uploads)
    const newProduct = useSelector((state: RootState) => state.products)
-   const { isError, isLoading, isSuccess, createdProduct } = newProduct
+   const { isError, isLoading, isSuccess, productCreate, productUpdate, product } = newProduct
+
    const [color, setColor] = useState<string[]>([])
+   const [imgConvert, setImgConvert] = useState<string[]>([])
+   const [imgUrl, setImgUrl] = useState<ImgType[]>([])
+   const [files, setFiles] = useState<File[]>([])
+
+   const navigate = useNavigate()
+   const { productId } = useParams()
+
+   ///////////////////////////////////////
+   useEffect(() => {
+      if (product.images) {
+         setImgUrl(product.images.map((item: ImgType) => item))
+         setImgConvert(product.images.map((item: ImgType) => item.url))
+      }
+      if (product.color) {
+         setColor(product.color)
+      }
+   }, [product])
+
+   useEffect(() => {
+      dispatch(getBrands())
+      dispatch(getProdCates())
+      dispatch(getColors())
+   }, [dispatch])
+   useEffect(() => {
+      if (isSuccess && Object.keys(productCreate).length) {
+         toast.success('Product Added Successfully!')
+         // navigate('/admin/product-list')
+         dispatch(resetProductState())
+      }
+      if (isSuccess && Object.keys(productUpdate).length) {
+         toast.success('Product Updated Successfully!')
+         navigate('/admin/product-list')
+         dispatch(resetProductState())
+      }
+      if (isError) {
+         dispatch(resetProductState())
+      }
+   }, [isError, isLoading, isSuccess, productCreate, dispatch, productUpdate, navigate])
+
+   useEffect(() => {
+      if (productId !== undefined) {
+         dispatch(getAProduct(productId))
+      } else {
+         dispatch(resetProductState())
+         setFiles([])
+         setImgUrl([])
+         setImgConvert([])
+         setColor([])
+      }
+   }, [productId, dispatch])
 
    const colorOpt: SelectProps['options'] = []
    colorState?.forEach((color) => {
@@ -57,26 +109,9 @@ function Product() {
          value: color.title,
       })
    })
-   useEffect(() => {
-      if (isSuccess) {
-         toast.success('Product Added Successfully!')
-      }
-      if (isError) {
-         toast.error('Something went wrong')
-      }
-      console.log('err:', isError, 'loading: ', isLoading, 'success: ', isSuccess, createdProduct)
-   }, [isError, isLoading, isSuccess, createdProduct])
-
-   useEffect(() => {
-      dispatch(getBrands())
-      dispatch(getProdCates())
-      dispatch(getColors())
-   }, [dispatch])
-
-   useEffect(() => {
-      formik.values.color = color
-   }, [color])
-
+   const handleColor = (value: string[]) => {
+      setColor(value)
+   }
    const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       const reader = new FileReader()
@@ -88,58 +123,45 @@ function Product() {
       setFiles((prev) => [...prev, file])
    }, [])
 
-   const checkFilesExistence = () => {
-      return files && files.length > 0
-   }
-
    const formik = useFormik({
+      enableReinitialize: true,
       initialValues: {
-         title: '',
-         description: '',
-         brand: '',
-         tags: '',
-         price: 0,
-         quantity: 0,
-         category: '',
-         color: [''],
-         images: [],
+         title: product.title || '',
+         description: product.description || '',
+         brand: product.brand || '',
+         tags: product.tags || '',
+         price: product.price || 0,
+         quantity: product.quantity || 0,
+         category: product.category || '',
+         color: product.color || [''],
+         images: product.images || [],
       },
       validationSchema: userSchema,
       onSubmit: async (values) => {
-         const hasFiles = checkFilesExistence()
-         if (hasFiles) {
+         if (files && files.length > 0) {
             const response = await dispatch(uploadImgs(files))
-            const imgValue = response.payload
-            const updatedValues = {
-               ...values,
-               images: imgValue,
-            }
-            dispatch(addProducts(updatedValues))
+            const imgValue = await response.payload
+            formik.values.images = [...imgUrl, ...imgValue.map((item: ImgType) => item)]
+            formik.values.color = color
+            setImgUrl([...imgUrl, ...imgValue.map((item: ImgType) => item)])
          } else {
-            dispatch(addProducts(values))
+            formik.values.images = imgUrl
          }
-         // an other way:
-         // if (hasFiles) {
-         //    //    const response = await dispatch(uploadImgs(files));
-         //  //     const imgValue = response.payload
-         //    const updatedValues = Object.assign({}, values, { images: imageState });
-         //  //    dispatch(addProducts(updatedValues));
-         //  } else {
-         //  //    dispatch(addProducts(values));
-         //    //  }
-         setFiles([])
-         setImgConvert([])
-         setColor([''])
-         formik.resetForm()
+         if (productId !== undefined) {
+            dispatch(updateAProduct({ id: productId, body: values }))
+         } else {
+            dispatch(createProduct(values))
+            setFiles([])
+            setImgConvert([])
+            setColor([])
+            formik.resetForm()
+         }
       },
    })
-   const handleColor = (value: string[]) => {
-      setColor(value)
-   }
 
    return (
       <div className={cx('wrapper')}>
-         <h1 className={cx('title')}>Add Product</h1>
+         <h1 className={cx('title')}>{productId !== undefined ? 'Edit' : 'Add'} Product</h1>
          <form className={cx('form')} action="" onSubmit={formik.handleSubmit}>
             <div className={cx('field')}>
                <InputCustom
@@ -149,7 +171,8 @@ function Product() {
                   className={cx('input')}
                   onBlur={formik.handleBlur('title')}
                   name="title"
-                  placeholder={'Enter Blog Title'}
+                  placeholder={'Enter Product Title'}
+                  lazyLoad={isLoading || uploadState.isLoading}
                />
                <span className={cx('err')}>{formik.touched.title && formik.errors.title}</span>
             </div>
@@ -167,6 +190,7 @@ function Product() {
                   type={'number'}
                   value={+formik.values.price}
                   name={'price'}
+                  lazyLoad={isLoading || uploadState.isLoading}
                   className={cx('input')}
                   onChange={formik.handleChange('price')}
                   onBlur={formik.handleBlur('price')}
@@ -203,12 +227,11 @@ function Product() {
                   className={cx('form-select')}
                >
                   <option>Select Category</option>
-                  {prodCateState &&
-                     prodCateState.map((el: StuffType, index: number) => (
-                        <option key={index} value={el.title}>
-                           {el.title}
-                        </option>
-                     ))}
+                  {prodCateState?.map((el: StuffType, index: number) => (
+                     <option key={index} value={el.title}>
+                        {el.title}
+                     </option>
+                  ))}
                </select>
                <span className={cx('err')}>{formik.touched.category && formik.errors.category}</span>
             </div>
@@ -233,6 +256,7 @@ function Product() {
 
             <div className={cx('field')}>
                <SelectMulti
+                  loading={isLoading || uploadState.isLoading}
                   mode="multiple"
                   className={cx('select-multi')}
                   allowClear
@@ -252,6 +276,7 @@ function Product() {
                   name={'quantity'}
                   onBlur={formik.handleBlur('quantity')}
                   placeholder={'Enter Quantity'}
+                  lazyLoad={isLoading || uploadState.isLoading}
                />
                <span className={cx('err')}>{formik.touched.quantity && formik.errors.quantity}</span>
             </div>
@@ -269,6 +294,7 @@ function Product() {
                </Dropzone>
             </div>
             <div className={cx('field')}>
+               {imgConvert && <p>Images product appear in here:</p>}
                <div className={cx('img-container')}>
                   {imgConvert?.map((url: string, index) => (
                      <div className={cx('wrap-img')} key={index}>
@@ -283,6 +309,10 @@ function Product() {
                                  prev.splice(index, 1)
                                  return [...prev]
                               })
+                              setImgUrl((prev) => {
+                                 prev.splice(index, 1)
+                                 return [...prev]
+                              })
                            }}
                         />
                         <Image className={cx('img-product')} src={url} />
@@ -291,8 +321,8 @@ function Product() {
                </div>
             </div>
 
-            <Button className={cx('form-btn')} primary type={'submit'}>
-               Add Product
+            <Button className={cx('form-btn')} primary type={'submit'} lazyLoad={isLoading || uploadState.isLoading}>
+               {productId !== undefined ? 'Update' : 'Add'} Product
             </Button>
          </form>
       </div>

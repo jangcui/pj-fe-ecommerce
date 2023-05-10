@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAction, createSlice } from '@reduxjs/toolkit'
 import { StuffStageType } from '~/types/stuffStage'
 import { createBrand, deleteBrand, getBrand, getBrands, updateABrand } from './brandService'
 
@@ -14,15 +14,12 @@ const initialState: StuffStageType = {
    isSuccess: false,
    message: '',
 }
+export const resetBrandState = createAction('Reset_Brand_State')
 
 export const brandsSlice = createSlice({
    name: 'brands',
    initialState,
-   reducers: {
-      resetState(state) {
-         Object.assign(state, initialState)
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
          .addCase(getBrands.pending, (state) => {
@@ -100,7 +97,7 @@ export const brandsSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
-      // .addDefaultCase(() => initialState)
+         .addCase(resetBrandState, () => initialState)
    },
 })
 

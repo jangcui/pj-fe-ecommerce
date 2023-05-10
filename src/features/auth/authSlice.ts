@@ -56,7 +56,7 @@ export const authSlice = createSlice({
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
-            state.message = 'Fail'
+            state.message = state.message = action.error as string
          })
    },
 })

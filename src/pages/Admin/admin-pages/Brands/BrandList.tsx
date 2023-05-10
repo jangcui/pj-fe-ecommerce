@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import { Modal, Space, Table } from 'antd'
+import { Table } from 'antd'
 
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '~/layouts/components/Button/Button'
@@ -40,12 +40,11 @@ function BrandList() {
    const brandState = useSelector((state: RootState) => state.brands.stuff)
 
    const [brandId, setBrandId] = useState<string>('')
+   const [open, setOpen] = useState(false)
 
    useEffect(() => {
       dispatch(getBrands())
    }, [dispatch])
-
-   const [open, setOpen] = useState(false)
 
    const showModal = (value?: string) => {
       setOpen(true)
@@ -57,7 +56,7 @@ function BrandList() {
    const hideModal = () => {
       setOpen(false)
    }
-   const handleDelete = (id?: string) => {
+   const handleDelete = (id: string) => {
       dispatch(deleteBrand(id))
       hideModal()
       setTimeout(() => {

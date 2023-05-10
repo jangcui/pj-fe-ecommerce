@@ -13,17 +13,20 @@ export interface ProductType {
    role?: string
    sold?: number
    images?: ImgType[]
-   color?: any[]
+   color?: string[]
    totalRating?: string
    ratings?: string[]
    __v?: number
 }
 
 export interface ProductStageType {
-   product: ProductType[]
-   createdProduct?: ProductType
-   isError?: boolean
-   isLoading?: boolean
-   isSuccess?: boolean
-   message?: string
+   productList: ProductType[]
+   product: ProductType
+   productCreate: ProductType
+   productUpdate: ProductType
+   productDelete: ProductType
+   isError: boolean
+   isLoading: boolean
+   isSuccess: boolean
+   message: string
 }

@@ -11,7 +11,7 @@ import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
 import { createCoupon, getCoupon, updateACoupon } from '~/features/coupon/couponService'
 import { useNavigate, useParams } from 'react-router-dom'
-import { resetState } from '~/features/coupon/couponSlice'
+import { resetCouponState } from '~/features/coupon/couponSlice'
 
 const cx = classNames.bind(styles)
 
@@ -31,16 +31,16 @@ function AddCoupon() {
    useEffect(() => {
       if (isSuccess && Object.keys(couponCreate).length) {
          toast.success('Coupon Added Successfully!')
-         dispatch(resetState())
+         dispatch(resetCouponState())
       }
       if (isSuccess && Object.keys(couponUpdate).length) {
          toast.success('Coupon Updated Successfully!')
          navigate('/admin/coupon-list')
-         dispatch(resetState())
+         dispatch(resetCouponState())
       }
       if (isError) {
          toast.error('Something went wrong')
-         dispatch(resetState())
+         dispatch(resetCouponState())
       }
    }, [isError, isLoading, isSuccess, couponCreate, dispatch, couponUpdate, navigate])
 
@@ -48,7 +48,7 @@ function AddCoupon() {
       if (couponId !== undefined) {
          dispatch(getCoupon(couponId))
       } else {
-         dispatch(resetState())
+         dispatch(resetCouponState())
       }
    }, [couponId, dispatch])
    const formik = useFormik({
@@ -59,12 +59,12 @@ function AddCoupon() {
          discount: coupon?.discount ? coupon?.discount : 0,
       },
       validationSchema: userSchema,
-      onSubmit: (values) => {
+      onSubmit: async (values) => {
          if (couponId !== undefined) {
             dispatch(updateACoupon({ id: couponId, body: values }))
          } else {
+            await dispatch(createCoupon(values))
             formik.resetForm()
-            dispatch(createCoupon(values))
          }
       },
    })

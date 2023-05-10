@@ -3,13 +3,14 @@ import classNames from 'classnames/bind'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { getEnquiries } from '~/features/enquiry/enquirySlice'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '~/layouts/components/Button/Button'
-import { AiFillDelete } from 'react-icons/ai'
-import { BiEdit } from 'react-icons/bi'
+import { AiFillEye, AiFillEyeInvisible, AiFillDelete } from 'react-icons/ai'
 import { AppDispatch, RootState } from '~/store/store'
 import { EnquiryType } from '~/types/enquiryState'
+import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import { toast } from 'react-toastify'
+import { deleteEnquiry, getEnquiries } from '~/features/enquiry/enquiryService'
 const cx = classNames.bind(styles)
 
 interface DataType extends EnquiryType {
@@ -47,10 +48,33 @@ const columns: any = [
 
 function Enquires() {
    const dispatch = useDispatch<AppDispatch>()
-   const enquiryState = useSelector((state: RootState) => state.enquiries.enquiry)
+   const enquiryState = useSelector((state: RootState) => state.enquiries.enquiries)
+   const [enqId, setEnqId] = useState<string>('')
+
    useEffect(() => {
       dispatch(getEnquiries())
-   }, [])
+   }, [dispatch])
+
+   const [open, setOpen] = useState(false)
+
+   const showModal = (value?: string) => {
+      setOpen(true)
+      if (value) {
+         setEnqId(value)
+      }
+   }
+
+   const hideModal = () => {
+      setOpen(false)
+   }
+   const handleDelete = (id: string) => {
+      dispatch(deleteEnquiry(id))
+      hideModal()
+      setTimeout(() => {
+         dispatch(getEnquiries())
+         toast.success('Deleted!')
+      }, 300)
+   }
 
    const data1: DataType[] = []
    for (let i = 0; i < enquiryState.length; i++) {
@@ -70,10 +94,10 @@ function Enquires() {
             action: (
                <>
                   <Button text to={'/'}>
-                     <AiFillDelete className={cx('icon')} />
+                     <AiFillEye className={cx('icon')} />
                   </Button>
-                  <Button text to={'/'}>
-                     <BiEdit className={cx('icon')} />
+                  <Button text onClick={() => showModal(enquiryState[i]._id)}>
+                     <AiFillDelete className={cx('icon')} />
                   </Button>
                </>
             ),
@@ -87,6 +111,12 @@ function Enquires() {
             <div className={cx('content')}>
                <Table columns={columns} dataSource={data1} />
             </div>
+            <ModalCustom
+               title={'This enquiry will be delete?'}
+               open={open}
+               onOk={() => handleDelete(enqId)}
+               onCancel={hideModal}
+            />
          </div>
       </div>
    )

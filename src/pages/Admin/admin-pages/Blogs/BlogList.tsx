@@ -48,13 +48,10 @@ const columns: any = [
 
 function BlogsList() {
    const dispatch = useDispatch<AppDispatch>()
-   const blogState = useSelector((state: RootState) => state.blogs.blogs)
-   const [blogId, setBlogId] = useState<string>('')
-   console.log(blogState)
-   useEffect(() => {
-      dispatch(getBlogs())
-   }, [dispatch])
 
+   const blogState = useSelector((state: RootState) => state.blogs.blogs)
+
+   const [blogId, setBlogId] = useState<string>('')
    const [open, setOpen] = useState(false)
 
    const showModal = (value?: string) => {
@@ -73,6 +70,11 @@ function BlogsList() {
       await dispatch(getBlogs())
       toast.success('Deleted!')
    }
+   ////////////////////////////
+   useEffect(() => {
+      dispatch(getBlogs())
+   }, [dispatch])
+
    const data1: DataType[] = []
    for (let i = 0; i < blogState.length; i++) {
       if (blogState[i].role !== 'admin') {

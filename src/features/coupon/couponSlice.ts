@@ -14,15 +14,11 @@ const initialState: CouponStageType = {
    message: '',
 }
 
-export const resetState = createAction('Reset_State')
+export const resetCouponState = createAction('Reset_Coupon_State')
 export const couponSlice = createSlice({
    name: 'coupon',
    initialState,
-   reducers: {
-      resetState(state) {
-         Object.assign(state, initialState)
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
          .addCase(getCoupons.pending, (state) => {
@@ -100,7 +96,7 @@ export const couponSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
-         .addDefaultCase(() => initialState)
+         .addCase(resetCouponState, () => initialState)
    },
 })
 

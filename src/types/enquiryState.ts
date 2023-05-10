@@ -10,7 +10,8 @@ export interface EnquiryType {
 }
 
 export interface EnquiryStageType {
-   enquiry: EnquiryType[]
+   enquiries: EnquiryType[]
+   enquiry: EnquiryType
    isError: boolean
    isLoading: boolean
    isSuccess: boolean

@@ -24,7 +24,7 @@ import { getColors } from '~/features/colors/colorService'
 import { getProdCates } from '~/features/prodCategories/productCateService'
 import { createProduct, getAProduct, updateAProduct } from '~/features/products/productsService'
 import { useNavigate, useParams } from 'react-router-dom'
-import { resetState } from '~/features/products/productsSlice'
+import { resetProductState } from '~/features/products/productsSlice'
 
 const cx = classNames.bind(styles)
 
@@ -42,13 +42,15 @@ const userSchema = Yup.object().shape({
 
 function Product() {
    const dispatch = useDispatch<AppDispatch>()
+
    const brandState = useSelector((state: RootState) => state.brands.stuff)
    const prodCateState = useSelector((state: RootState) => state.prodCates.stuff)
    const colorState = useSelector((state: RootState) => state.colors.stuff)
+   const uploadState = useSelector((state: RootState) => state.uploads)
    const newProduct = useSelector((state: RootState) => state.products)
    const { isError, isLoading, isSuccess, productCreate, productUpdate, product } = newProduct
-   const [color, setColor] = useState<string[]>([])
 
+   const [color, setColor] = useState<string[]>([])
    const [imgConvert, setImgConvert] = useState<string[]>([])
    const [imgUrl, setImgUrl] = useState<ImgType[]>([])
    const [files, setFiles] = useState<File[]>([])
@@ -56,10 +58,14 @@ function Product() {
    const navigate = useNavigate()
    const { productId } = useParams()
 
+   ///////////////////////////////////////
    useEffect(() => {
       if (product.images) {
          setImgUrl(product.images.map((item: ImgType) => item))
          setImgConvert(product.images.map((item: ImgType) => item.url))
+      }
+      if (product.color) {
+         setColor(product.color)
       }
    }, [product])
 
@@ -72,30 +78,27 @@ function Product() {
       if (isSuccess && Object.keys(productCreate).length) {
          toast.success('Product Added Successfully!')
          // navigate('/admin/product-list')
-         dispatch(resetState())
+         dispatch(resetProductState())
       }
       if (isSuccess && Object.keys(productUpdate).length) {
          toast.success('Product Updated Successfully!')
-         // navigate('/admin/product-list')
-         dispatch(resetState())
+         navigate('/admin/product-list')
+         dispatch(resetProductState())
       }
       if (isError) {
-         toast.error('Something went wrong')
-         dispatch(resetState())
+         dispatch(resetProductState())
       }
    }, [isError, isLoading, isSuccess, productCreate, dispatch, productUpdate, navigate])
-
-   useEffect(() => {
-      formik.values.color = color
-   }, [color])
 
    useEffect(() => {
       if (productId !== undefined) {
          dispatch(getAProduct(productId))
       } else {
-         dispatch(resetState())
-         setImgConvert([])
+         dispatch(resetProductState())
          setFiles([])
+         setImgUrl([])
+         setImgConvert([])
+         setColor([])
       }
    }, [productId, dispatch])
 
@@ -123,15 +126,15 @@ function Product() {
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         title: product?.title || '',
-         description: product?.description || '',
-         brand: product?.brand || '',
-         tags: product?.tags || '',
-         price: product?.price || 0,
-         quantity: product?.quantity || 0,
-         category: product?.category || '',
-         color: product?.color || [''],
-         images: product?.images || [],
+         title: product.title || '',
+         description: product.description || '',
+         brand: product.brand || '',
+         tags: product.tags || '',
+         price: product.price || 0,
+         quantity: product.quantity || 0,
+         category: product.category || '',
+         color: product.color || [''],
+         images: product.images || [],
       },
       validationSchema: userSchema,
       onSubmit: async (values) => {
@@ -139,18 +142,18 @@ function Product() {
             const response = await dispatch(uploadImgs(files))
             const imgValue = await response.payload
             formik.values.images = [...imgUrl, ...imgValue.map((item: ImgType) => item)]
+            formik.values.color = color
             setImgUrl([...imgUrl, ...imgValue.map((item: ImgType) => item)])
          } else {
             formik.values.images = imgUrl
          }
          if (productId !== undefined) {
             dispatch(updateAProduct({ id: productId, body: values }))
-            setFiles([])
          } else {
             dispatch(createProduct(values))
             setFiles([])
             setImgConvert([])
-            setColor([''])
+            setColor([])
             formik.resetForm()
          }
       },
@@ -158,7 +161,7 @@ function Product() {
 
    return (
       <div className={cx('wrapper')}>
-         <h1 className={cx('title')}>Add Product</h1>
+         <h1 className={cx('title')}>{productId !== undefined ? 'Edit' : 'Add'} Product</h1>
          <form className={cx('form')} action="" onSubmit={formik.handleSubmit}>
             <div className={cx('field')}>
                <InputCustom
@@ -169,6 +172,7 @@ function Product() {
                   onBlur={formik.handleBlur('title')}
                   name="title"
                   placeholder={'Enter Product Title'}
+                  lazyLoad={isLoading || uploadState.isLoading}
                />
                <span className={cx('err')}>{formik.touched.title && formik.errors.title}</span>
             </div>
@@ -186,6 +190,7 @@ function Product() {
                   type={'number'}
                   value={+formik.values.price}
                   name={'price'}
+                  lazyLoad={isLoading || uploadState.isLoading}
                   className={cx('input')}
                   onChange={formik.handleChange('price')}
                   onBlur={formik.handleBlur('price')}
@@ -222,12 +227,11 @@ function Product() {
                   className={cx('form-select')}
                >
                   <option>Select Category</option>
-                  {prodCateState &&
-                     prodCateState.map((el: StuffType, index: number) => (
-                        <option key={index} value={el.title}>
-                           {el.title}
-                        </option>
-                     ))}
+                  {prodCateState?.map((el: StuffType, index: number) => (
+                     <option key={index} value={el.title}>
+                        {el.title}
+                     </option>
+                  ))}
                </select>
                <span className={cx('err')}>{formik.touched.category && formik.errors.category}</span>
             </div>
@@ -252,6 +256,7 @@ function Product() {
 
             <div className={cx('field')}>
                <SelectMulti
+                  loading={isLoading || uploadState.isLoading}
                   mode="multiple"
                   className={cx('select-multi')}
                   allowClear
@@ -271,6 +276,7 @@ function Product() {
                   name={'quantity'}
                   onBlur={formik.handleBlur('quantity')}
                   placeholder={'Enter Quantity'}
+                  lazyLoad={isLoading || uploadState.isLoading}
                />
                <span className={cx('err')}>{formik.touched.quantity && formik.errors.quantity}</span>
             </div>
@@ -315,8 +321,8 @@ function Product() {
                </div>
             </div>
 
-            <Button className={cx('form-btn')} primary type={'submit'}>
-               Add Product
+            <Button className={cx('form-btn')} primary type={'submit'} lazyLoad={isLoading || uploadState.isLoading}>
+               {productId !== undefined ? 'Update' : 'Add'} Product
             </Button>
          </form>
       </div>

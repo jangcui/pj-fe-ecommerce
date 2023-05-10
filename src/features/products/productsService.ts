@@ -1,8 +1,8 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import { ParamsType } from '~/types/paramsStage'
 import { ProductType } from '~/types/productStage'
 import * as httpRequest from '~/untils/httpRequest'
-export const resetState = createAction('Reset_State')
+
 export const getAProduct = createAsyncThunk('product/get', async (id: string, thunkAPI) => {
    try {
       const response = await httpRequest.get(`product/${id}`, {
@@ -62,7 +62,7 @@ export const updateAProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk('product/delete', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.Delete(`product/delete/${id}`)
+      const response = await httpRequest.Delete(`product/${id}`)
       return response
    } catch (error: any) {
       if (error.name === 'AxiosError' && error.response.status === 422) {

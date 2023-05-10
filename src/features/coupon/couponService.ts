@@ -1,8 +1,6 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import { CouponType } from '~/types/couponStage'
 import * as httpRequest from '~/untils/httpRequest'
-
-export const resetState = createAction('Reset_State')
 
 export const getCoupon = createAsyncThunk('coupon/get', async (id: string, thunkAPI) => {
    try {

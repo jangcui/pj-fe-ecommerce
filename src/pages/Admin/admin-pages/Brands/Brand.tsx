@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
-import { createBrand, getBrand, resetState, updateABrand } from '~/features/brands/brandService'
+import { createBrand, getBrand, updateABrand } from '~/features/brands/brandService'
+import { resetBrandState } from '~/features/brands/brandsSlice'
 
 const cx = classNames.bind(styles)
 
@@ -28,16 +29,16 @@ function Brand() {
    useEffect(() => {
       if (isSuccess && Object.keys(itemCreate).length) {
          toast.success('Brand Added Successfully!')
-         dispatch(resetState())
+         dispatch(resetBrandState())
       }
       if (isSuccess && Object.keys(itemUpdate).length) {
          toast.success('Brand Updated Successfully!')
          navigate('/admin/brand-list')
-         dispatch(resetState())
+         dispatch(resetBrandState())
       }
       if (isError) {
          toast.error('Something went wrong')
-         dispatch(resetState())
+         dispatch(resetBrandState())
       }
    }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
 
@@ -45,7 +46,7 @@ function Brand() {
       if (brandId !== undefined) {
          dispatch(getBrand(brandId))
       } else {
-         dispatch(resetState())
+         dispatch(resetBrandState())
       }
    }, [brandId, dispatch])
 
@@ -59,8 +60,8 @@ function Brand() {
          if (brandId !== undefined) {
             dispatch(updateABrand({ id: brandId, title: formik.values.title }))
          } else {
-            formik.resetForm()
             await dispatch(createBrand(values))
+            formik.resetForm()
          }
       },
    })

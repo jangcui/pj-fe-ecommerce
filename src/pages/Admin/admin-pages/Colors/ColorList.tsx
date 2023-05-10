@@ -38,14 +38,13 @@ const columns: any = [
 function ColorList() {
    const dispatch = useDispatch<AppDispatch>()
    const colorState = useSelector((state: RootState) => state.colors.stuff)
+   const [colorId, setColorId] = useState<string>('')
+
+   const [open, setOpen] = useState(false)
 
    useEffect(() => {
       dispatch(getColors())
    }, [dispatch])
-
-   const [colorId, setColorId] = useState<string>('')
-
-   const [open, setOpen] = useState(false)
 
    const showModal = (value?: string) => {
       setOpen(true)
@@ -57,7 +56,7 @@ function ColorList() {
    const hideModal = () => {
       setOpen(false)
    }
-   const handleDelete = (id?: string) => {
+   const handleDelete = (id: string) => {
       dispatch(deleteColor(id))
       hideModal()
       setTimeout(() => {

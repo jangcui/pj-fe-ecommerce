@@ -14,16 +14,12 @@ const initialState: ProductStageType = {
    isSuccess: false,
    message: '',
 }
-export const resetState = createAction('Reset_State')
+export const resetProductState = createAction('Reset_Product_State')
 
 export const productSlice = createSlice({
    name: 'products',
    initialState,
-   reducers: {
-      resetState(state) {
-         Object.assign(state, initialState)
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
       builder
@@ -55,7 +51,7 @@ export const productSlice = createSlice({
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
-            state.message = action.error.message as string
+            state.message = action.error as string
          })
          .addCase(getAProduct.pending, (state) => {
             state.isLoading = true
@@ -102,6 +98,7 @@ export const productSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
+         .addCase(resetProductState, () => initialState)
    },
 })
 

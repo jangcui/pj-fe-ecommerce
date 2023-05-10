@@ -1,4 +1,3 @@
-import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAction, createSlice } from '@reduxjs/toolkit'
 
 import { StuffStageType } from '~/types/stuffStage'
@@ -17,15 +16,11 @@ const initialState: StuffStageType = {
    message: '',
 }
 
-export const resetState = createAction('Reset_State')
+export const resetProdCateState = createAction('Reset_ProdCate_State')
 export const prodCateSlice = createSlice({
    name: 'prod-Categories',
    initialState,
-   reducers: {
-      resetState(state) {
-         Object.assign(state, initialState)
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
          .addCase(getProdCates.pending, (state) => {
@@ -103,7 +98,7 @@ export const prodCateSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
-      // .addDefaultCase(() => initialState)
+         .addCase(resetProdCateState, () => initialState)
    },
 })
 

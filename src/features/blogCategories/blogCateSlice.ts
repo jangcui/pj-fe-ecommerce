@@ -14,16 +14,12 @@ const initialState: StuffStageType = {
    isSuccess: false,
    message: '',
 }
-export const resetState = createAction('Reset_State')
+export const resetBlogCateState = createAction('Reset_BlogCate_State')
 
 export const blogCateSlice = createSlice({
    name: 'blogCategory',
    initialState,
-   reducers: {
-      resetState(state) {
-         Object.assign(state, initialState)
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
          .addCase(getBlogCates.pending, (state) => {
@@ -101,7 +97,7 @@ export const blogCateSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
-      // .addDefaultCase(() => initialState)
+         .addCase(resetBlogCateState, () => initialState)
    },
 })
 

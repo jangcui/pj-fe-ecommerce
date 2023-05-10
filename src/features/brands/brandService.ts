@@ -1,8 +1,6 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 import * as httpRequest from '~/untils/httpRequest'
 import { StuffType } from '~/types/stuffStage'
-
-export const resetState = createAction('Reset_State')
 
 export const getBrand = createAsyncThunk('brand/get', async (id: string, thunkAPI) => {
    try {

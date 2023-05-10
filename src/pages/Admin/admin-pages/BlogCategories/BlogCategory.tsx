@@ -11,7 +11,7 @@ import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createBlogCate, getBlogCate, updateABlogCate } from '~/features/blogCategories/blogCateService'
-import { resetState } from '~/features/blogCategories/blogCateSlice'
+import { resetBlogCateState } from '~/features/blogCategories/blogCateSlice'
 
 const cx = classNames.bind(styles)
 
@@ -29,16 +29,16 @@ function BlogCategory() {
    useEffect(() => {
       if (isSuccess && Object.keys(itemCreate).length) {
          toast.success('Color Added Successfully!')
-         dispatch(resetState())
+         dispatch(resetBlogCateState())
       }
       if (isSuccess && Object.keys(itemUpdate).length) {
          toast.success('Color Updated Successfully!')
          navigate('/admin/blog-category-list')
-         dispatch(resetState())
+         dispatch(resetBlogCateState())
       }
       if (isError) {
          toast.error('Something went wrong')
-         dispatch(resetState())
+         dispatch(resetBlogCateState())
       }
    }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
 
@@ -46,7 +46,7 @@ function BlogCategory() {
       if (blogCateId !== undefined) {
          dispatch(getBlogCate(blogCateId))
       } else {
-         dispatch(resetState())
+         dispatch(resetBlogCateState())
       }
    }, [blogCateId, dispatch])
 

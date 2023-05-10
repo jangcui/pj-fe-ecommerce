@@ -19,9 +19,9 @@ import Image from '~/components/Image/Image'
 import { StuffType } from '~/types/stuffStage'
 import { createBlog, getBlog, updateABlog } from '~/features/blogs/blogService'
 import { useNavigate, useParams } from 'react-router-dom'
-import { resetState } from '~/features/blogs/blogsSlice'
 import { toast } from 'react-toastify'
 import { getBlogCates } from '~/features/blogCategories/blogCateService'
+import { resetBlogState } from '~/features/blogs/blogsSlice'
 
 const cx = classNames.bind(styles)
 
@@ -34,8 +34,10 @@ const userSchema = Yup.object().shape({
 
 function CreateBlog() {
    const dispatch = useDispatch<AppDispatch>()
+
    const blogCateState = useSelector((state: RootState) => state.blogCates.stuff)
    const blogState = useSelector((state: RootState) => state.blogs)
+   const uploadState = useSelector((state: RootState) => state.uploads)
    const { isError, isLoading, isSuccess, blog, blogUpdate, blogCreate } = blogState
 
    const [imgConvert, setImgConvert] = useState<string[]>([])
@@ -45,6 +47,7 @@ function CreateBlog() {
    const navigate = useNavigate()
    const { blogId } = useParams()
 
+   ////////////////////////////////////////////////
    useEffect(() => {
       dispatch(getBlogCates())
    }, [dispatch])
@@ -53,16 +56,15 @@ function CreateBlog() {
       if (isSuccess && Object.keys(blogCreate).length) {
          toast.success('Blog Added Successfully!')
          // navigate('/admin/blog-list')
-         dispatch(resetState())
+         dispatch(resetBlogState())
       }
       if (isSuccess && Object.keys(blogUpdate).length) {
          toast.success('Blog Updated Successfully!')
-         // navigate('/admin/blog-list')
-         dispatch(resetState())
+         navigate('/admin/blog-list')
+         dispatch(resetBlogState())
       }
       if (isError) {
          toast.error('Something went wrong')
-         dispatch(resetState())
       }
    }, [isError, isLoading, isSuccess, blogCreate, dispatch, blogUpdate, navigate])
 
@@ -70,7 +72,7 @@ function CreateBlog() {
       if (blogId !== undefined) {
          dispatch(getBlog(blogId))
       } else {
-         dispatch(resetState())
+         dispatch(resetBlogState())
          setImgConvert([])
          setFiles([])
       }
@@ -86,10 +88,10 @@ function CreateBlog() {
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         title: blog?.title || '',
-         description: blog?.description || '',
-         category: blog?.category || '',
-         images: blog?.images || [],
+         title: blog?.title ? blog.title : '',
+         description: blog?.description ? blog.description : '',
+         category: blog?.category ? blog.category : '',
+         images: blog?.images ? blog.images : [],
       },
       validationSchema: userSchema,
       onSubmit: async (values) => {
@@ -102,10 +104,11 @@ function CreateBlog() {
             formik.values.images = imgUrl
          }
          if (blogId !== undefined) {
-            dispatch(updateABlog({ id: blogId, body: values }))
+            await dispatch(updateABlog({ id: blogId, body: values }))
             setFiles([])
+            formik.resetForm()
          } else {
-            dispatch(createBlog(values))
+            await dispatch(createBlog(values))
             setFiles([])
             setImgConvert([])
             formik.resetForm()
@@ -136,7 +139,7 @@ function CreateBlog() {
                   onBlur={formik.handleBlur('title')}
                   name="title"
                   placeholder={'Enter Blog Title'}
-                  lazyLoad={isLoading}
+                  lazyLoad={isLoading || uploadState.isLoading}
                />
                <span className={cx('err')}>{formik.touched.title && formik.errors.title}</span>
             </div>
@@ -207,7 +210,7 @@ function CreateBlog() {
                   ))}
                </div>
             </div>
-            <Button className={cx('form-btn')} primary type={'submit'} lazyLoad={isLoading}>
+            <Button className={cx('form-btn')} primary type={'submit'} lazyLoad={isLoading || uploadState.isLoading}>
                {blogId !== undefined ? 'Update' : 'Add'} Blog
             </Button>
          </form>

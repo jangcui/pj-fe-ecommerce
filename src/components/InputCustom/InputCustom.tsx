@@ -1,9 +1,8 @@
 import classNames from 'classnames/bind'
 
 import styles from './InputCustom.module.scss'
-import { EyeIcon, EyeSlashIcon } from '../Icon'
 import { useState } from 'react'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { AiFillEye, AiFillEyeInvisible, AiOutlineLoading3Quarters } from 'react-icons/ai'
 import Button from '~/layouts/components/Button/Button'
 
 const cx = classNames.bind(styles)
@@ -52,8 +51,8 @@ function InputCustom<T>(props: InputProps<T>) {
                   className={cx('input', className)}
                   autoComplete="true"
                />
-               <Button text className={cx('icon')} onClick={() => setHidden(!hidden)} type={'button'}>
-                  {hidden ? <EyeSlashIcon /> : <EyeIcon />}
+               <Button text className={cx('hidden')} onClick={() => setHidden(!hidden)} type={'button'}>
+                  {!hidden ? <AiFillEye className={cx('icon')} /> : <AiFillEyeInvisible className={cx('icon')} />}
                </Button>
             </div>
          )}

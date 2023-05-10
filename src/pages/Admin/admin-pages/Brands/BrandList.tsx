@@ -40,12 +40,11 @@ function BrandList() {
    const brandState = useSelector((state: RootState) => state.brands.stuff)
 
    const [brandId, setBrandId] = useState<string>('')
+   const [open, setOpen] = useState(false)
 
    useEffect(() => {
       dispatch(getBrands())
    }, [dispatch])
-
-   const [open, setOpen] = useState(false)
 
    const showModal = (value?: string) => {
       setOpen(true)
@@ -57,7 +56,7 @@ function BrandList() {
    const hideModal = () => {
       setOpen(false)
    }
-   const handleDelete = (id?: string) => {
+   const handleDelete = (id: string) => {
       dispatch(deleteBrand(id))
       hideModal()
       setTimeout(() => {

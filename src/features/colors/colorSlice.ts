@@ -15,16 +15,12 @@ const initialState: StuffStageType = {
    isSuccess: false,
    message: '',
 }
-export const resetState = createAction('Reset_State')
+export const resetColorState = createAction('Reset_Color_State')
 
 export const colorSlice = createSlice({
    name: 'color',
    initialState,
-   reducers: {
-      resetState(state) {
-         Object.assign(state, initialState)
-      },
-   },
+   reducers: {},
    extraReducers: (builder) => {
       builder
          .addCase(getColors.pending, (state) => {
@@ -102,6 +98,7 @@ export const colorSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
+         .addCase(resetColorState, () => initialState)
    },
 })
 

@@ -1,15 +1,20 @@
 import classNames from 'classnames/bind'
-
+import { Table } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getProducts } from '~/features/products/productsSlice'
 import styles from './Products.module.scss'
+import Button from '~/layouts/components/Button/Button'
+import { AiFillDelete } from 'react-icons/ai'
+import { BiEdit } from 'react-icons/bi'
+import { AppDispatch, RootState } from '~/store/store'
+import { ProductType } from '~/types/productStage'
 
 const cx = classNames.bind(styles)
-import { Table } from 'antd'
 
-interface DataType {
+interface DataType extends ProductType {
    key: React.Key
-   name: string
-   product: number
-   status: string
+   action: JSX.Element
 }
 
 const columns: any = [
@@ -18,30 +23,76 @@ const columns: any = [
       dataIndex: 'key',
    },
    {
-      title: 'Name',
-      dataIndex: 'name',
+      title: 'Title',
+      dataIndex: 'title',
+      sorter: (a: any, b: any) => a.title.length - b.title.length,
    },
    {
-      title: 'Products',
-      dataIndex: 'product',
+      title: 'Slug',
+      dataIndex: 'slug',
+      sorter: (a: any, b: any) => a.slug.length - b.slug.length,
+   },
+
+   {
+      title: 'Brand',
+      dataIndex: 'brand',
    },
    {
-      title: 'Status',
-      dataIndex: 'status',
+      title: 'Category',
+      dataIndex: 'category',
+      sorter: (a: any, b: any) => a.category.length - b.category.length,
+   },
+
+   {
+      title: 'Price',
+      dataIndex: 'price',
+      sorter: (a: any, b: any) => a.price - b.price,
+   },
+   {
+      title: 'Sold',
+      dataIndex: 'sold',
+   },
+   {
+      title: 'Action',
+      dataIndex: 'action',
    },
 ]
 
-const data1: DataType[] = []
-for (let i = 0; i < 46; i++) {
-   data1.push({
-      key: i,
-      name: `Edward King ${i}`,
-      product: 32,
-      status: `London, Park Lane no. ${i}`,
-   })
-}
-
 function ProductList() {
+   const dispatch = useDispatch<AppDispatch>()
+   const productData = useSelector((state: RootState) => state.products.product)
+   const params = {
+      sort: true,
+   }
+   useEffect(() => {
+      dispatch(getProducts(params))
+   }, [])
+
+   const data1: DataType[] = []
+   for (let i = 0; i < productData.length; i++) {
+      if (productData[i].role !== 'admin') {
+         data1.push({
+            key: i + 1,
+            title: productData[i].title,
+            slug: productData[i].slug,
+            brand: productData[i].brand,
+            category: productData[i].category,
+            sold: productData[i].sold,
+            price: productData[i].price,
+            action: (
+               <>
+                  <Button text to={'/'}>
+                     <AiFillDelete className={cx('icon')} />
+                  </Button>
+                  <Button text to={'/'}>
+                     <BiEdit className={cx('icon')} />
+                  </Button>
+               </>
+            ),
+         })
+      }
+   }
+
    return (
       <div className={cx('wrapper')}>
          <h1>Product List</h1>

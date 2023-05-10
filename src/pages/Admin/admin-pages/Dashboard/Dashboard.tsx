@@ -148,7 +148,6 @@ function Dashboard() {
                      <span className={cx('money')}>$1000 </span>
                      <span className={cx('content')}>
                         <span className={cx('percent')}>
-                           {' '}
                            <BsArrowRight className={cx('icon')} />
                            32%
                         </span>

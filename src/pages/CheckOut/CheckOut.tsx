@@ -84,16 +84,16 @@ function CheckOut() {
                      <span className={cx('price')}>$1000</span>
                   </div>
                   <div className={cx('calculate')}>
-                     <div className={cx('filed')}>
+                     <div className={cx('field')}>
                         <span className={cx('type')}>Subtotal</span>
                         <span className={cx('price')}>$1200</span>
                      </div>{' '}
-                     <div className={cx('filed')}>
+                     <div className={cx('field')}>
                         <span className={cx('type')}>Shipping</span>
                         <span className={cx('price')}>$120</span>
                      </div>
                   </div>
-                  <div className={cx('filed')}>
+                  <div className={cx('field')}>
                      <b className={cx('type')}>Total:</b>
                      <b className={cx('price')}>$2300</b>
                   </div>

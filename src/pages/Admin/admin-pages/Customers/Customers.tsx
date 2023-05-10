@@ -4,12 +4,16 @@ import styles from './Customers.module.scss'
 
 const cx = classNames.bind(styles)
 import { Table } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUsers } from '~/features/customers/customerSlice'
+import { useEffect } from 'react'
+import { AppDispatch, RootState } from '~/store/store'
+import { UserType } from '~/types/userStage'
 
-interface DataType {
+interface DataType extends UserType {
    key: React.Key
    name: string
-   product: number
-   status: string
+   blocked: string
 }
 
 const columns: any = [
@@ -20,28 +24,39 @@ const columns: any = [
    {
       title: 'Name',
       dataIndex: 'name',
+      sorter: (a: any, b: any) => a.name.length - b.name.length,
    },
    {
-      title: 'Products',
-      dataIndex: 'product',
+      title: 'Mobile',
+      dataIndex: 'mobile',
    },
    {
-      title: 'Status',
-      dataIndex: 'status',
+      title: 'Blocked',
+      dataIndex: 'blocked',
    },
 ]
 
-const data1: DataType[] = []
-for (let i = 0; i < 46; i++) {
-   data1.push({
-      key: i,
-      name: `Edward King ${i}`,
-      product: 32,
-      status: `London, Park Lane no. ${i}`,
-   })
-}
-
 function Customers() {
+   const dispatch = useDispatch<AppDispatch>()
+
+   const userState = useSelector((state: RootState) => state.customer.user)
+   useEffect(() => {
+      dispatch(getUsers())
+   }, [])
+
+   const data1: DataType[] = []
+   for (let i = 0; i < userState.length; i++) {
+      if (userState[i].role !== 'admin') {
+         data1.push({
+            key: i + 1,
+            name: userState[i].fist_name + ' ' + userState[i].last_name,
+            email: userState[i].email,
+            mobile: userState[i].mobile,
+            blocked: `${userState[i].isBlocked}`,
+         })
+      }
+   }
+
    return (
       <div className={cx('wrapper')}>
          <h1>Customers</h1>

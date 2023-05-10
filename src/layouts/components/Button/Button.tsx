@@ -1,6 +1,7 @@
 import { FC, HTMLProps } from 'react'
 import classNames from 'classnames/bind'
 import styles from './Button.module.scss'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
@@ -11,6 +12,7 @@ interface ButtonProps extends HTMLProps<HTMLButtonElement> {
    disable?: boolean
    secondary?: boolean
    text?: boolean
+   lazyLoad?: boolean
    primary?: boolean
    leftIcon?: JSX.Element
    rightIcon?: JSX.Element
@@ -23,6 +25,7 @@ const Button: FC<ButtonProps> = ({
    disable = false,
    text = false,
    secondary = false,
+   lazyLoad = false,
    children,
    onClick,
    leftIcon,
@@ -54,6 +57,7 @@ const Button: FC<ButtonProps> = ({
       primary,
       secondary,
       disable,
+      lazyLoad,
       text,
       [className as string]: !!className,
    })
@@ -61,7 +65,9 @@ const Button: FC<ButtonProps> = ({
    return (
       <Comp className={classes} {...props}>
          {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
-         <span className={cx('title')}>{children}</span>
+         <span className={cx('title')}>
+            {lazyLoad ? <AiOutlineLoading3Quarters className={cx('icon-loading')} /> : children}
+         </span>
          {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
       </Comp>
    )

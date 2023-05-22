@@ -9,17 +9,17 @@ import Button from '~/layouts/components/Button'
 import config from '~/config/config'
 import InputCustom from '~/components/InputCustom'
 import styles from './Login.module.scss'
-import { login } from '~/features/auth/authSlice'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppDispatch, RootState } from '~/store/store'
+import { login } from '~/features/customers/customerService'
 
 const cx = classNames.bind(styles)
 
 function Login() {
    const dispatch = useDispatch<AppDispatch>()
    const navigate = useNavigate()
-   const { user, isError, isLoading, isSuccess, message } = useSelector((state: RootState) => state.auth)
+   const { user, isLoading, isSuccess, message } = useSelector((state: RootState) => state.auth)
    const userSchema = Yup.object().shape({
       email: Yup.string().email('Email should be valid').required('Email is required'),
       password: Yup.string().required('Password is required'),
@@ -31,16 +31,16 @@ function Login() {
       },
       validationSchema: userSchema,
       onSubmit: async (values) => {
-         const user = await dispatch(login(values))
+         await dispatch(login(values))
       },
    })
    useEffect(() => {
-      if (isSuccess) {
-         navigate('/admin')
+      if (isSuccess && user) {
+         navigate('/')
       } else {
          navigate('')
       }
-   }, [user, navigate, isError, isLoading, isSuccess])
+   }, [user, navigate, isSuccess])
    return (
       <>
          <ChangeTitle title={'Login'} />
@@ -77,7 +77,7 @@ function Login() {
                   Forgot your password?
                </Button>
                <div className={cx('login-btn')}>
-                  <Button className={cx('btn')} type={'submit'}>
+                  <Button className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
                      Login
                   </Button>
                   <Button to={config.routes.signup} className={cx('btn')} type={'button'}>

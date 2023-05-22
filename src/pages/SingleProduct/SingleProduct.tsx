@@ -6,85 +6,113 @@ import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
 import { StarRating } from 'star-rating-react-ts'
 import Button from '~/layouts/components/Button/Button'
-import { CompareIcon, DropIcon, LikeIcon, MinusIcon, PlusIcon } from '~/components/Icon'
-import Image from '~/components/Image/Image'
+import { CompareIcon, LikeIcon, MinusIcon, PlusIcon } from '~/components/Icon'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { getAProduct } from '~/features/products/productsService'
+import images from '~/assets/images'
+import { TfiAngleDown } from 'react-icons/tfi'
+import { addToCart } from '~/features/customers/customerService'
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+
 const cx = classNames.bind(styles)
 
-declare module 'swiper/react' {
-   export interface SwiperSlideProps {
-      isActive?: boolean
-      isPrev?: boolean
-      isNext?: boolean
-   }
-}
 function SingleProduct() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { product } = useSelector((state: RootState) => state.products)
+   const imgList = product?.images?.map((img) => img.url)
+   const [color, setColor] = useState<string>('')
+   const [quantity, setQuantity] = useState<number>(1)
+   const { productId } = useParams()
+
+   useEffect(() => {
+      if (productId) {
+         dispatch(getAProduct(productId))
+      }
+   }, [dispatch, productId])
+
+   // const handleAddToCart()=> {
+   //    dispatch(addToCart)
+   // }
+
    return (
       <>
-         <ChangeTitle title={'Dynamic Product Name'} />
-         <BreadCrumb title={'Dynamic Product Name'} />
+         <ChangeTitle title={`${product?.title}`} />
+         <BreadCrumb title={`${product?.title}`} />
          <div className={cx('wrapper')}>
             <div className={cx('detail-container')}>
                <div className={cx('detail')}>
                   <div className={cx('wrap-img')}>
-                     {/* <Image src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/310682455_1762406820778371_5312311738616970341_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=knQEZlY3eP8AX-JtItR&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfAhOK9HbtZIsyF85dgdbReVsAuEJQXvVgHJtitscsFyWQ&oe=643A226E" /> */}
-                     <div className={cx('img-magnify')}>
-                        <ReactImageMagnify
-                           className={cx('img-main')}
-                           hoverDelayInMs={100}
-                           enlargedImageContainerDimensions={{ width: '80%', height: '60%' }}
-                           {...{
-                              smallImage: {
-                                 isFluidWidth: true,
-                                 src: 'https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/310682455_1762406820778371_5312311738616970341_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=knQEZlY3eP8AX-JtItR&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfAhOK9HbtZIsyF85dgdbReVsAuEJQXvVgHJtitscsFyWQ&oe=643A226E',
-                              },
-                              largeImage: {
-                                 src: 'https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/310682455_1762406820778371_5312311738616970341_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=knQEZlY3eP8AX-JtItR&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfAhOK9HbtZIsyF85dgdbReVsAuEJQXvVgHJtitscsFyWQ&oe=643A226E',
-                                 width: 2500,
-                                 height: 3500,
-                              },
-                           }}
-                        />
+                     <div className={cx('img-zoom')}>
+                        <div className={cx('img')}>
+                           <ReactImageMagnify
+                              enlargedImagePosition="over"
+                              {...{
+                                 smallImage: {
+                                    isFluidWidth: true,
+                                    src: imgList !== undefined ? imgList[0] : images.errorImage,
+                                 },
+                                 largeImage: {
+                                    src: imgList !== undefined ? imgList[0] : images.errorImage,
+                                    width: 2000,
+                                    height: 2000,
+                                 },
+                              }}
+                           />
+                        </div>
                      </div>
-
-                     <div className={cx('img-other')}>
-                        <Image
-                           className={cx('img-sub')}
-                           src={
-                              'https://images.fpt.shop/unsafe/fit-in/585x390/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/5/27/637577064561995165_ss-tab-a7-lite-xam-1.jpg'
-                           }
-                        />
-                        <Image
-                           className={cx('img-sub')}
-                           src={
-                              'https://images.fpt.shop/unsafe/fit-in/585x390/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/5/27/637577064561995165_ss-tab-a7-lite-xam-1.jpg'
-                           }
-                        />
-                        <Image
-                           className={cx('img-sub')}
-                           src={
-                              'https://images.fpt.shop/unsafe/fit-in/585x390/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/5/27/637577064561995165_ss-tab-a7-lite-xam-1.jpg'
-                           }
-                        />
-                        <Image
-                           className={cx('img-sub')}
-                           src={
-                              'https://images.fpt.shop/unsafe/fit-in/585x390/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/5/27/637577064561995165_ss-tab-a7-lite-xam-1.jpg'
-                           }
-                        />
+                     <div className={cx('grid')}>
+                        <div className={cx('img')}>
+                           <ReactImageMagnify
+                              enlargedImagePosition="over"
+                              {...{
+                                 smallImage: {
+                                    isFluidWidth: true,
+                                    src: imgList !== undefined ? imgList[1] : images.errorImage,
+                                 },
+                                 largeImage: {
+                                    src: imgList !== undefined ? imgList[1] : images.errorImage,
+                                    width: 1200,
+                                    height: 1200,
+                                 },
+                              }}
+                           />
+                        </div>
+                        <div className={cx('img')}>
+                           <ReactImageMagnify
+                              enlargedImagePosition="over"
+                              {...{
+                                 smallImage: {
+                                    isFluidWidth: true,
+                                    src: imgList !== undefined ? imgList[2] : images.errorImage,
+                                 },
+                                 largeImage: {
+                                    src: imgList !== undefined ? imgList[2] : images.errorImage,
+                                    width: 1200,
+                                    height: 1200,
+                                 },
+                              }}
+                           />
+                        </div>
                      </div>
                   </div>
                   <div className={cx('content')}>
-                     <h3 className={cx('title')}>Kids Headphones Bulk 10 Pack Multi Colored For Students</h3>
-                     <span className={cx('price')}>$ 100.00</span>
+                     <h3 className={cx('title')}>{product.title}</h3>
+                     <span className={cx('price')}>$ {product.price}</span>
                      <div className={cx('star')}>
                         <StarRating
-                           initialRating={5}
-                           readOnly
+                           initialRating={product.totalRating}
                            theme={{
-                              size: 16,
+                              size: 24,
+                              colors: {
+                                 backgroundColorHover: '#ffd333',
+                                 backgroundColorActive: '#ffd333',
+                              },
                            }}
                         />
-                        <span className={cx('review')}>( 2 review)</span>
+                        <span className={cx('review')}>( {product.totalRating})</span>
                      </div>
                      <input className={cx('input')} type="text" placeholder="Write a review" />
                      <>
@@ -94,18 +122,15 @@ function SingleProduct() {
                         </div>
                         <div className={cx('field')}>
                            <span className={cx('name')}>Brand:</span>
-                           <span className={cx('value')}>Havells</span>
+                           <span className={cx('value')}>{product.brand}</span>
                         </div>
                         <div className={cx('field')}>
                            <span className={cx('name')}>Categories:</span>
-                           <span className={cx('value')}>
-                              airpods, camera&apos;s, Computer & Laptop, headphones, mini speaker, our, Portable
-                              Speaker, smartphones, Smart television, Smartwatches
-                           </span>
+                           <span className={cx('value')}>{product.category}</span>
                         </div>
                         <div className={cx('field')}>
                            <span className={cx('name')}>Tags:</span>
-                           <span className={cx('value')}>headphones, laptop, oppo, mobile, speaker</span>
+                           <span className={cx('value')}>{product.tags}</span>
                         </div>
                         <div className={cx('field')}>
                            <span className={cx('name')}>SKU:</span>
@@ -135,20 +160,29 @@ function SingleProduct() {
                            <span className={cx('name')}>Quantity:</span>
                            <div className={cx('option')}>
                               <div className={cx('wrap-input')}>
-                                 <Button className={cx('input-btn')} text>
-                                    <MinusIcon />
+                                 <Button
+                                    className={cx('input-btn')}
+                                    text
+                                    onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
+                                 >
+                                    <AiOutlineMinus className={cx('icon')} />
                                  </Button>
-                                 <input type="number" defaultValue={0} min={0} step={1} max={1000} readOnly />
+                                 <input type="number" value={quantity} min={0} step={1} max={1000} />
                                  <Button className={cx('input-btn')} text>
-                                    <PlusIcon />
+                                    <AiOutlinePlus
+                                       className={cx('icon')}
+                                       onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
+                                    />
                                  </Button>
                               </div>
-                              <Button className={cx('btn')} primary>
-                                 ADD TO CART
-                              </Button>
-                              <Button className={cx('btn')} secondary>
-                                 Buy it now{' '}
-                              </Button>
+                              <div className={cx('wrap-btn')}>
+                                 <Button className={cx('btn')} primary>
+                                    ADD TO CART
+                                 </Button>
+                                 <Button className={cx('btn')} secondary>
+                                    Buy it now{' '}
+                                 </Button>
+                              </div>
                            </div>
                         </div>
                      </>
@@ -169,42 +203,29 @@ function SingleProduct() {
                      <>
                         <div className={cx('option')}>
                            <span className={cx('text')}>Shipping and returns</span>
-                           <DropIcon className={cx('icon')} />
+                           <TfiAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('option')}>
                            <span className={cx('text')}>Materials </span>
-                           <DropIcon className={cx('icon')} />
+                           <TfiAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('option')}>
                            <span className={cx('text')}>Dimensions</span>
-                           <DropIcon className={cx('icon')} />
+                           <TfiAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('option')}>
                            <span className={cx('text')}>Care Instructions</span>
-                           <DropIcon className={cx('icon')} />
+                           <TfiAngleDown className={cx('icon')} />
                         </div>
                      </>
-
-                     <div className={cx('payment')}>
-                        <h3 className={cx('title')}> Pay,emt methods </h3>
-                        <div className={cx('img-card')}>
-                           <Image src={'https://fptshop.com.vn/Content/v4/images/ft-img11.png?v=1'} />
-                           <Image src={'https://fptshop.com.vn/Content/v4/images/ft-img11.png?v=1'} />
-                           <Image src={'https://fptshop.com.vn/Content/v4/images/ft-img11.png?v=1'} />
-                           <Image src={'https://fptshop.com.vn/Content/v4/images/ft-img11.png?v=1'} />
-                           <Image src={'https://fptshop.com.vn/Content/v4/images/ft-img11.png?v=1'} />
-                        </div>
-                     </div>
                   </div>
                </div>
                <div className={cx('description-container')}>
                   <h2>Description</h2>
-                  <p className={cx('description')}>
-                     James with Web Hosting 9 ngày trước Overall, this tutorial provides a comprehensive and practical
-                     guide to building an e-commerce website using React JS. Whether you are a beginner or an
-                     experienced developer, this tutorial is an excellent resource for anyone looking to build a modern
-                     and functional e-commerce website.
-                  </p>
+                  <p
+                     className={cx('description')}
+                     dangerouslySetInnerHTML={{ __html: product.description as string }}
+                  ></p>
                </div>
                <div className={cx('review-container')}>
                   <h2>Review</h2>

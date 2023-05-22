@@ -9,10 +9,7 @@ export const getBlogCates = createAsyncThunk('blogCategory/get-all', async (__, 
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const updateABlogCate = createAsyncThunk('blogCategory/update', async (body: StuffType, thunkAPI) => {
@@ -22,10 +19,7 @@ export const updateABlogCate = createAsyncThunk('blogCategory/update', async (bo
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 
@@ -34,10 +28,7 @@ export const deleteBlogCate = createAsyncThunk('blogCategory/delete', async (id:
       const response = await httpRequest.Delete(`blog-category/${id}`)
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const getBlogCate = createAsyncThunk('blogCategory/get', async (id: string, thunkAPI) => {
@@ -47,10 +38,7 @@ export const getBlogCate = createAsyncThunk('blogCategory/get', async (id: strin
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const createBlogCate = createAsyncThunk('blogCategory/create', async (data: StuffType, thunkAPI) => {
@@ -60,9 +48,6 @@ export const createBlogCate = createAsyncThunk('blogCategory/create', async (dat
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })

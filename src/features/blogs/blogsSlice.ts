@@ -1,6 +1,6 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
 import { BlogStageType } from '~/types/blogStage'
-import { createBlog, deleteBlog, getBlog, getBlogs, updateABlog } from './blogService'
+import { createBlog, deleteBlog, getBlog, getBlogs, toggleBlogToTrashBin, updateABlog } from './blogService'
 
 const initialState: BlogStageType = {
    blogs: [],
@@ -90,6 +90,21 @@ export const blogSlice = createSlice({
             state.blogDelete = action.payload
          })
          .addCase(deleteBlog.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(toggleBlogToTrashBin.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(toggleBlogToTrashBin.fulfilled, (state, action) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.blogUpdate = action.payload
+         })
+         .addCase(toggleBlogToTrashBin.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false

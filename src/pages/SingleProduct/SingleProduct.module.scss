@@ -9,7 +9,9 @@
       font-size: 24px;
       margin: 12px 0;
    }
-
+   img {
+      object-fit: cover !important;
+   }
    .detail-container {
       width: 80%;
       display: flex;
@@ -23,39 +25,40 @@
          box-shadow: 0 1px 4px 0 #c0c0c0, 0 2px 6px 2px rgba(101, 105, 108, 0.15);
          background-color: var(--white);
          border-radius: 6px;
+         overflow: hidden;
 
          .wrap-img {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            border-radius: 2px;
-            width: 50%;
+            padding: 12px;
+            gap: 20px;
+            align-items: center;
 
-            .img-main {
-               border: 0.5px solid var(--text-color);
-               position: relative;
-               z-index: 3;
+            .img {
+               object-fit: contain;
+               object-position: center;
+               border: 1px dashed var(--border-color-gray);
+               padding: 12px;
+               border-radius: 4px;
+               background-color: var(--bg-color);
+               cursor: zoom-in;
             }
-
-            .img-other {
-               flex: 1;
+            .img-zoom {
+               margin-bottom: 20px;
+               border-radius: 4px;
+            }
+            .grid {
                display: flex;
-               position: relative;
-               margin-top: 30px;
-               flex-wrap: wrap;
-               justify-content: space-between;
+               justify-content: space-evenly;
                gap: 10px;
-
-               .img-sub {
-                  width: calc(50% - 10px);
-                  border: 0.5px solid var(--text-color);
-                  padding: 20px;
-                  background-color: var(--bg-color);
-                  cursor: pointer;
+               .img {
+                  flex: 1;
                }
             }
          }
          .content {
-            width: 50%;
+            width: 55%;
             padding: 0 16px;
             .title {
                border-bottom: 1px solid rgba(60, 64, 67, 0.231);
@@ -143,6 +146,7 @@
                .option {
                   flex: 1;
                   display: flex;
+                  padding: 10px 0;
 
                   .wrap-input {
                      display: flex;
@@ -172,11 +176,16 @@
                         display: none;
                      }
                   }
-
-                  .btn {
+                  .wrap-btn {
                      display: flex;
-                     padding: 10px 14px;
-                     margin-right: 12px;
+                     gap: 12px;
+
+                     .btn {
+                        display: flex;
+                        padding: 0 12px;
+                        margin-right: 12px;
+                        border-radius: 4px;
+                     }
                   }
                }
             }
@@ -198,33 +207,11 @@
                   padding: 10px 0;
                }
             }
-
-            .payment {
-               display: flex;
-               justify-content: center;
-               flex-direction: column;
-               margin-top: 100px;
-               row-gap: 16px;
-               border-radius: 4px;
-               align-items: center;
-               padding: 40px 70px;
-               background-color: var(--bg-color);
-               color: var(--text-color);
-
-               .img-card {
-                  display: flex;
-                  justify-content: center;
-                  gap: 10px;
-
-                  .img {
-                     cursor: pointer;
-                  }
-               }
-            }
          }
       }
    }
    .description-container {
+      width: 100%;
       margin: 30px 0;
 
       .description {
@@ -300,6 +287,7 @@
                justify-content: end;
                border-bottom: 0.5px solid var(--border-color-gray);
                padding: 20px 0;
+
                .btn {
                   padding: 8px 16px;
                }
@@ -310,6 +298,7 @@
             width: 100%;
             position: relative;
             padding: 16px 0;
+
             .btn-report {
                position: absolute;
                font-size: 12px;

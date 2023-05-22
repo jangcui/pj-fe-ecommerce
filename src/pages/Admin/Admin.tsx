@@ -1,40 +1,41 @@
-import React, { useState } from 'react'
-import classNames from 'classnames/bind'
-import {
-   AiOutlineDashboard,
-   AiOutlineUser,
-   AiOutlineShoppingCart,
-   AiOutlineBgColors,
-   AiOutlineMenuUnfold,
-   AiOutlineMenuFold,
-   AiOutlineBell,
-} from 'react-icons/ai'
-import { SiBrandfolder, SiBlogger } from 'react-icons/si'
-import { FaClipboardList, FaBlogger, FaBlog, FaListAlt } from 'react-icons/fa'
-import { RiCoupon2Line, RiCoupon4Fill, RiCoupon3Line } from 'react-icons/ri'
-import { TbBrandShopee } from 'react-icons/tb'
-import { BiCategoryAlt, BiCategory, BiColorFill } from 'react-icons/bi'
-import { BsCartPlus, BsCartCheck } from 'react-icons/bs'
 import { Layout, Menu } from 'antd'
+import classNames from 'classnames/bind'
+import React, { useEffect, useState } from 'react'
+import {
+   AiOutlineBell,
+   AiOutlineBgColors,
+   AiOutlineDashboard,
+   AiOutlineMenuFold,
+   AiOutlineMenuUnfold,
+   AiOutlineShoppingCart,
+} from 'react-icons/ai'
+import { BiCategory, BiCategoryAlt, BiColorFill } from 'react-icons/bi'
+import { FaBlog, FaBlogger, FaClipboardList, FaListAlt, FaTrashAlt } from 'react-icons/fa'
+import { FiUsers } from 'react-icons/fi'
+import { RiCoupon2Line, RiCoupon3Line, RiCoupon4Fill, RiProductHuntLine } from 'react-icons/ri'
+import { SiBlogger, SiBrandfolder, SiProducthunt } from 'react-icons/si'
+import { TbBrandShopee } from 'react-icons/tb'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 const { Header, Sider, Content } = Layout
 
-import styles from './Admin.module.scss'
-import Button from '~/layouts/components/Button'
 import Image from '~/components/Image/Image'
-import Dashboard from './admin-pages/Dashboard'
+import Button from '~/layouts/components/Button'
+import styles from './Admin.module.scss'
 import { Blog, BlogList } from './admin-pages/Blogs'
-import Order from './admin-pages/Order'
-import Enquires from './admin-pages/Enquires'
-import Customers from './admin-pages/Customers'
-import { Brand, BrandList } from './admin-pages/Brands'
-import { ProdCategory, ProdCategoriesList } from './admin-pages/ProductCategories'
-import { Product, ProductList } from './admin-pages/Products'
+import Dashboard from './admin-pages/Dashboard'
+
 import ChangeTitle from '~/components/ChangeTitle'
+import { BlogCateList, BlogCategory } from './admin-pages/BlogCategories'
+import { Brand, BrandList } from './admin-pages/Brands'
 import Color from './admin-pages/Colors/Color'
 import ColorList from './admin-pages/Colors/ColorList'
-import { BlogCateList, BlogCategory } from './admin-pages/BlogCategories'
 import { Coupon, CouponList } from './admin-pages/Coupon'
+import Customers from './admin-pages/Customers'
+import { EnquiresList, Enquiry } from './admin-pages/Enquires'
+import { Order, OrderList } from './admin-pages/Order'
+import { ProdCategoriesList, ProdCategory } from './admin-pages/ProductCategories'
+import { Product, ProductList } from './admin-pages/Products'
+import { BlogsTrash, CustomerTrash, ProductsTrash } from './admin-pages/Trash'
 
 const cx = classNames.bind(styles)
 
@@ -42,6 +43,14 @@ const Admin: React.FC = () => {
    const [collapsed, setCollapsed] = useState(false)
 
    const navigate = useNavigate()
+   const getAdminFromLocalStorage: string | null = localStorage.getItem('ADMIN')
+   const admin = getAdminFromLocalStorage ? JSON.parse(getAdminFromLocalStorage) : null
+
+   useEffect(() => {
+      if (!admin) {
+         navigate('/admin/login')
+      }
+   })
 
    return (
       <>
@@ -72,7 +81,7 @@ const Admin: React.FC = () => {
                      },
                      {
                         key: 'customer',
-                        icon: <AiOutlineUser className={cx('icon')} />,
+                        icon: <FiUsers className={cx('icon')} />,
                         label: 'Customers',
                      },
                      {
@@ -82,12 +91,12 @@ const Admin: React.FC = () => {
                         children: [
                            {
                               key: 'product',
-                              icon: <BsCartPlus className={cx('icon')} />,
+                              icon: <RiProductHuntLine className={cx('icon')} />,
                               label: 'Add Product',
                            },
                            {
                               key: 'product-list',
-                              icon: <BsCartCheck className={cx('icon')} />,
+                              icon: <SiProducthunt className={cx('icon')} />,
                               label: 'Product List',
                            },
                            {
@@ -123,7 +132,7 @@ const Admin: React.FC = () => {
                         ],
                      },
                      {
-                        key: 'order',
+                        key: 'orders',
                         icon: <FaClipboardList className={cx('icon')} />,
                         label: 'Orders',
                      },
@@ -172,6 +181,28 @@ const Admin: React.FC = () => {
                         ],
                      },
                      {
+                        key: 'trash',
+                        icon: <FaTrashAlt className={cx('icon')} />,
+                        label: 'Trash',
+                        children: [
+                           {
+                              key: 'trash/product',
+                              icon: <SiProducthunt className={cx('icon')} />,
+                              label: 'Product Trash',
+                           },
+                           {
+                              key: 'trash/blog',
+                              icon: <FaBlog className={cx('icon')} />,
+                              label: 'Blog trash',
+                           },
+                           {
+                              key: 'trash/customer',
+                              icon: <FiUsers className={cx('icon')} />,
+                              label: 'Customer trash',
+                           },
+                        ],
+                     },
+                     {
                         key: 'enquiries',
                         icon: <FaListAlt className={cx('icon')} />,
                         label: 'Enquires',
@@ -215,7 +246,8 @@ const Admin: React.FC = () => {
                   <Routes>
                      <Route path="" element={<Dashboard />} />
                      <Route path="customer" element={<Customers />} />
-                     <Route path="order" element={<Order />} />
+                     <Route path="orders" element={<OrderList />} />
+                     <Route path="order/:orderId" element={<Order />} />
                      <Route path="product" element={<Product />} />
                      <Route path="product/:productId" element={<Product />} />
                      <Route path="product-list" element={<ProductList />} />
@@ -237,7 +269,11 @@ const Admin: React.FC = () => {
                      <Route path="blog-category" element={<BlogCategory />} />
                      <Route path="blog-category/:blogCateId" element={<BlogCategory />} />
                      <Route path="blog-category-list" element={<BlogCateList />} />
-                     <Route path="enquiries" element={<Enquires />} />
+                     <Route path="enquiry/:enqId" element={<Enquiry />} />
+                     <Route path="enquiries" element={<EnquiresList />} />
+                     <Route path="trash/product" element={<ProductsTrash />} />
+                     <Route path="trash/blog" element={<BlogsTrash />} />
+                     <Route path="trash/customer" element={<CustomerTrash />} />
                   </Routes>
                </Content>
             </Layout>

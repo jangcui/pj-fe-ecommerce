@@ -15,12 +15,24 @@ interface InputProps<T> {
    className?: string
    name?: string
    type?: string
+   min?: number
    pwdStyle?: boolean
    lazyLoad?: boolean
 }
 
 function InputCustom<T>(props: InputProps<T>) {
-   const { value, onChange, placeholder, name, className, type, pwdStyle = false, lazyLoad = false, onBlur } = props
+   const {
+      value,
+      onChange,
+      placeholder,
+      name,
+      className,
+      type,
+      pwdStyle = false,
+      min,
+      lazyLoad = false,
+      onBlur,
+   } = props
    const [hidden, setHidden] = useState(false)
    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       onChange(event.target.value as unknown as T)
@@ -38,6 +50,7 @@ function InputCustom<T>(props: InputProps<T>) {
                   placeholder={placeholder}
                   className={cx('input', className)}
                   onBlur={onBlur}
+                  min={min}
                />
                {lazyLoad && <AiOutlineLoading3Quarters className={cx('icon-loading')} />}
             </div>

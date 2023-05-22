@@ -1,20 +1,22 @@
 import { ImgType } from './imageStage'
+import { StuffType } from './stuffStage'
 
 export interface ProductType {
    _id?: string
    tags?: string
    title?: string
+   images?: ImgType[]
    slug?: string
    description?: string
    price?: number
    quantity?: number
    category?: string
    brand?: string
-   role?: string
    sold?: number
-   images?: ImgType[]
-   color?: string[]
-   totalRating?: string
+   color?: string[] | StuffType[]
+   isDelete?: boolean
+   deleteDate?: Date | any
+   totalRating?: number
    ratings?: string[]
    __v?: number
 }

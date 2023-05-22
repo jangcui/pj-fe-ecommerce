@@ -3,7 +3,7 @@ import styles from './BreadCrumb.module.scss'
 import { Link } from 'react-router-dom'
 const cx = classNames.bind(styles)
 
-function BreadCrumb({ title }: { title: string }) {
+function BreadCrumb({ title }: { title?: string }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container')}>

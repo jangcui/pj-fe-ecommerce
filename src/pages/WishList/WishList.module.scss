@@ -2,14 +2,27 @@
    width: 100%;
    display: flex;
    flex-wrap: wrap;
-   min-height: 100vh;
-   justify-content: center;
+   gap: 4px;
+   min-height: 1000px;
+   padding: 40px;
 
+   .loading {
+      height: 1000px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+   }
    .container {
       position: relative;
-      width: calc(16% - 20px);
+      max-height: 450px;
+
+      width: calc(20% - 20px);
       padding: 4px;
-      height: fit-content;
+      display: flex;
+      background-color: var(--white);
+      overflow: hidden;
+      z-index: 2;
+      flex-direction: column;
       margin: 10px 4px;
       border-radius: 6px;
 
@@ -24,17 +37,27 @@
             opacity: 0.85;
          }
       }
-      .img {
+      .wrap-img {
+         height: 400px;
          width: 100%;
-         transition: transform 0.2s;
+         .img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            transition: all 0.2s;
+            border-radius: 4px;
 
-         &:hover {
-            transform: scale(1.03);
-            transition: transform 0.4s;
+            &:hover {
+               transform: scale(1.03);
+               transition: transform 0.4s;
+            }
          }
       }
+
       .content {
-         padding: 0 12px;
+         padding: 12px;
+         margin-top: 10px;
+         min-height: 100px;
 
          .title {
             font-size: 18px;

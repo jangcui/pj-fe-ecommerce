@@ -24,7 +24,7 @@ function Color() {
    const colorState = useSelector((state: RootState) => state.colors)
    const navigate = useNavigate()
    const { colorId } = useParams()
-   const { isError, isLoading, isSuccess, itemCreate, name, itemUpdate } = colorState
+   const { isError, isLoading, isSuccess, itemCreate, item, itemUpdate } = colorState
 
    useEffect(() => {
       if (isSuccess && Object.keys(itemUpdate).length) {
@@ -42,7 +42,7 @@ function Color() {
          dispatch(resetColorState())
       }
    }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
-
+   console.log(itemUpdate)
    useEffect(() => {
       if (colorId !== undefined) {
          dispatch(getColor(colorId))
@@ -54,7 +54,7 @@ function Color() {
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         title: name || '',
+         title: item.title || '',
       },
       validationSchema: userSchema,
       onSubmit: (values) => {
@@ -78,7 +78,7 @@ function Color() {
                className={cx('input')}
                placeholder="Enter Color Title"
             />
-            <p className={cx('err')}>{formik.touched.title && formik.errors.title}</p>
+            <p className={cx('error')}>{formik.touched.title && formik.errors.title}</p>
 
             <Button className={cx('form-btn')} primary type={'submit'} lazyLoad={isLoading} disable={isLoading}>
                {colorId !== undefined ? 'Update' : 'Add'} Color

@@ -4,862 +4,104 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Image from '~/components/Image'
 import { CloseIcon } from '~/components/Icon'
-const cx = classNames.bind(styles)
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { useEffect, useState } from 'react'
+import { addToWishList, getUserWishList } from '~/features/customers/customerService'
+import { ProductType } from '~/types/productStage'
+import { ImgType } from '~/types/imageStage'
+import Button from '~/layouts/components/Button'
+import Loading from '~/components/Loading/Loading'
+import ModalCustom from '~/components/ModalCustom/ModalCustom'
 
+const cx = classNames.bind(styles)
+interface ValueType {
+   index: number
+   id?: string
+}
 function WishList() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { wishlist, isLoading } = useSelector((state: RootState) => state.customer)
+   const [dataList, setDataList] = useState<ProductType[]>([])
+   const [open, setOpen] = useState(false)
+   const [value, setValue] = useState<ValueType>({
+      index: 0,
+      id: '',
+   })
+
+   useEffect(() => {
+      dispatch(getUserWishList())
+   }, [dispatch])
+   useEffect(() => {
+      if (wishlist) {
+         setDataList(wishlist)
+      }
+   }, [wishlist])
+
+   const handleRemoveProduct = async ({ index, id }: { index: number; id?: string }) => {
+      if (id) {
+         const newData = [...dataList]
+         newData.splice(index, 1)
+         setOpen(false)
+         setDataList(newData)
+         await dispatch(addToWishList({ prodId: id }))
+      }
+   }
+
    return (
       <>
          <ChangeTitle title={'WishList'} />
          <BreadCrumb title={'WishList'} />
          <div className={cx('wrapper')}>
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
+            {isLoading ? (
+               <div className={cx('loading')}>
+                  {' '}
+                  <Loading />
                </div>
-            </div>
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>{' '}
-            <div className={cx('container')}>
-               <CloseIcon className={cx('icon')} />
-               <Image
-                  className={cx('img')}
-                  src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/1/4/14_1_9_2_9.jpg"
-               />
-               <div className={cx('content')}>
-                  <h3 className={cx('title')}>
-                     Thủ đô của Cộng hòa Séc là một trong những điểm đến hàng đầu tại Châu Âu với kho tàng lịch sử, nghệ
-                     thuật, âm nhạc và kiến trúc phong phú. Con sông Vltava đẹp như một bức tranh, uốn lượn quanh thành
-                     phố với một vài cây cầu bắc ngang, mỗi cây cầu đều mang nét văn hóa hoặc kiến trúc hấp dẫn. Một
-                     trong những cây cầu nổi tiếng nhất trong số đó là Cầu Charles
-                  </h3>
-                  <span className={cx('price')}>$500</span>
-               </div>
-            </div>
+            ) : (
+               <>
+                  {dataList?.length === 0 && (
+                     <div className={cx('loading')}>
+                        <h2>No data.</h2>{' '}
+                     </div>
+                  )}
+                  {dataList?.map((data, index) => {
+                     const product = data
+                     const imgList = product.images?.map((img: ImgType) => img.url)
+
+                     return (
+                        <div className={cx('container')} key={index}>
+                           <>
+                              <Button
+                                 text
+                                 onClick={() => {
+                                    value.index = index
+                                    value.id = product._id
+                                    setValue({ ...value })
+                                    setOpen(true)
+                                 }}
+                              >
+                                 <CloseIcon className={cx('icon')} />
+                              </Button>
+                              <div className={cx('wrap-img')}>
+                                 <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
+                              </div>
+                              <div className={cx('content')}>
+                                 <h3 className={cx('title')}>{product.title}</h3>
+                                 <span className={cx('price')}>${product.price}</span>
+                              </div>
+                           </>{' '}
+                        </div>
+                     )
+                  })}
+               </>
+            )}
+            <ModalCustom
+               title={'Remove to wishlist '}
+               open={open}
+               onOk={() => handleRemoveProduct({ index: value.index, id: value.id })}
+               onCancel={() => setOpen(false)}
+            />
          </div>
       </>
    )

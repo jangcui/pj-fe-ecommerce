@@ -45,7 +45,7 @@ const Button: FC<ButtonProps> = ({
       props.href = href
    }
    //remove event listener when btn is disabled
-   if (disable) {
+   if (disable || lazyLoad) {
       Object.keys(props).forEach((key) => {
          if (key.startsWith('on') && typeof props[key] === 'function') {
             delete props[key]

@@ -79,7 +79,7 @@ function Categories() {
                placeholder="Enter Product Category"
                lazyLoad={isLoading}
             />
-            <p className={cx('err')}>{formik.touched.title && formik.errors.title}</p>
+            <p className={cx('error')}>{formik.touched.title && formik.errors.title}</p>
             <Button className={cx('form-btn')} primary type={'submit'}>
                {categoryId !== undefined ? 'Update' : 'Add'} Product Category
             </Button>

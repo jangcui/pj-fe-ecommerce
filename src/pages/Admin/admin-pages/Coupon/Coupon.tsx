@@ -83,7 +83,7 @@ function AddCoupon() {
                   placeholder="Enter Name Coupon"
                   lazyLoad={isLoading}
                />
-               <p className={cx('err')}>{formik.touched.name && formik.errors.name}</p>
+               <p className={cx('error')}>{formik.touched.name && formik.errors.name}</p>
             </div>
             <div className={cx('field')}>
                <InputCustom
@@ -94,7 +94,7 @@ function AddCoupon() {
                   className={cx('input')}
                   placeholder="Enter Expiry"
                />
-               <p className={cx('err')}>{formik.touched.expiry && formik.errors.expiry}</p>
+               <p className={cx('error')}>{formik.touched.expiry && formik.errors.expiry}</p>
             </div>
             <div className={cx('field')}>
                <InputCustom
@@ -106,7 +106,7 @@ function AddCoupon() {
                   placeholder="Enter Expiry"
                   lazyLoad={isLoading}
                />
-               <p className={cx('err')}>{formik.touched.discount && formik.errors.discount}</p>
+               <p className={cx('error')}>{formik.touched.discount && formik.errors.discount}</p>
             </div>
             <Button className={cx('form-btn')} primary type={'submit'}>
                {couponId !== undefined ? 'Update' : 'Add'} Coupon

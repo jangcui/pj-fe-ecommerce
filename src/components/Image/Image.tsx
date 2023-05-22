@@ -20,7 +20,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(function MyImage(
       <img
          className={classNames(styles.wrapper, className)}
          ref={ref}
-         src={fallback || src}
+         src={src !== '' ? src : fallback}
          alt={alt}
          {...props}
          onError={handleError}

@@ -30,6 +30,11 @@
          grid-template-columns: repeat(3, 1fr);
          grid-gap: 10px;
       }
+      .popular {
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         grid-gap: 4px;
+      }
       .blogs {
          display: grid;
          grid-template-columns: repeat(4, 1fr);

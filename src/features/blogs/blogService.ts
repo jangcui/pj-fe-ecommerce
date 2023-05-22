@@ -9,10 +9,17 @@ export const getBlog = createAsyncThunk('blog/get', async (id: string, thunkAPI)
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const toggleBlogToTrashBin = createAsyncThunk('blog/add-to-trash-bin', async (id: string, thunkAPI) => {
+   try {
+      const response = await httpRequest.put(`blog/trash/${id}`, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const getBlogs = createAsyncThunk('blog/get-all', async (__, thunkAPI) => {
@@ -22,10 +29,7 @@ export const getBlogs = createAsyncThunk('blog/get-all', async (__, thunkAPI) =>
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const createBlog = createAsyncThunk('blog/create', async (data: BlogType, thunkAPI) => {
@@ -35,10 +39,7 @@ export const createBlog = createAsyncThunk('blog/create', async (data: BlogType,
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const updateABlog = createAsyncThunk(
@@ -63,9 +64,6 @@ export const deleteBlog = createAsyncThunk('blog/delete', async (id: string, thu
       const response = await httpRequest.Delete(`blog/${id}`)
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })

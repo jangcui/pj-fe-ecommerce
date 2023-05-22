@@ -10,12 +10,21 @@ export const getAProduct = createAsyncThunk('product/get', async (id: string, th
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
+
+export const toggleProductToTrashBin = createAsyncThunk('product/add-to-trash-bin', async (id: string, thunkAPI) => {
+   try {
+      const response = await httpRequest.put(`product/trash/${id}`, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+
 export const getProducts = createAsyncThunk('product/get-all', async (config: ParamsType, thunkAPI) => {
    try {
       const response = await httpRequest.get('product', {
@@ -24,10 +33,7 @@ export const getProducts = createAsyncThunk('product/get-all', async (config: Pa
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const createProduct = createAsyncThunk('product/create', async (data: ProductType, thunkAPI) => {
@@ -37,10 +43,7 @@ export const createProduct = createAsyncThunk('product/create', async (data: Pro
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const updateAProduct = createAsyncThunk(
@@ -65,9 +68,6 @@ export const deleteProduct = createAsyncThunk('product/delete', async (id: strin
       const response = await httpRequest.Delete(`product/${id}`)
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })

@@ -8,7 +8,6 @@ const initialState: StuffStageType = {
    item: {},
    itemCreate: {},
    itemUpdate: {},
-   itemDelete: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -60,7 +59,7 @@ export const colorSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.name = action.payload.title
+            state.item = action.payload
          })
          .addCase(getColor.rejected, (state, action) => {
             state.isError = true
@@ -75,7 +74,7 @@ export const colorSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemUpdate = action.payload.title
+            state.itemUpdate = action.payload
          })
          .addCase(updateAColor.rejected, (state, action) => {
             state.isError = true
@@ -86,11 +85,11 @@ export const colorSlice = createSlice({
          .addCase(deleteColor.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(deleteColor.fulfilled, (state, action) => {
+         .addCase(deleteColor.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemDelete = action.payload.title
+            state.message = 'Deleted'
          })
          .addCase(deleteColor.rejected, (state, action) => {
             state.isError = true

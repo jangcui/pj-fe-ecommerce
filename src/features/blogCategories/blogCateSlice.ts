@@ -7,7 +7,6 @@ const initialState: StuffStageType = {
    item: {},
    itemCreate: {},
    itemUpdate: {},
-   itemDelete: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -89,7 +88,7 @@ export const blogCateSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemDelete = action.payload.title
+            state.message = 'Deleted'
          })
          .addCase(deleteBlogCate.rejected, (state, action) => {
             state.isError = true

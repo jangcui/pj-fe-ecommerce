@@ -2,10 +2,8 @@ import axios from 'axios'
 
 import { base_url } from './base_url'
 
-interface User {
-   token: string
-}
 const requests = axios.create({
+   // baseURL: 'http://localhost:4000/api',
    baseURL: base_url,
    headers: {
       'Content-Type': 'application/json',
@@ -14,11 +12,10 @@ const requests = axios.create({
 
 requests.interceptors.request.use(
    function (config) {
-      const user: string | null = localStorage.getItem('USER')
-      if (user) {
-         const userObj: User = JSON.parse(user)
-         const token = userObj.token
-         config.headers.Authorization = `Bearer ${token}`
+      const token: string | null = localStorage.getItem('TOKEN')
+      if (token) {
+         const tokenParse: string = JSON.parse(token)
+         config.headers.Authorization = `Bearer ${tokenParse}`
       }
       return config
    },

@@ -1,53 +1,67 @@
 import classNames from 'classnames/bind'
 import styles from './Collection.module.scss'
-import { AddCartIcon, CompareIcon, EyeIcon, LikeIcon } from '~/components/Icon'
 import Image from '~/components/Image/Image'
 import { StarRating } from 'star-rating-react-ts'
 import Button from '~/layouts/components/Button/Button'
-import config from '~/config/config'
+import config from '~/config'
+import { ProductType } from '~/types/productStage'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { addToWishList } from '~/features/customers/customerService'
+import { AiOutlineHeart, AiTwotoneHeart } from 'react-icons/ai'
+import { HiArrowPath } from 'react-icons/hi2'
+import { useState } from 'react'
+import { BsFillCartPlusFill } from 'react-icons/bs'
+import { FaEye } from 'react-icons/fa'
 
 const cx = classNames.bind(styles)
 
-function Collection() {
+function Collection({ data, isSort = false }: { data: ProductType; isSort?: boolean }) {
+   const dispatch = useDispatch<AppDispatch>()
+   const [isActive, setIsActive] = useState<boolean>(false)
+   const productData = useSelector((state: RootState) => state.products.productList)
+   const imgList = data.images?.map((img) => img.url)
+
+   const handleAddToWishList = (productId: string) => {
+      dispatch(addToWishList({ prodId: productId }))
+   }
    return (
       <div className={cx('wrapper')}>
-         <div className={cx('container')}>
-            <Image
-               className={cx('collection-img')}
-               // src={prod.images[0]}
-               src="https://images.fpt.shop/unsafe/fit-in/214x214/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2023/1/31/638107846050335072_iphone-13-dd-1.jpg"
-            />
+         <div className={cx('container', isSort && 'sort')}>
+            <div className={cx('wrap-img')}>
+               <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
+            </div>
             <div className={cx('wrap-btn')}>
                <Button text to={config.routes.compare} secondary className={cx('btn')}>
-                  <CompareIcon width={'20px'} height={'20px'} />
+                  <HiArrowPath className={cx('icon')} />
                </Button>
-               <Button text to={config.routes.product} secondary className={cx('btn')}>
-                  <EyeIcon width={'20px'} height={'20px'} />
+               <Button text to={`/product/${data._id}`} secondary className={cx('btn')}>
+                  <FaEye className={cx('icon')} />
                </Button>
                <Button text to={config.routes.cart} className={cx('btn')}>
-                  <AddCartIcon width={'20px'} height={'20px'} />
+                  <BsFillCartPlusFill className={cx('icon')} />
                </Button>
             </div>
-            <div className={cx('collection-info')}>
+            <div className={cx('info')}>
                <div className={cx('slug')}>
-                  <p>Slug</p>
-                  <Button text to={config.routes.wishlist} className={cx('btn')}>
-                     <LikeIcon width={'20px'} height={'20px'} />
+                  <p>{data.slug}</p>
+                  <Button text className={cx('btn')} onClick={() => handleAddToWishList(data._id as string)}>
+                     {isActive ? (
+                        <AiOutlineHeart className={cx('icon')} />
+                     ) : (
+                        <AiTwotoneHeart className={cx('icon', 'icon-active')} />
+                     )}
                   </Button>
                </div>
-               <h2 className={cx('title')}>title</h2>
-               <p className={cx('description')}>
-                  this is description heheheh eehhehehe he heheh he heh ehh he this is description heheheh eehhehehe he
-                  heheh he heh ehh he this is description heheheh eehhehehe he heheh he heh ehh he this is description
-                  heheheh eehhehehe he heheh he heh ehh he this is description heheheh eehhehehe he heheh he heh ehh he
-               </p>
-               <div className={cx('sold')}>sold : 12345</div>
+               <h2 className={cx('title')}>{data.title}</h2>
+               <p className={cx('description')} dangerouslySetInnerHTML={{ __html: data.description as string }}></p>
+               <div className={cx('sold')}>sold : {data.sold}</div>
                <div className={cx('price')}>
-                  $ <p>400</p>
+                  $ <p>{data.price}</p>
                </div>
                <div className={cx('rating')}>
                   <StarRating
-                     initialRating={4}
+                     initialRating={data.totalRating}
                      readOnly
                      theme={{
                         size: 24,

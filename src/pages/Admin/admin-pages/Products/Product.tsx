@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import { Select as SelectMulti } from 'antd'
 import Dropzone from 'react-dropzone'
-import 'react-widgets/styles.css'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import * as Yup from 'yup'
@@ -36,7 +35,7 @@ const userSchema = Yup.object().shape({
    category: Yup.string().required('Category is required'),
    price: Yup.number().positive().integer().required('Price is required'),
    quantity: Yup.number().positive().integer().required('Quantity is required'),
-   color: Yup.array().min(1, 'At least 1 ').required('Color is required'),
+   color: Yup.array().required('Color is required'),
    images: Yup.array().required('Images is required'),
 })
 
@@ -60,24 +59,33 @@ function Product() {
 
    ///////////////////////////////////////
    useEffect(() => {
-      if (product.images) {
-         setImgUrl(product.images.map((item: ImgType) => item))
-         setImgConvert(product.images.map((item: ImgType) => item.url))
-      }
-      if (product.color) {
-         setColor(product.color)
-      }
-   }, [product])
-
-   useEffect(() => {
       dispatch(getBrands())
       dispatch(getProdCates())
       dispatch(getColors())
    }, [dispatch])
    useEffect(() => {
+      if (productId !== undefined) {
+         dispatch(getAProduct(productId))
+      } else {
+         setFiles([])
+         setImgUrl([])
+         setImgConvert([])
+         dispatch(resetProductState())
+         setColor([])
+      }
+   }, [productId, dispatch])
+   useEffect(() => {
+      if (product.images) {
+         setImgUrl(product.images.map((item: ImgType) => item))
+         setImgConvert(product.images.map((item: ImgType) => item.url))
+      }
+   }, [product])
+
+   useEffect(() => {
       if (isSuccess && Object.keys(productCreate).length) {
          toast.success('Product Added Successfully!')
          // navigate('/admin/product-list')
+         setColor([])
          dispatch(resetProductState())
       }
       if (isSuccess && Object.keys(productUpdate).length) {
@@ -86,32 +94,19 @@ function Product() {
          dispatch(resetProductState())
       }
       if (isError) {
-         dispatch(resetProductState())
+         toast.error('Something went wrong')
       }
    }, [isError, isLoading, isSuccess, productCreate, dispatch, productUpdate, navigate])
-
-   useEffect(() => {
-      if (productId !== undefined) {
-         dispatch(getAProduct(productId))
-      } else {
-         dispatch(resetProductState())
-         setFiles([])
-         setImgUrl([])
-         setImgConvert([])
-         setColor([])
-      }
-   }, [productId, dispatch])
+   console.log(product)
 
    const colorOpt: SelectProps['options'] = []
    colorState?.forEach((color) => {
       colorOpt.push({
          label: color.title,
-         value: color.title,
+         value: color._id,
       })
    })
-   const handleColor = (value: string[]) => {
-      setColor(value)
-   }
+
    const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
       const reader = new FileReader()
@@ -126,15 +121,15 @@ function Product() {
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         title: product.title || '',
-         description: product.description || '',
-         brand: product.brand || '',
-         tags: product.tags || '',
-         price: product.price || 0,
-         quantity: product.quantity || 0,
-         category: product.category || '',
-         color: product.color || [''],
-         images: product.images || [],
+         title: product?.title ? product?.title : '',
+         description: product?.description ? product?.description : '',
+         brand: product?.brand ? product?.brand : '',
+         tags: product?.tags ? product?.tags : '',
+         price: product?.price ? product?.price : 0,
+         quantity: product?.quantity ? product?.quantity : 0,
+         category: product?.category ? product?.category : '',
+         color: product?.color ? color : [''],
+         images: product?.images ? product?.images : [],
       },
       validationSchema: userSchema,
       onSubmit: async (values) => {
@@ -142,23 +137,26 @@ function Product() {
             const response = await dispatch(uploadImgs(files))
             const imgValue = await response.payload
             formik.values.images = [...imgUrl, ...imgValue.map((item: ImgType) => item)]
-            formik.values.color = color
             setImgUrl([...imgUrl, ...imgValue.map((item: ImgType) => item)])
          } else {
             formik.values.images = imgUrl
          }
          if (productId !== undefined) {
             dispatch(updateAProduct({ id: productId, body: values }))
-         } else {
-            dispatch(createProduct(values))
+            console.log(values)
+         }
+         if (productId === undefined) {
+            await dispatch(createProduct(values))
+            console.log(values)
             setFiles([])
             setImgConvert([])
-            setColor([])
+            setImgUrl([])
             formik.resetForm()
          }
       },
    })
-
+   console.log(color)
+   console.log(product?.color && product?.color.map((item: any) => item._id))
    return (
       <div className={cx('wrapper')}>
          <h1 className={cx('title')}>{productId !== undefined ? 'Edit' : 'Add'} Product</h1>
@@ -174,7 +172,7 @@ function Product() {
                   placeholder={'Enter Product Title'}
                   lazyLoad={isLoading || uploadState.isLoading}
                />
-               <span className={cx('err')}>{formik.touched.title && formik.errors.title}</span>
+               <span className={cx('error')}>{formik.touched.title && formik.errors.title}</span>
             </div>
             <div className={cx('field')}>
                <ReactQuill
@@ -183,7 +181,7 @@ function Product() {
                   onBlur={() => formik.handleBlur('description')}
                   onChange={formik.handleChange('description')}
                />
-               <span className={cx('err')}>{formik.touched.description && formik.errors.description}</span>
+               <span className={cx('error')}>{formik.touched.description && formik.errors.description}</span>
             </div>
             <div className={cx('field')}>
                <InputCustom
@@ -196,7 +194,7 @@ function Product() {
                   onBlur={formik.handleBlur('price')}
                   placeholder="Enter Your Price"
                />
-               <span className={cx('err')}>{formik.touched.price && formik.errors.price}</span>
+               <span className={cx('error')}>{formik.touched.price && formik.errors.price}</span>
             </div>
             <div className={cx('field')}>
                <select
@@ -215,7 +213,7 @@ function Product() {
                         </option>
                      ))}
                </select>
-               <span className={cx('err')}>{formik.touched.brand && formik.errors.brand}</span>
+               <span className={cx('error')}>{formik.touched.brand && formik.errors.brand}</span>
             </div>
             <div className={cx('field')}>
                <select
@@ -233,7 +231,7 @@ function Product() {
                      </option>
                   ))}
                </select>
-               <span className={cx('err')}>{formik.touched.category && formik.errors.category}</span>
+               <span className={cx('error')}>{formik.touched.category && formik.errors.category}</span>
             </div>
             <div className={cx('field')}>
                <select
@@ -251,7 +249,7 @@ function Product() {
                   <option value="popular">Popular</option>
                   <option value="special">Special</option>
                </select>
-               <span className={cx('err')}>{formik.touched.tags && formik.errors.tags}</span>
+               <span className={cx('error')}>{formik.touched.tags && formik.errors.tags}</span>
             </div>
 
             <div className={cx('field')}>
@@ -262,10 +260,14 @@ function Product() {
                   allowClear
                   placeholder="Please select"
                   value={color}
-                  onChange={(value) => handleColor(value)}
+                  onChange={(value) => {
+                     console.log(value)
+                     setColor([...value])
+                     formik.values.color = value
+                  }}
                   options={colorOpt}
                />
-               <span className={cx('err')}>{formik.touched.color && formik.errors.color}</span>
+               <span className={cx('error')}>{formik.touched.color && formik.errors.color}</span>
             </div>
             <div className={cx('field')}>
                <InputCustom
@@ -278,7 +280,7 @@ function Product() {
                   placeholder={'Enter Quantity'}
                   lazyLoad={isLoading || uploadState.isLoading}
                />
-               <span className={cx('err')}>{formik.touched.quantity && formik.errors.quantity}</span>
+               <span className={cx('error')}>{formik.touched.quantity && formik.errors.quantity}</span>
             </div>
             <div className={cx('field')}>
                <Dropzone onDrop={onDrop} maxFiles={10}>

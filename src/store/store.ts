@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import authReducer from '~/features/auth/authSlice'
+import authReducer from '~/features/admin/adminSlice'
 import customerReducer from '~/features/customers/customerSlice'
 import productsReducer from '~/features/products/productsSlice'
 import brandsReducer from '~/features/brands/brandsSlice'
@@ -12,6 +12,7 @@ import enquiryReducer from '~/features/enquiry/enquirySlice'
 import couponReducer from '~/features/coupon/couponSlice'
 import orderReducer from '~/features/orders/ordersSlice'
 import uploadReducer from '~/features/upload/uploadSlice'
+import trashReducer from '~/features/trashBin/trashBinSlice'
 
 export const store = configureStore({
    reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
       orders: orderReducer,
       uploads: uploadReducer,
       coupons: couponReducer,
+      trashBin: trashReducer,
    },
 })
 export type RootState = ReturnType<typeof store.getState>

@@ -1,7 +1,14 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
 
 import { ProductStageType } from '~/types/productStage'
-import { createProduct, deleteProduct, getAProduct, getProducts, updateAProduct } from './productsService'
+import {
+   createProduct,
+   deleteProduct,
+   getAProduct,
+   getProducts,
+   toggleProductToTrashBin,
+   updateAProduct,
+} from './productsService'
 
 const initialState: ProductStageType = {
    productList: [],
@@ -21,7 +28,6 @@ export const productSlice = createSlice({
    initialState,
    reducers: {},
    extraReducers: (builder) => {
-      builder
       builder
          .addCase(getProducts.pending, (state) => {
             state.isLoading = true
@@ -98,6 +104,21 @@ export const productSlice = createSlice({
             state.isLoading = false
             state.message = action.error as string
          })
+         .addCase(toggleProductToTrashBin.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(toggleProductToTrashBin.fulfilled, (state) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+         })
+         .addCase(toggleProductToTrashBin.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+
          .addCase(resetProductState, () => initialState)
    },
 })

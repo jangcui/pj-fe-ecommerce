@@ -8,7 +8,7 @@ import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { AppDispatch, RootState } from '~/store/store'
 import { BlogType } from '~/types/blogStage'
-import { deleteBlog, getBlogs } from '~/features/blogs/blogService'
+import { getBlogs, toggleBlogToTrashBin } from '~/features/blogs/blogService'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { toast } from 'react-toastify'
 
@@ -66,7 +66,7 @@ function BlogsList() {
    }
    const handleDelete = async (id: string) => {
       hideModal()
-      await dispatch(deleteBlog(id))
+      await dispatch(toggleBlogToTrashBin(id))
       await dispatch(getBlogs())
       toast.success('Deleted!')
    }
@@ -77,25 +77,23 @@ function BlogsList() {
 
    const data1: DataType[] = []
    for (let i = 0; i < blogState.length; i++) {
-      if (blogState[i].role !== 'admin') {
-         data1.push({
-            key: i + 1,
-            title: blogState[i].title,
-            description: blogState[i].description,
-            category: blogState[i].category,
-            numViews: blogState[i].numViews,
-            action: (
-               <>
-                  <Button text to={`/admin/blog/${blogState[i]._id}`}>
-                     <BiEdit className={cx('icon')} />
-                  </Button>
-                  <Button text onClick={() => showModal(blogState[i]._id)}>
-                     <AiFillDelete className={cx('icon')} />
-                  </Button>
-               </>
-            ),
-         })
-      }
+      data1.push({
+         key: i + 1,
+         title: blogState[i].title,
+         description: blogState[i].description,
+         category: blogState[i].category,
+         numViews: blogState[i].numViews,
+         action: (
+            <>
+               <Button text to={`/admin/blog/${blogState[i]._id}`}>
+                  <BiEdit className={cx('icon')} />
+               </Button>
+               <Button text onClick={() => showModal(blogState[i]._id)}>
+                  <AiFillDelete className={cx('icon')} />
+               </Button>
+            </>
+         ),
+      })
    }
    return (
       <div className={cx('wrapper')}>
@@ -105,7 +103,7 @@ function BlogsList() {
                <Table columns={columns} dataSource={data1} />
             </div>{' '}
             <ModalCustom
-               title={'This blog will be delete?'}
+               title={'This product will be add to trash bin?'}
                open={open}
                onOk={() => handleDelete(blogId)}
                onCancel={hideModal}

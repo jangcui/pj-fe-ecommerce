@@ -7,7 +7,6 @@ const initialState: StuffStageType = {
    item: {},
    itemCreate: {},
    itemUpdate: {},
-   itemDelete: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -85,11 +84,11 @@ export const brandsSlice = createSlice({
          .addCase(deleteBrand.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(deleteBrand.fulfilled, (state, action) => {
+         .addCase(deleteBrand.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemDelete = action.payload.title
+            state.message = 'Deleted'
          })
          .addCase(deleteBrand.rejected, (state, action) => {
             state.isError = true

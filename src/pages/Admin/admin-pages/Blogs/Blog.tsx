@@ -66,7 +66,7 @@ function CreateBlog() {
       if (isError) {
          toast.error('Something went wrong')
       }
-   }, [isError, isLoading, isSuccess, blogCreate, dispatch, blogUpdate, navigate])
+   }, [isError, isSuccess, blogCreate, dispatch, blogUpdate, navigate])
 
    useEffect(() => {
       if (blogId !== undefined) {
@@ -141,7 +141,7 @@ function CreateBlog() {
                   placeholder={'Enter Blog Title'}
                   lazyLoad={isLoading || uploadState.isLoading}
                />
-               <span className={cx('err')}>{formik.touched.title && formik.errors.title}</span>
+               <span className={cx('error')}>{formik.touched.title && formik.errors.title}</span>
             </div>
             <div className={cx('field')}>
                <select
@@ -159,7 +159,7 @@ function CreateBlog() {
                      </option>
                   ))}
                </select>
-               <span className={cx('err')}>{formik.touched.category && formik.errors.category}</span>
+               <span className={cx('error')}>{formik.touched.category && formik.errors.category}</span>
             </div>
             <div className={cx('field')}>
                <ReactQuill
@@ -168,7 +168,7 @@ function CreateBlog() {
                   onBlur={() => formik.handleBlur('description')}
                   onChange={formik.handleChange('description')}
                />
-               <span className={cx('err')}>{formik.touched.description && formik.errors.description}</span>
+               <span className={cx('error')}>{formik.touched.description && formik.errors.description}</span>
             </div>
             <div className={cx('field')}>
                <Dropzone onDrop={onDrop} maxFiles={10}>

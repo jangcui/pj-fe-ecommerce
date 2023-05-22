@@ -4,7 +4,8 @@
    align-items: center;
    flex-direction: column;
    justify-content: space-between;
-   padding: 36px 0;
+   row-gap: 10px;
+   padding: 24px 0;
 
    .container {
       width: 80%;
@@ -15,8 +16,8 @@
          margin-bottom: 16px;
       }
       .filter-list {
-         flex-basis: 25%;
-         max-width: 25%;
+         flex-basis: 20%;
+         max-width: 20%;
 
          .filter-block {
             display: flex;
@@ -53,7 +54,7 @@
                }
                .color {
                   display: grid;
-                  grid-template-columns: repeat(9, 1fr);
+                  grid-template-columns: repeat(5, 1fr);
                   grid-row-gap: 10px;
 
                   .color-circle {
@@ -93,7 +94,7 @@
             display: flex;
             width: 100%;
             align-items: center;
-            padding: 12px 10px;
+            padding: 0 10px;
             justify-content: space-between;
             box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
             background-color: var(--white);
@@ -108,7 +109,7 @@
                   display: flex;
                   background-color: #f8f9fa;
                   color: #000;
-                  padding: 10px 10px;
+                  padding: 6px 10px;
                   justify-content: space-between;
                   cursor: pointer;
                   width: 200px;
@@ -125,6 +126,10 @@
                display: flex;
                align-items: center;
 
+               .icon {
+                  width: 18px;
+                  height: 18px;
+               }
                .wrap-icon {
                   display: flex;
                   align-items: center;
@@ -154,6 +159,30 @@
             display: flex;
             flex-wrap: wrap;
 
+            .collection {
+               width: 50%;
+               margin: 10px auto;
+            }
+         }
+         .sort-1 {
+            .collection {
+               width: 100%;
+               margin: 10px auto;
+            }
+         }
+         .sort-2 {
+            .collection {
+               width: 50%;
+               margin: 10px auto;
+            }
+         }
+         .sort-3 {
+            .collection {
+               width: 33%;
+               margin: 10px auto;
+            }
+         }
+         .sort-4 {
             .collection {
                width: 25%;
                margin: 10px auto;

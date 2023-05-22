@@ -1,6 +1,6 @@
 import config from '~/config'
 import Admin from '~/pages/Admin'
-import BlogPage from '~/pages/BlogPage/BlogPage'
+import BlogPage from '~/pages/BlogPage'
 import CartPage from '~/pages/CartPage'
 import CheckOut from '~/pages/CheckOut'
 import CompareProducts from '~/pages/CompareProducts'
@@ -9,6 +9,7 @@ import Home from '~/pages/Home'
 import Login from '~/pages/Login'
 import ForgotPwd from '~/pages/Login/ForgotPwd'
 import SignUp from '~/pages/Login/SignUp'
+import LoginAdmin from '~/pages/LoginAdmin/LoginAdmin'
 import NotFound from '~/pages/NotFound'
 import OurStore from '~/pages/OurStore'
 import Products from '~/pages/Products'
@@ -36,6 +37,7 @@ const publicRouter: Route[] = [
    { path: config.routes.cart, component: CartPage },
    { path: config.routes.forgotPwd, component: ForgotPwd },
    { path: config.routes.signup, component: SignUp },
+   { path: config.routes.loginAdmin, component: LoginAdmin, layout: null },
    { path: config.routes.checkout, component: CheckOut },
    { path: config.routes.login, component: Login },
    { path: config.routes.notfound, component: NotFound, layout: null },

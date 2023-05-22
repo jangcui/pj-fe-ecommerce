@@ -1,13 +1,52 @@
-import classNames from 'classnames/bind'
-
 import styles from './OurStore.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
+import { TfiLayoutColumn3, TfiLayoutColumn2, TfiAngleDown, TfiAlignJustify } from 'react-icons/tfi'
+import classNames from 'classnames/bind'
 import ChangeTitle from '~/components/ChangeTitle'
-import { DropIcon, Sort1Icon, Sort2Icon, Sort3Icon } from '~/components/Icon'
 import Collection from '../../components/Collection/Collection'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { getProducts } from '~/features/products/productsService'
+import { useEffect, useState } from 'react'
+import Button from '~/layouts/components/Button/Button'
+import Loading from '~/components/Loading/Loading'
 const cx = classNames.bind(styles)
 
 function OurStore() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { productList, isLoading } = useSelector((state: RootState) => state.products)
+   const [params, setParams] = useState({})
+   const [sortBtn, setSortBtn] = useState([
+      {
+         id: 0,
+         isActive: true,
+         classSort: 'sort-4',
+         icon: <TfiAlignJustify className={cx('icon')} style={{ transform: 'rotate(90deg)' }} />,
+      },
+      { id: 1, isActive: false, classSort: 'sort-3', icon: <TfiLayoutColumn3 className={cx('icon')} /> },
+      { id: 2, isActive: false, classSort: 'sort-2', icon: <TfiLayoutColumn2 className={cx('icon')} /> },
+      { id: 3, isActive: false, classSort: 'sort-1', icon: <TfiAlignJustify className={cx('icon')} /> },
+   ])
+   const [sortClass, setSortClass] = useState<string>('')
+   const handleSortClick = (id: number) => {
+      const newSort = sortBtn.map((el) => {
+         if (el.id === id) {
+            return { ...el, isActive: true }
+         } else {
+            return { ...el, isActive: false }
+         }
+      })
+      setSortBtn(newSort)
+   }
+
+   useEffect(() => {
+      dispatch(getProducts(params))
+   }, [dispatch, params])
+   useEffect(() => {
+      const activeSortBtn = sortBtn.find((btn) => btn.isActive)
+      const activeSortClass = activeSortBtn ? activeSortBtn.classSort : ''
+      setSortClass(activeSortClass)
+   }, [sortBtn])
    return (
       <>
          <ChangeTitle title={'Our Store'} />
@@ -93,168 +132,33 @@ function OurStore() {
                      <div className={cx('sort-by')}>
                         <span>Sort By: </span>
                         <span className={cx('option')}>
-                           <p>Best selling</p> <DropIcon />
+                           <p>Best selling</p> <TfiAngleDown />
                         </span>
                      </div>
                      <div className={cx('sort-icons')}>
-                        <p>21 product</p>
+                        <p>{productList.length} product</p>
                         <div className={cx('wrap-icon')}>
-                           <span className={cx('icon-filter', 'active')}>
-                              {' '}
-                              <Sort1Icon />
-                           </span>
-                           <span className={cx('icon-filter', 'active')}>
-                              {' '}
-                              <Sort2Icon />
-                           </span>
-                           <span className={cx('icon-filter')}>
-                              {' '}
-                              <Sort1Icon />
-                           </span>
-                           <span className={cx('icon-filter')}>
-                              <Sort3Icon />
-                           </span>
+                           {sortBtn.map((el, i) => (
+                              <Button text onClick={() => handleSortClick(el.id)} key={i}>
+                                 <span className={cx('icon-filter', el.isActive && 'active')}>{el.icon}</span>
+                              </Button>
+                           ))}
                         </div>
                      </div>
                   </div>
 
-                  <div className={cx('product')}>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
-                     <span className={cx('collection')}>
-                        {' '}
-                        <Collection />
-                     </span>
+                  <div className={cx('product', sortClass)}>
+                     {isLoading ? (
+                        <Loading />
+                     ) : (
+                        <>
+                           {productList?.map((product, index) => (
+                              <div className={cx('collection')} key={index}>
+                                 <Collection data={product} isSort={sortClass === 'sort-1'} />
+                              </div>
+                           ))}
+                        </>
+                     )}
                   </div>
                </div>
             </div>

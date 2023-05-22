@@ -25,10 +25,7 @@ export const uploadImgs = createAsyncThunk('images/uploadImgs', async (data: any
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 

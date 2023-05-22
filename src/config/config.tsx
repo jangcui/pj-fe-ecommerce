@@ -1,10 +1,10 @@
 const routes = {
    home: '/',
    products: '/products',
-   product: '/product/:id',
+   product: '/product/:productId',
    store: '/our-store',
    blogs: '/blogs',
-   blog: '/blog/:id',
+   blog: '/blog/:blogId',
    contact: '/contact',
    compare: '/compare',
    wishlist: '/wishlist',
@@ -13,6 +13,7 @@ const routes = {
    checkout: '/checkout',
    cart: '/cart',
    admin: '/admin/*',
+   loginAdmin: '/admin/login',
    signup: '/signup',
    notfound: '*',
 }

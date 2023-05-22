@@ -2,10 +2,40 @@ import classNames from 'classnames/bind'
 import styles from './Contact.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
 import Button from '~/layouts/components/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import InputCustom from '~/components/InputCustom/InputCustom'
+import { createEnquiry } from '~/features/enquiry/enquiryService'
 const cx = classNames.bind(styles)
 
+const userSchema = Yup.object().shape({
+   name: Yup.string().required('Name is required'),
+   email: Yup.string().email('Email should be valid').required('Email is required'),
+   mobile: Yup.string().required('Phone number is required'),
+   comment: Yup.string().required('Please enter comments'),
+})
+
 function Contact() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { enqCreate, isLoading } = useSelector((state: RootState) => state.enquiries)
+
+   const formik = useFormik({
+      initialValues: {
+         name: '',
+         email: '',
+         mobile: '',
+         comment: '',
+      },
+      validationSchema: userSchema,
+      onSubmit: async (values) => {
+         console.log(values)
+         dispatch(createEnquiry(values))
+      },
+   })
+
    return (
       <>
          <ChangeTitle title={'Contact Us'} />
@@ -21,16 +51,62 @@ function Contact() {
                ></iframe>
 
                <div className={cx('content')}>
-                  <div className={cx('form-submit')}>
+                  <form className={cx('form-submit')} action="" onSubmit={formik.handleSubmit}>
                      <h3 className={cx('title')}>Submit</h3>
-                     <input type="text" placeholder="Name" />
-                     <input type="email" placeholder="Email*" />
-                     <input type="text" placeholder="Phone Number" />
-                     <textarea itemType="text" placeholder="Comments" />
-                     <Button primary className={cx('btn')}>
+                     <div className={cx('field')}>
+                        <InputCustom
+                           value={formik.values.name}
+                           onChange={formik.handleChange('name')}
+                           className={cx('input')}
+                           type={'text'}
+                           onBlur={formik.handleBlur('name')}
+                           placeholder={'Name'}
+                        />
+                        {formik.touched.name && formik.errors.name ? (
+                           <span className={cx('error')}>{formik.errors.name}</span>
+                        ) : null}
+                     </div>
+                     <div className={cx('field')}>
+                        <InputCustom
+                           value={formik.values.email}
+                           onChange={formik.handleChange('email')}
+                           className={cx('input')}
+                           onBlur={formik.handleBlur('email')}
+                           type={'text'}
+                           placeholder={'Email'}
+                        />
+                        {formik.touched.email && formik.errors.email ? (
+                           <span className={cx('error')}>{formik.errors.email}</span>
+                        ) : null}
+                     </div>
+                     <div className={cx('field')}>
+                        <InputCustom
+                           value={formik.values.mobile}
+                           onChange={formik.handleChange('mobile')}
+                           className={cx('input')}
+                           type={'text'}
+                           onBlur={formik.handleBlur('mobile')}
+                           placeholder={'Phone Number'}
+                        />
+                        {formik.touched.mobile && formik.errors.mobile ? (
+                           <span className={cx('error')}>{formik.errors.mobile}</span>
+                        ) : null}
+                     </div>
+                     <div className={cx('field')}>
+                        <textarea
+                           itemType="text"
+                           onBlur={formik.handleBlur('comment')}
+                           onChange={formik.handleChange('comment')}
+                           placeholder="Comments"
+                        />
+                        {formik.touched.comment && formik.errors.comment ? (
+                           <span className={cx('error')}>{formik.errors.comment}</span>
+                        ) : null}
+                     </div>
+                     <Button primary className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
                         Submit
                      </Button>
-                  </div>
+                  </form>
                   <div className={cx('contact')}>
                      <h3 className={cx('title')}>Get In Touch With Us</h3>
                      <ul>

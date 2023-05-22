@@ -1,8 +1,8 @@
 export interface EnquiryType {
-   _id?: string
+   _id?: string | any
    name?: string
    email?: string
-   status?: JSX.Element
+   status?: string
    mobile?: string
    comment?: string
    role?: string
@@ -12,6 +12,9 @@ export interface EnquiryType {
 export interface EnquiryStageType {
    enquiries: EnquiryType[]
    enquiry: EnquiryType
+   enqCreate: EnquiryType
+   enqUpdate: EnquiryType
+   enqDelete: EnquiryType
    isError: boolean
    isLoading: boolean
    isSuccess: boolean

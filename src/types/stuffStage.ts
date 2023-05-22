@@ -8,10 +8,9 @@ export interface StuffType {
 
 export interface StuffStageType {
    stuff: StuffType[]
-   item: object
-   itemCreate: object
-   itemDelete: object
-   itemUpdate: object
+   item: StuffType
+   itemCreate: StuffType
+   itemUpdate: StuffType
    name: string
    isError: boolean
    isLoading: boolean

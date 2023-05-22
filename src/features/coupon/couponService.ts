@@ -9,10 +9,7 @@ export const getCoupon = createAsyncThunk('coupon/get', async (id: string, thunk
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const getCoupons = createAsyncThunk('coupon/get-all', async (__, thunkAPI) => {
@@ -22,10 +19,7 @@ export const getCoupons = createAsyncThunk('coupon/get-all', async (__, thunkAPI
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const createCoupon = createAsyncThunk('coupon/create', async (data: CouponType, thunkAPI) => {
@@ -35,10 +29,7 @@ export const createCoupon = createAsyncThunk('coupon/create', async (data: Coupo
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 
@@ -64,9 +55,6 @@ export const deleteCoupon = createAsyncThunk('coupon/delete', async (id: string 
       const response = await httpRequest.Delete(`coupon/${id}`)
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })

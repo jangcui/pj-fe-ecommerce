@@ -32,20 +32,23 @@
             display: flex;
             flex-direction: column;
 
-            input {
-               width: 100%;
-               padding: 12px;
-               border-radius: 4px;
-               font-size: 20px;
+            .field {
                margin: 12px 0;
-            }
-            textarea {
-               width: 100%;
-               min-height: 120px;
-               border-radius: 4px;
-               font-size: 20px;
-               resize: unset;
-               padding: 12px;
+
+               .input {
+                  width: 100%;
+                  padding: 12px;
+                  border-radius: 4px;
+                  font-size: 20px;
+               }
+               textarea {
+                  width: 100%;
+                  min-height: 120px;
+                  border-radius: 4px;
+                  font-size: 20px;
+                  resize: unset;
+                  padding: 12px;
+               }
             }
             .btn {
                padding: 16px 12px;

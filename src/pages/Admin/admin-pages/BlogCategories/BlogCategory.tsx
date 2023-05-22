@@ -79,7 +79,7 @@ function BlogCategory() {
                placeholder="Enter Brand Title"
                lazyLoad={isLoading}
             />
-            <p className={cx('err')}>{formik.touched.title && formik.errors.title}</p>
+            <p className={cx('error')}>{formik.touched.title && formik.errors.title}</p>
 
             <Button className={cx('form-btn')} primary type={'submit'}>
                {blogCateId !== undefined ? 'Update' : 'Add'} Blog Category

@@ -9,6 +9,10 @@ import SpecialProducts from './SpecialProducts/SpecialProducts'
 import ChangeTitle from '~/components/ChangeTitle'
 import Collection from '~/components/Collection'
 import BlogComp from '~/components/BlogComp'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { useEffect } from 'react'
+import { getProducts } from '~/features/products/productsService'
 const cx = classNames.bind(styles)
 
 type Item = {
@@ -40,6 +44,13 @@ const ITEM_MARQUEE: Item[] = [
 ]
 
 function Home() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { productList } = useSelector((state: RootState) => state.products)
+
+   useEffect(() => {
+      dispatch(getProducts({}))
+   }, [dispatch])
+   console.log(productList)
    return (
       <div className={cx('wrapper')}>
          <ChangeTitle title={'E-commerce'} />
@@ -58,41 +69,37 @@ function Home() {
                   ))}
                </Marquee>
             </section>
-            <h1>Collections</h1>
-            <section className={cx('collection')}>
-               <Collection />
-               <Collection />
-               <Collection />
-               <Collection />
-               <Collection />
-               <Collection />
-               <Collection />
-               <Collection />
+            <h1>Featured Collection</h1>
+            <section className={cx('special')}>
+               {productList?.map((product, index) => {
+                  if (product.tags === 'featured') {
+                     return <SpecialProducts data={product} key={index} />
+                  }
+               })}
             </section>
-
             <h1>Special Products</h1>
             <section className={cx('special')}>
-               <SpecialProducts />
-               <SpecialProducts />
-               <SpecialProducts />
-               <SpecialProducts />
-               <SpecialProducts />
-               <SpecialProducts />
-               <SpecialProducts />
+               {productList?.map((product, index) => {
+                  if (product.tags === 'special') {
+                     return <SpecialProducts data={product} key={index} />
+                  }
+               })}
+            </section>
+            <h1>Popular Products</h1>
+            <section className={cx('popular')}>
+               {productList?.map((product, index) => {
+                  if (product.tags === 'popular') {
+                     return <Collection data={product} key={index} />
+                  }
+               })}
             </section>
 
             <h1>Blogs</h1>
-            <section className={cx('blogs')}>
+            {/* <section className={cx('blogs')}>
                <BlogComp />
                <BlogComp />
-               <BlogComp />
-               <BlogComp />
-               <BlogComp />
-               <BlogComp />
-               <BlogComp />
-               <BlogComp />
-               <BlogComp />
-            </section>
+            
+            </section> */}
          </div>
       </div>
    )

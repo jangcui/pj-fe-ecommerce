@@ -9,10 +9,7 @@ export const getProdCates = createAsyncThunk('productCategory/get-all', async (_
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const updateAProdCate = createAsyncThunk('productCategory/update', async (body: StuffType, thunkAPI) => {
@@ -22,10 +19,7 @@ export const updateAProdCate = createAsyncThunk('productCategory/update', async 
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 
@@ -34,10 +28,7 @@ export const deleteProdCate = createAsyncThunk('productCategory/delete', async (
       const response = await httpRequest.Delete(`prod-category/${id}`)
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const getProdCate = createAsyncThunk('productCategory/get', async (id: string, thunkAPI) => {
@@ -47,10 +38,7 @@ export const getProdCate = createAsyncThunk('productCategory/get', async (id: st
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const createProdCate = createAsyncThunk('productCategory/create', async (data: StuffType, thunkAPI) => {
@@ -60,9 +48,6 @@ export const createProdCate = createAsyncThunk('productCategory/create', async (
       })
       return response
    } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })

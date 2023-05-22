@@ -1,51 +1,58 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createAction, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import * as httpRequest from '~/untils/httpRequest'
 import { OrderStageType } from '~/types/orderStage'
+import { getAOrder, getAllOrders } from './orderService'
 
-export const getOrders = createAsyncThunk('user/all-orders', async (__, thunkAPI) => {
-   try {
-      const response = await httpRequest.get('color', {
-         signal: thunkAPI.signal,
-      })
-      return response
-   } catch (error: any) {
-      if (error.name === 'AxiosError' && error.response.status === 422) {
-         return thunkAPI.rejectWithValue(error.response.data)
-      }
-      throw error
-   }
-})
 const initialState: OrderStageType = {
-   order: [],
+   orderList: [],
+   order: {},
+   orderCreate: {},
+   orderUpdate: {},
+   orderDelete: {},
    isError: false,
    isLoading: false,
    isSuccess: false,
    message: '',
 }
 
+export const resetOrderState = createAction('Reset_Order_State')
 export const ordersSlice = createSlice({
    name: 'orders',
    initialState,
    reducers: {},
    extraReducers: (builder) => {
       builder
-         .addCase(getOrders.pending, (state) => {
+         .addCase(getAllOrders.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(getOrders.fulfilled, (state, action: PayloadAction<any>) => {
+         .addCase(getAllOrders.fulfilled, (state, action: PayloadAction<any>) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.order = action.payload
-            state.message = 'Success'
+            state.orderList = action.payload
          })
-         .addCase(getOrders.rejected, (state, action) => {
+         .addCase(getAllOrders.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error as string
          })
+         .addCase(getAOrder.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(getAOrder.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.order = action.payload
+         })
+         .addCase(getAOrder.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(resetOrderState, () => initialState)
    },
 })
 

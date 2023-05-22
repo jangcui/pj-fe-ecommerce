@@ -11,7 +11,7 @@ import { ProductType } from '~/types/productStage'
 import { ParamsType } from '~/types/paramsStage'
 import { toast } from 'react-toastify'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
-import { deleteProduct, getProducts } from '~/features/products/productsService'
+import { deleteProduct, getProducts, toggleProductToTrashBin } from '~/features/products/productsService'
 
 const cx = classNames.bind(styles)
 
@@ -60,15 +60,14 @@ const columns: any = [
       dataIndex: 'action',
    },
 ]
-
+const params: ParamsType = {
+   sort: true,
+}
 function ProductList() {
    const dispatch = useDispatch<AppDispatch>()
    const productData = useSelector((state: RootState) => state.products.productList)
    const [productId, setProductId] = useState<string>('')
 
-   const params: ParamsType = {
-      sort: true,
-   }
    useEffect(() => {
       dispatch(getProducts(params))
    }, [dispatch])
@@ -87,33 +86,34 @@ function ProductList() {
    }
    const handleDelete = async (id: string) => {
       hideModal()
-      await dispatch(deleteProduct(id))
-      await dispatch(getProducts(params))
-      toast.success('Deleted!')
+      await dispatch(toggleProductToTrashBin(id))
+
+      setTimeout(() => {
+         dispatch(getProducts(params))
+         toast.success('Product added to trash bin!')
+      }, 100)
    }
    const data1: DataType[] = []
    for (let i = 0; i < productData.length; i++) {
-      if (productData[i].role !== 'admin') {
-         data1.push({
-            key: i + 1,
-            title: productData[i].title,
-            slug: productData[i].slug,
-            brand: productData[i].brand,
-            category: productData[i].category,
-            sold: productData[i].sold,
-            price: productData[i].price,
-            action: (
-               <>
-                  <Button text to={`/admin/product/${productData[i]._id}`}>
-                     <BiEdit className={cx('icon')} />
-                  </Button>
-                  <Button text onClick={() => showModal(productData[i]._id)}>
-                     <AiFillDelete className={cx('icon')} />
-                  </Button>
-               </>
-            ),
-         })
-      }
+      data1.push({
+         key: i + 1,
+         title: productData[i].title,
+         slug: productData[i].slug,
+         brand: productData[i].brand,
+         category: productData[i].category,
+         sold: productData[i].sold,
+         price: productData[i].price,
+         action: (
+            <>
+               <Button text to={`/admin/product/${productData[i]._id}`}>
+                  <BiEdit className={cx('icon')} />
+               </Button>
+               <Button text onClick={() => showModal(productData[i]._id)}>
+                  <AiFillDelete className={cx('icon')} />
+               </Button>
+            </>
+         ),
+      })
    }
 
    return (
@@ -124,7 +124,7 @@ function ProductList() {
                <Table columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
-               title={'This blog will be delete?'}
+               title={'This blog will be add to trash bin?'}
                open={open}
                onOk={() => handleDelete(productId)}
                onCancel={hideModal}

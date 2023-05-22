@@ -1,19 +1,65 @@
 .wrapper {
+   .btn-back {
+      font-size: 16px;
+      &:hover {
+         opacity: 0.8;
+      }
+   }
+   .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+   }
    h1 {
       margin-bottom: 30px;
    }
+   .icon-back {
+      width: 20px;
+      height: 20px;
+   }
+   select {
+      font-size: 16px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color-gray);
+      border-radius: 5px;
+      box-shadow: 0 0 5px var(--border-color-gray);
+   }
+   .order-text {
+      color: var(--slug-color);
+
+      &:hover {
+         color: var(--blue);
+         text-decoration: underline;
+      }
+   }
+   .field {
+      margin-bottom: 30px;
+      color: var(--text-color);
+
+      .key {
+         font-weight: 600;
+         font-size: 20px;
+      }
+      .value {
+         margin-left: 30px;
+         font-weight: 400;
+         font-size: 18px;
+      }
+      .btn-action {
+         color: var(--blue);
+         &:hover {
+            text-decoration: underline;
+         }
+      }
+   }
+
    .icon {
       width: 20px;
       height: 20px;
       margin-right: 4px;
       color: var(--slug-color);
    }
-   .err {
-      color: var(--slug-color);
-      font-size: 14px;
-      margin-bottom: 30px;
-      width: 100%;
-   }
+
    .input {
       font-size: 14px;
       display: block;

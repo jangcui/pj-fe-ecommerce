@@ -9,6 +9,7 @@
    --black: #161823;
    --bg-header: #131921;
    --white: #ffff;
+   --blue: #3760ff;
    --green: #48bb78;
    --font-family: 'Roboto', sans-serif;
    --default-layout-width: 1150px;
@@ -22,11 +23,9 @@
    margin: 0;
    padding: 0;
 }
-
 html {
    font-size: 62.5%;
 }
-
 body {
    font-family: var(--font-family);
    font-size: 1.6rem;
@@ -35,7 +34,6 @@ body {
    text-rendering: optimizeSpeed;
    overflow-y: overlay;
 }
-
 // scrollbar css
 html *::-webkit-scrollbar {
    border-radius: 0;
@@ -66,4 +64,17 @@ Link [tabIndex] {
 a[href] {
    border: none;
    text-decoration: none;
+}
+
+.icon {
+   width: 24px;
+   height: 24px;
+}
+.icon-active {
+   color: var(--slug-color);
+}
+
+.error {
+   color: var(--slug-color);
+   font-size: 12px;
 }

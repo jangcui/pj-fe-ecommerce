@@ -3,9 +3,20 @@ import styles from './BlogPage.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import BlogComp from '~/components/BlogComp'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '~/store/store'
+import { getBlogs } from '~/features/blogs/blogService'
+import { useEffect } from 'react'
 const cx = classNames.bind(styles)
 
 function BlogPage() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { blogs, isLoading } = useSelector((state: RootState) => state.blogs)
+
+   useEffect(() => {
+      dispatch(getBlogs())
+   }, [dispatch])
+
    return (
       <>
          <ChangeTitle title={'Blogs'} />
@@ -24,30 +35,11 @@ function BlogPage() {
                   </div>
                </div>
                <div className={cx('blogs')}>
-                  <span className={cx('item')}>
-                     {' '}
-                     <BlogComp />
-                  </span>
-                  <span className={cx('item')}>
-                     {' '}
-                     <BlogComp />
-                  </span>
-                  <span className={cx('item')}>
-                     {' '}
-                     <BlogComp />
-                  </span>
-                  <span className={cx('item')}>
-                     {' '}
-                     <BlogComp />
-                  </span>
-                  <span className={cx('item')}>
-                     {' '}
-                     <BlogComp />
-                  </span>
-                  <span className={cx('item')}>
-                     {' '}
-                     <BlogComp />
-                  </span>
+                  {blogs?.map((blog, index) => (
+                     <span className={cx('item')} key={index}>
+                        <BlogComp data={blog} />
+                     </span>
+                  ))}
                </div>
             </div>
          </div>

@@ -9,9 +9,9 @@ export interface CouponType {
 export interface CouponStageType {
    coupons: CouponType[]
    coupon?: CouponType
-   couponCreate: object
-   couponDelete: object
-   couponUpdate: object
+   couponCreate: CouponType
+   couponDelete: CouponType
+   couponUpdate: CouponType
    isError: boolean
    isLoading: boolean
    isSuccess: boolean

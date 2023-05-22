@@ -14,6 +14,9 @@ export interface BlogType {
    __v?: string
    isLiked?: boolean
    isDisLiked?: boolean
+   updatedAt?: Date | any
+   createdAt?: Date | any
+   deleteDate?: Date | any
 }
 
 export interface BlogStageType {

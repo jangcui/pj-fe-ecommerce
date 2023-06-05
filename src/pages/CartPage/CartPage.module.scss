@@ -2,9 +2,11 @@
    padding: 16px 30px;
    padding-bottom: unset;
    width: 100%;
+   padding: 40px 0px;
+   background-color: var(--bg-color);
 
    .section {
-      padding: 20px 0;
+      padding: 20px 40px;
       border-bottom: 1px solid var(--border-color-gray);
       display: flex;
       justify-content: space-between;
@@ -21,35 +23,37 @@
             align-items: center;
             gap: 10px;
 
-            .btn-delete {
-               &:hover {
-                  color: var(--slug-color);
+            .update-quantity {
+               display: flex;
+               flex-direction: column;
+               gap: 10px;
+
+               input {
+                  height: 30px;
+                  border-radius: 2px;
+                  text-align: center;
+                  font-size: 16px;
+                  background-color: var(--white);
+               }
+               input[type='number']::-webkit-inner-spin-button,
+               input[type='number']::-webkit-outer-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+                  display: none;
                }
             }
-            .btn-counter {
-               background-color: var(--white);
-               padding: 6px 10px;
+
+            span {
                display: flex;
-               gap: 10px;
-               align-items: center;
+               flex-direction: column;
+               row-gap: 6px;
 
-               p {
-                  color: var(--text-color);
-                  font-size: 16px;
-                  margin-right: 4px;
-               }
-               span {
-                  display: flex;
-                  flex-direction: column;
-                  row-gap: 6px;
-
-                  .icon-btn {
-                     opacity: 0.9;
-                     border: 1px solid var(--text-color);
-                     padding: 4px;
-                     &:hover {
-                        opacity: 1;
-                     }
+               .icon-btn {
+                  opacity: 0.9;
+                  border: 1px solid var(--text-color);
+                  padding: 4px;
+                  &:hover {
+                     opacity: 1;
                   }
                }
             }
@@ -68,6 +72,19 @@
                   flex-direction: column;
                   justify-content: center;
 
+                  .color {
+                     margin-right: 10px;
+                     margin-top: 8px;
+                     cursor: pointer;
+                     display: flex;
+                     width: 20px;
+                     align-items: center;
+                     justify-content: center;
+                     height: 20px;
+                     background-color: var(--orange-color);
+                     border-radius: 100%;
+                  }
+
                   p {
                      font-size: 14px;
                      flex: 1;
@@ -83,6 +100,16 @@
          }
          .price {
             font-weight: 600;
+            display: flex;
+            gap: 20px;
+            width: 100px;
+            justify-content: flex-end;
+
+            .btn-delete {
+               &:hover {
+                  color: var(--slug-color);
+               }
+            }
          }
       }
 
@@ -97,11 +124,11 @@
       }
       .text-foot {
          color: var(--text-gray);
-         font-size: 12px;
+         font-size: 18px;
          margin: 16px 0;
 
          span {
-            font-size: 16px;
+            font-size: 24px;
             font-weight: 600;
             margin-right: 4px;
             color: var(--text-color);

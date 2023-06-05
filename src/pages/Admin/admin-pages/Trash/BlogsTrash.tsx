@@ -10,7 +10,7 @@ import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteBlog, toggleBlogToTrashBin } from '~/features/blogs/blogService'
 import { geBlogsTrash } from '~/features/trashBin/trashBinService'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { BlogType } from '~/types/blogStage'
 

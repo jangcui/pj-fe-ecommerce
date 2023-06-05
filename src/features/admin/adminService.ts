@@ -55,3 +55,24 @@ export const deleteAUser = createAsyncThunk('admin/delete-user', async (id: stri
       return console.log(thunkAPI)
    }
 })
+
+export const getAOrder = createAsyncThunk('enquiry/get', async (id: string, thunkAPI) => {
+   try {
+      const response = await httpRequest.get(`user/order-user/${id}`, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const getAllOrders = createAsyncThunk('orders', async (__, thunkAPI) => {
+   try {
+      const response = await httpRequest.get('user/all-orders', {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})

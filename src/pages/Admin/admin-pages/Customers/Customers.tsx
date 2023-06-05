@@ -5,16 +5,17 @@ import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '~/store/store'
-import { UserType } from '~/types/userStage'
 import { getUsers, toggleCustomerToTrashBin } from '~/features/admin/adminService'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { toast } from 'react-toastify'
 import { AiFillDelete } from 'react-icons/ai'
 
-interface DataType extends UserType {
+interface DataType {
    key: React.Key
    name: string
+   email: string
+   mobile: string
    blocked: string
    action: JSX.Element
 }

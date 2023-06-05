@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
-import { getAllOrders } from '~/features/orders/orderService'
 
 const cx = classNames.bind(styles)
 interface DataType {
@@ -50,56 +49,54 @@ const columns: any = [
 
 function OrderList() {
    const dispatch = useDispatch<AppDispatch>()
-   const orderState = useSelector((state: RootState) => state.orders.orderList)
+   const orderState = useSelector((state: RootState) => state.auth.orderList)
 
-   useEffect(() => {
-      dispatch(getAllOrders())
-   }, [dispatch])
-   console.log(orderState)
-   const data1: DataType[] = []
-   for (let i = 0; i < orderState.length; i++) {
-      data1.push({
-         key: i + 1,
-         name: orderState[i]?.orderBy?.fist_name + ' ' + orderState[i]?.orderBy?.last_name,
-         product: (
-            <>
-               <Button text to={`/admin/order/${orderState[i]._id}`}>
-                  <p className={cx('order-text')}> View User Order</p>
-               </Button>
-            </>
-         ),
-         amount: orderState[i]?.paymentIntent?.amount,
-         date: new Date(orderState[i]?.createdAt as Date)
-            .toLocaleString('vi-VN', {
-               hour: '2-digit',
-               minute: '2-digit',
-               second: '2-digit',
-               hour12: true,
-               year: 'numeric',
-               month: '2-digit',
-               day: '2-digit',
-            })
-            .replace(' ', ', '),
-         action: (
-            <>
-               <Button text to={'/'}>
-                  <AiFillDelete className={cx('icon')} />
-               </Button>
-               <Button text to={'/'}>
-                  <BiEdit className={cx('icon')} />
-               </Button>
-            </>
-         ),
-      })
-   }
+   // useEffect(() => {
+   //    dispatch(getAllOrders())
+   // }, [dispatch])
+
+   // const data1: DataType[] = []
+   // for (let i = 0; i < orderState.length; i++) {
+   //    data1.push({
+   //       key: i + 1,
+   //       name: orderState[i]?.orderBy?.fist_name + ' ' + orderState[i]?.orderBy?.last_name,
+   //       product: (
+   //          <>
+   //             <Button text to={`/admin/order/${orderState[i]._id}`}>
+   //                <p className={cx('order-text')}> View User Order</p>
+   //             </Button>
+   //          </>
+   //       ),
+   //       amount: orderState[i]?.paymentIntent?.amount,
+   //       date: new Date(orderState[i]?.createdAt as Date)
+   //          .toLocaleString('vi-VN', {
+   //             hour: '2-digit',
+   //             minute: '2-digit',
+   //             second: '2-digit',
+   //             hour12: true,
+   //             year: 'numeric',
+   //             month: '2-digit',
+   //             day: '2-digit',
+   //          })
+   //          .replace(' ', ', '),
+   //       action: (
+   //          <>
+   //             <Button text to={'/'}>
+   //                <AiFillDelete className={cx('icon')} />
+   //             </Button>
+   //             <Button text to={'/'}>
+   //                <BiEdit className={cx('icon')} />
+   //             </Button>
+   //          </>
+   //       ),
+   //    })
+   // }
 
    return (
       <div className={cx('wrapper')}>
          <h1>Orders</h1>
          <div className={cx('chart')}>
-            <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
-            </div>
+            <div className={cx('content')}>{/* <Table columns={columns} dataSource={data1} /> */}</div>
          </div>
       </div>
    )

@@ -5,7 +5,7 @@ import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import InputCustom from '~/components/InputCustom/InputCustom'
 import { useEffect } from 'react'
 
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
@@ -15,7 +15,7 @@ import { resetProdCateState } from '~/features/prodCategories/prodCateSlice'
 
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const productCateSchema = Yup.object().shape({
    title: Yup.string().required('Title is required'),
 })
 
@@ -55,7 +55,7 @@ function Categories() {
       initialValues: {
          title: name || '',
       },
-      validationSchema: userSchema,
+      validationSchema: productCateSchema,
       onSubmit: async (values) => {
          if (categoryId !== undefined) {
             const result = await dispatch(updateAProdCate({ id: categoryId, title: formik.values.title }))

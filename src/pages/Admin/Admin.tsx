@@ -19,7 +19,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom'
 const { Header, Sider, Content } = Layout
 
 import Image from '~/components/Image/Image'
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import styles from './Admin.module.scss'
 import { Blog, BlogList } from './admin-pages/Blogs'
 import Dashboard from './admin-pages/Dashboard'

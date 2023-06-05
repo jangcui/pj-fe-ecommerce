@@ -10,9 +10,10 @@ import { useEffect, useState } from 'react'
 import { addToWishList, getUserWishList } from '~/features/customers/customerService'
 import { ProductType } from '~/types/productStage'
 import { ImgType } from '~/types/imageStage'
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import Loading from '~/components/Loading/Loading'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 interface ValueType {
@@ -21,17 +22,22 @@ interface ValueType {
 }
 function WishList() {
    const dispatch = useDispatch<AppDispatch>()
-   const { wishlist, isLoading } = useSelector((state: RootState) => state.customer)
+   const { wishlist, isLoading, user } = useSelector((state: RootState) => state.customer)
    const [dataList, setDataList] = useState<ProductType[]>([])
    const [open, setOpen] = useState(false)
    const [value, setValue] = useState<ValueType>({
       index: 0,
       id: '',
    })
-
+   const navigate = useNavigate()
    useEffect(() => {
-      dispatch(getUserWishList())
-   }, [dispatch])
+      if (!user) {
+         navigate('/login')
+      } else {
+         dispatch(getUserWishList())
+      }
+   }, [user, navigate, dispatch])
+
    useEffect(() => {
       if (wishlist) {
          setDataList(wishlist)

@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './BlogComp.module.scss'
 import Image from '~/components/Image/Image'
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import { BlogType } from '~/types/blogStage'
 const cx = classNames.bind(styles)
 

@@ -3,31 +3,32 @@ import type { SelectProps } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import { Select as SelectMulti } from 'antd'
+import { useNavigate, useParams } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
+import { useDispatch, useSelector } from 'react-redux'
+import { AiOutlineClose, AiOutlineFileImage } from 'react-icons/ai'
 import * as Yup from 'yup'
+
 import styles from './Products.module.scss'
 import InputCustom from '~/components/InputCustom'
-import Button from '~/layouts/components/Button'
-import { useDispatch, useSelector } from 'react-redux'
+import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { StuffType } from '~/types/stuffStage'
-import { AiOutlineClose, AiOutlineFileImage } from 'react-icons/ai'
 import { uploadImgs } from '~/features/upload/uploadSlice'
 import Image from '~/components/Image/Image'
 import { ImgType } from '~/types/imageStage'
-import { toast } from 'react-toastify'
 import { getBrands } from '~/features/brands/brandService'
 import { getColors } from '~/features/colors/colorService'
 import { getProdCates } from '~/features/prodCategories/productCateService'
 import { createProduct, getAProduct, updateAProduct } from '~/features/products/productsService'
-import { useNavigate, useParams } from 'react-router-dom'
 import { resetProductState } from '~/features/products/productsSlice'
+import { ProductType } from '~/types/productStage'
 
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const productSchema = Yup.object().shape({
    title: Yup.string().required('Title is required'),
    description: Yup.string().required('Description is required'),
    brand: Yup.string().required('Brand is required'),
@@ -46,8 +47,7 @@ function Product() {
    const prodCateState = useSelector((state: RootState) => state.prodCates.stuff)
    const colorState = useSelector((state: RootState) => state.colors.stuff)
    const uploadState = useSelector((state: RootState) => state.uploads)
-   const newProduct = useSelector((state: RootState) => state.products)
-   const { isError, isLoading, isSuccess, productCreate, productUpdate, product } = newProduct
+   const { product, isLoading } = useSelector((state: RootState) => state.products)
 
    const [color, setColor] = useState<string[]>([])
    const [imgConvert, setImgConvert] = useState<string[]>([])
@@ -63,6 +63,7 @@ function Product() {
       dispatch(getProdCates())
       dispatch(getColors())
    }, [dispatch])
+
    useEffect(() => {
       if (productId !== undefined) {
          dispatch(getAProduct(productId))
@@ -74,30 +75,13 @@ function Product() {
          setColor([])
       }
    }, [productId, dispatch])
+
    useEffect(() => {
       if (product.images) {
          setImgUrl(product.images.map((item: ImgType) => item))
          setImgConvert(product.images.map((item: ImgType) => item.url))
       }
    }, [product])
-
-   useEffect(() => {
-      if (isSuccess && Object.keys(productCreate).length) {
-         toast.success('Product Added Successfully!')
-         // navigate('/admin/product-list')
-         setColor([])
-         dispatch(resetProductState())
-      }
-      if (isSuccess && Object.keys(productUpdate).length) {
-         toast.success('Product Updated Successfully!')
-         navigate('/admin/product-list')
-         dispatch(resetProductState())
-      }
-      if (isError) {
-         toast.error('Something went wrong')
-      }
-   }, [isError, isLoading, isSuccess, productCreate, dispatch, productUpdate, navigate])
-   console.log(product)
 
    const colorOpt: SelectProps['options'] = []
    colorState?.forEach((color) => {
@@ -128,11 +112,11 @@ function Product() {
          price: product?.price ? product?.price : 0,
          quantity: product?.quantity ? product?.quantity : 0,
          category: product?.category ? product?.category : '',
-         color: product?.color ? color : [''],
-         images: product?.images ? product?.images : [],
+         color: product.color && productId !== undefined ? color : [''],
+         images: product.images ? product?.images : [],
       },
-      validationSchema: userSchema,
-      onSubmit: async (values) => {
+      validationSchema: productSchema,
+      onSubmit: async (values: ProductType) => {
          if (files && files.length > 0) {
             const response = await dispatch(uploadImgs(files))
             const imgValue = await response.payload
@@ -142,21 +126,23 @@ function Product() {
             formik.values.images = imgUrl
          }
          if (productId !== undefined) {
-            dispatch(updateAProduct({ id: productId, body: values }))
-            console.log(values)
+            const productUpdate = await dispatch(updateAProduct({ id: productId, body: values }))
+            if (productUpdate) {
+               navigate('/admin/product-list')
+            }
          }
          if (productId === undefined) {
-            await dispatch(createProduct(values))
-            console.log(values)
-            setFiles([])
-            setImgConvert([])
-            setImgUrl([])
-            formik.resetForm()
+            const product = await dispatch(createProduct(values))
+            if (product) {
+               setColor([])
+               setFiles([])
+               setImgConvert([])
+               setImgUrl([])
+               formik.resetForm()
+            }
          }
       },
    })
-   console.log(color)
-   console.log(product?.color && product?.color.map((item: any) => item._id))
    return (
       <div className={cx('wrapper')}>
          <h1 className={cx('title')}>{productId !== undefined ? 'Edit' : 'Add'} Product</h1>
@@ -261,9 +247,8 @@ function Product() {
                   placeholder="Please select"
                   value={color}
                   onChange={(value) => {
-                     console.log(value)
                      setColor([...value])
-                     formik.values.color = value
+                     formik.setFieldValue('color', value)
                   }}
                   options={colorOpt}
                />

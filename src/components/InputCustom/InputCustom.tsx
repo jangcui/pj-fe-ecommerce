@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import styles from './InputCustom.module.scss'
 import { useState } from 'react'
 import { AiFillEye, AiFillEyeInvisible, AiOutlineLoading3Quarters } from 'react-icons/ai'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 
 const cx = classNames.bind(styles)
 
@@ -18,6 +18,7 @@ interface InputProps<T> {
    min?: number
    pwdStyle?: boolean
    lazyLoad?: boolean
+   disabled?: boolean
 }
 
 function InputCustom<T>(props: InputProps<T>) {
@@ -31,6 +32,7 @@ function InputCustom<T>(props: InputProps<T>) {
       pwdStyle = false,
       min,
       lazyLoad = false,
+      disabled = false,
       onBlur,
    } = props
    const [hidden, setHidden] = useState(false)
@@ -50,6 +52,7 @@ function InputCustom<T>(props: InputProps<T>) {
                   placeholder={placeholder}
                   className={cx('input', className)}
                   onBlur={onBlur}
+                  disabled={disabled}
                   min={min}
                />
                {lazyLoad && <AiOutlineLoading3Quarters className={cx('icon-loading')} />}

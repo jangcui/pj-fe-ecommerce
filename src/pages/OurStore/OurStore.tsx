@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { getProducts } from '~/features/products/productsService'
 import { useEffect, useState } from 'react'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import Loading from '~/components/Loading/Loading'
 const cx = classNames.bind(styles)
 
@@ -52,114 +52,112 @@ function OurStore() {
          <ChangeTitle title={'Our Store'} />
          <BreadCrumb title={'Our Store'} />
          <div className={cx('wrapper')}>
-            <div className={cx('container')}>
-               <div className={cx('filter-list')}>
-                  <div className={cx('filter-block')}>
-                     <h1 className={cx('title')}>Shop by categories</h1>
-                     <div className={cx('option')}>
-                        <span>watch</span>
-                        <span>tv</span>
-                        <span>camera</span>
-                        <span>laptop</span>
+            <div className={cx('filter-list')}>
+               <div className={cx('filter-block')}>
+                  <h1 className={cx('title')}>Shop by categories</h1>
+                  <div className={cx('option')}>
+                     <span>watch</span>
+                     <span>tv</span>
+                     <span>camera</span>
+                     <span>laptop</span>
+                  </div>
+               </div>
+               <div className={cx('filter-block')}>
+                  <h1 className={cx('title')}>Filter by</h1>
+                  <div className={cx('availability')}>
+                     <h2>availability</h2>
+                     <span>
+                        <input type="checkbox" />
+                        In stock(0)
+                     </span>
+                     <span>
+                        <input type="checkbox" /> out of stock (1)
+                     </span>
+                  </div>
+                  <div className={cx('availability')}>
+                     <h2>Price</h2>
+                     <div className={cx('price')}>
+                        <span className={cx('price-range')}>from</span>
+                        <span className={cx('price-range')}>to</span>
                      </div>
                   </div>
-                  <div className={cx('filter-block')}>
-                     <h1 className={cx('title')}>Filter by</h1>
-                     <div className={cx('availability')}>
-                        <h2>availability</h2>
-                        <span>
-                           <input type="checkbox" />
-                           In stock(0)
-                        </span>
-                        <span>
-                           <input type="checkbox" /> out of stock (1)
-                        </span>
-                     </div>
-                     <div className={cx('availability')}>
-                        <h2>Price</h2>
-                        <div className={cx('price')}>
-                           <span className={cx('price-range')}>from</span>
-                           <span className={cx('price-range')}>to</span>
-                        </div>
-                     </div>
-                     <div className={cx('availability')}>
-                        <h2>color</h2>
-                        <div className={cx('color')}>
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                           <span className={cx('color-circle')} />
-                        </div>
-                     </div>
-                     <div className={cx('availability')}>
-                        <h2>size</h2>
-                        <span>
-                           <input type="checkbox" /> s
-                        </span>
-                        <span>
-                           <input type="checkbox" /> m
-                        </span>
+                  <div className={cx('availability')}>
+                     <h2>color</h2>
+                     <div className={cx('color')}>
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
+                        <span className={cx('color-circle')} />
                      </div>
                   </div>
-                  <div className={cx('filter-block')}>
-                     <h1 className={cx('title')}>Product Tags</h1>
-                     <div className={cx('product-tags')}>
-                        <span>#HeadPhone</span>
-                        <span>#Laptop</span>
-                        <span>#Camera</span>
-                        <span>#Watch</span>
-                     </div>
+                  <div className={cx('availability')}>
+                     <h2>size</h2>
+                     <span>
+                        <input type="checkbox" /> s
+                     </span>
+                     <span>
+                        <input type="checkbox" /> m
+                     </span>
                   </div>
-                  <div className={cx('filter-block')}>
-                     <h1 className={cx('title')}>Random Product</h1>
-                     <div className={cx('product-tags')}>
-                        <span>#HeadPhone</span>
-                        <span>#Laptop</span>
-                        <span>#Camera</span>
-                        <span>#Watch</span>
+               </div>
+               <div className={cx('filter-block')}>
+                  <h1 className={cx('title')}>Product Tags</h1>
+                  <div className={cx('product-tags')}>
+                     <span>#HeadPhone</span>
+                     <span>#Laptop</span>
+                     <span>#Camera</span>
+                     <span>#Watch</span>
+                  </div>
+               </div>
+               <div className={cx('filter-block')}>
+                  <h1 className={cx('title')}>Random Product</h1>
+                  <div className={cx('product-tags')}>
+                     <span>#HeadPhone</span>
+                     <span>#Laptop</span>
+                     <span>#Camera</span>
+                     <span>#Watch</span>
+                  </div>
+               </div>
+            </div>
+            <div className={cx('products')}>
+               <div className={cx('filter-sort')}>
+                  <div className={cx('sort-by')}>
+                     <span>Sort By: </span>
+                     <span className={cx('option')}>
+                        <p>Best selling</p> <TfiAngleDown />
+                     </span>
+                  </div>
+                  <div className={cx('sort-icons')}>
+                     <p>{productList.length} product</p>
+                     <div className={cx('wrap-icon')}>
+                        {sortBtn.map((el, i) => (
+                           <Button text onClick={() => handleSortClick(el.id)} key={i}>
+                              <span className={cx('icon-filter', el.isActive && 'active')}>{el.icon}</span>
+                           </Button>
+                        ))}
                      </div>
                   </div>
                </div>
-               <div className={cx('products')}>
-                  <div className={cx('filter-sort')}>
-                     <div className={cx('sort-by')}>
-                        <span>Sort By: </span>
-                        <span className={cx('option')}>
-                           <p>Best selling</p> <TfiAngleDown />
-                        </span>
-                     </div>
-                     <div className={cx('sort-icons')}>
-                        <p>{productList.length} product</p>
-                        <div className={cx('wrap-icon')}>
-                           {sortBtn.map((el, i) => (
-                              <Button text onClick={() => handleSortClick(el.id)} key={i}>
-                                 <span className={cx('icon-filter', el.isActive && 'active')}>{el.icon}</span>
-                              </Button>
-                           ))}
-                        </div>
-                     </div>
-                  </div>
 
-                  <div className={cx('product', sortClass)}>
-                     {isLoading ? (
-                        <Loading />
-                     ) : (
-                        <>
-                           {productList?.map((product, index) => (
-                              <div className={cx('collection')} key={index}>
-                                 <Collection data={product} isSort={sortClass === 'sort-1'} />
-                              </div>
-                           ))}
-                        </>
-                     )}
-                  </div>
+               <div className={cx('product', sortClass)}>
+                  {isLoading ? (
+                     <Loading />
+                  ) : (
+                     <>
+                        {productList?.map((product, index) => (
+                           <div className={cx('collection')} key={index}>
+                              <Collection data={product} isSort={sortClass === 'sort-1'} />
+                           </div>
+                        ))}
+                     </>
+                  )}
                </div>
             </div>
          </div>

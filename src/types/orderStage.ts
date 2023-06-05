@@ -1,38 +1,37 @@
 import { ProductType } from './productStage'
-import { UserType } from './userStage'
-export interface PaymentType {
-   id?: string
-   method?: string
-   amount?: number
-   status?: string
-   createdAt?: string | Date
-   currency?: string
+import { StuffType } from './stuffStage'
+
+export interface ShippingInfo {
+   first_name: string
+   last_name: string
+   address: string
+   city: string
+   state: string
+   other?: string
+   country: string
+   pin_code: number | string
 }
 
-export interface OrderType {
-   _id?: string
-   products?: {
-      product?: ProductType
-      count?: number
-      color?: string[]
-      _id?: string
-   }[]
-   paymentIntent?: PaymentType
-   orderStatus?: string
-   orderBy?: UserType
-   createdAt?: string | Date
-   updatedAt?: string
-   __v?: number
+export interface OrderItem {
+   productId: ProductType | string | any
+   color: StuffType | string | any
+   quantity: number
+   price: number
 }
 
-export interface OrderStageType {
-   orderList: OrderType[]
-   order: OrderType
-   orderCreate: OrderType
-   orderUpdate: OrderType
-   orderDelete: OrderType
-   isError: boolean
-   isLoading: boolean
-   isSuccess: boolean
-   message: string
+export interface PaymentInfo {
+   orderCreationId?: string
+   razor_pay_order_id: string
+   razor_pay_payment_id: string
+}
+
+export interface OrderDataStage {
+   total_price: number
+   total_price_after_discount: number
+   shippingInfo: ShippingInfo
+   orderItems: OrderItem[]
+   paymentInfo: PaymentInfo
+   createdAt?: Date
+   paid_at?: Date
+   order_status?: string
 }

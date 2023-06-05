@@ -1,5 +1,4 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
-
 import { ProductStageType } from '~/types/productStage'
 import {
    createProduct,
@@ -9,13 +8,24 @@ import {
    toggleProductToTrashBin,
    updateAProduct,
 } from './productsService'
+import { toast } from 'react-toastify'
+
+const initialProduct = {
+   tags: '',
+   title: '',
+   images: [],
+   description: '',
+   price: 0,
+   quantity: 0,
+   category: '',
+   brand: '',
+   color: [],
+   totalRating: 0,
+}
 
 const initialState: ProductStageType = {
    productList: [],
-   product: {},
-   productCreate: {},
-   productUpdate: {},
-   productDelete: {},
+   product: initialProduct,
    isError: false,
    isLoading: false,
    isSuccess: false,
@@ -47,17 +57,18 @@ export const productSlice = createSlice({
          .addCase(createProduct.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(createProduct.fulfilled, (state, action) => {
+         .addCase(createProduct.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.productCreate = action.payload
+            toast.success('Product Create successfully')
          })
          .addCase(createProduct.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error as string
+            toast.error('Something went wrong')
          })
          .addCase(getAProduct.pending, (state) => {
             state.isLoading = true
@@ -73,36 +84,39 @@ export const productSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error.message as string
+            toast.error('Something went wrong')
          })
          .addCase(updateAProduct.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(updateAProduct.fulfilled, (state, action) => {
+         .addCase(updateAProduct.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.productUpdate = action.payload
+            toast.success('Product Update successfully')
          })
          .addCase(updateAProduct.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error as string
+            toast.error('Something went wrong')
          })
          .addCase(deleteProduct.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(deleteProduct.fulfilled, (state, action) => {
+         .addCase(deleteProduct.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.productDelete = action.payload
+            toast.success('Product Deleted')
          })
          .addCase(deleteProduct.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error as string
+            toast.error('Something went wrong')
          })
          .addCase(toggleProductToTrashBin.pending, (state) => {
             state.isLoading = true
@@ -117,6 +131,7 @@ export const productSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error as string
+            toast.error('Something went wrong')
          })
 
          .addCase(resetProductState, () => initialState)

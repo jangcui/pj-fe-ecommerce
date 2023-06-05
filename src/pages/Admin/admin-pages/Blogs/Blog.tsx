@@ -9,7 +9,7 @@ import * as Yup from 'yup'
 import styles from './Blog.module.scss'
 
 import InputCustom from '~/components/InputCustom'
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import { AiOutlineClose, AiOutlineFileImage } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
@@ -25,7 +25,7 @@ import { resetBlogState } from '~/features/blogs/blogsSlice'
 
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const blogSchema = Yup.object().shape({
    title: Yup.string().required('Title is required'),
    description: Yup.string().required('Description is required'),
    category: Yup.string().required('Category is required'),
@@ -93,7 +93,7 @@ function CreateBlog() {
          category: blog?.category ? blog.category : '',
          images: blog?.images ? blog.images : [],
       },
-      validationSchema: userSchema,
+      validationSchema: blogSchema,
       onSubmit: async (values) => {
          if (files && files.length > 0) {
             const response = await dispatch(uploadImgs(files))

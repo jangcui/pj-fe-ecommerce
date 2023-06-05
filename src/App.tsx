@@ -5,12 +5,14 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 
 import DefaultLayout from './layouts/DefaultLayout'
+import ScrollTopWhenPageChange from './hook/ScroolTop'
 
 const App: FC = () => {
    return (
       <>
          <Router>
             <div className="App">
+               <ScrollTopWhenPageChange />
                <Routes>
                   {publicRouter.map((route, i) => {
                      const Page = route.component

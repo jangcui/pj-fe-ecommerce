@@ -1,17 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { UserStageType } from '~/types/userStage'
-import { deleteAUser, getUsers, loginAdmin, toggleBlockAUser, toggleCustomerToTrashBin } from './adminService'
+import { AdminStageType } from '~/types/userStage'
+import {
+   deleteAUser,
+   getAOrder,
+   getAllOrders,
+   getUsers,
+   loginAdmin,
+   toggleBlockAUser,
+   toggleCustomerToTrashBin,
+} from './adminService'
 import { toast } from 'react-toastify'
 
 const getAdminFromLocalStorage: string | null = localStorage.getItem('ADMIN')
-const admin = getAdminFromLocalStorage ? JSON.parse(getAdminFromLocalStorage) : null
+const admin = getAdminFromLocalStorage ? JSON.parse(getAdminFromLocalStorage) : {}
 
-const initialState: UserStageType = {
+const initialState: AdminStageType = {
    userList: [],
    admin: admin,
-   userUpdate: {},
-   isAdmin: false,
+   orderList: [],
+   isAdmin: admin ? true : false,
    isError: false,
    isLoading: false,
    isSuccess: false,
@@ -107,6 +115,36 @@ export const adminSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
             state.message = 'Some thing went wrong'
+         })
+         .addCase(getAllOrders.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(getAllOrders.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.orderList = action.payload
+         })
+         .addCase(getAllOrders.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(getAOrder.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(getAOrder.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            // state.order = action.payload
+         })
+         .addCase(getAOrder.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
          })
    },
 })

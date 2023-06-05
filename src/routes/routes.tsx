@@ -6,13 +6,15 @@ import CheckOut from '~/pages/CheckOut'
 import CompareProducts from '~/pages/CompareProducts'
 import Contact from '~/pages/Contact'
 import Home from '~/pages/Home'
-import Login from '~/pages/Login'
+import Login, { ResetPwd } from '~/pages/Login'
 import ForgotPwd from '~/pages/Login/ForgotPwd'
 import SignUp from '~/pages/Login/SignUp'
 import LoginAdmin from '~/pages/LoginAdmin/LoginAdmin'
+import MyOrder from '~/pages/MyOrder'
 import NotFound from '~/pages/NotFound'
 import OurStore from '~/pages/OurStore'
 import Products from '~/pages/Products'
+import Profile from '~/pages/Profile'
 import SingleBlog from '~/pages/SingleBlog'
 import SingleProduct from '~/pages/SingleProduct'
 import WishList from '~/pages/WishList'
@@ -40,6 +42,9 @@ const publicRouter: Route[] = [
    { path: config.routes.loginAdmin, component: LoginAdmin, layout: null },
    { path: config.routes.checkout, component: CheckOut },
    { path: config.routes.login, component: Login },
+   { path: config.routes.order, component: MyOrder },
+   { path: config.routes.profile, component: Profile },
+   { path: config.routes.resetPwd, component: ResetPwd },
    { path: config.routes.notfound, component: NotFound, layout: null },
 ]
 

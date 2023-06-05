@@ -6,11 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
-import { getAOrder, getAllOrders } from '~/features/orders/orderService'
 import { useNavigate, useParams } from 'react-router-dom'
-import { resetOrderState } from '~/features/orders/ordersSlice'
+import { getAOrder } from '~/features/admin/adminService'
 
 const cx = classNames.bind(styles)
 interface DataType {
@@ -52,20 +51,19 @@ const columns: any = [
 
 function Order() {
    const dispatch = useDispatch<AppDispatch>()
-   const orderState = useSelector((state: RootState) => state.orders.order)
+   // const orderState = useSelector((state: RootState) => state.orders.order)
 
-   const navigate = useNavigate()
-   const { orderId } = useParams()
+   // const navigate = useNavigate()
+   // const { orderId } = useParams()
 
-   useEffect(() => {
-      if (orderId !== undefined) {
-         dispatch(getAOrder('6418838bd2090623d32d3a35'))
-      } else {
-         dispatch(resetOrderState())
-      }
-   }, [dispatch, orderId])
+   // useEffect(() => {
+   //    if (orderId !== undefined) {
+   //       dispatch(getAOrder('6418838bd2090623d32d3a35'))
+   //    } else {
+   //       dispatch(resetOrderState())
+   //    }
+   // }, [dispatch, orderId])
 
-   console.log(orderState)
    return (
       <div className={cx('wrapper')}>
          <h1>View Order </h1>

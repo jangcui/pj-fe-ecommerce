@@ -2,7 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './Collection.module.scss'
 import Image from '~/components/Image/Image'
 import { StarRating } from 'star-rating-react-ts'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import config from '~/config'
 import { ProductType } from '~/types/productStage'
 import { useSelector, useDispatch } from 'react-redux'
@@ -13,6 +13,7 @@ import { HiArrowPath } from 'react-icons/hi2'
 import { useState } from 'react'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 import { FaEye } from 'react-icons/fa'
+import images from '~/assets/images'
 
 const cx = classNames.bind(styles)
 
@@ -29,7 +30,7 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
       <div className={cx('wrapper')}>
          <div className={cx('container', isSort && 'sort')}>
             <div className={cx('wrap-img')}>
-               <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
+               <Image className={cx('img')} src={imgList && imgList[0] ? imgList[0] : images.errorImage} />
             </div>
             <div className={cx('wrap-btn')}>
                <Button text to={config.routes.compare} secondary className={cx('btn')}>
@@ -61,7 +62,7 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
                </div>
                <div className={cx('rating')}>
                   <StarRating
-                     initialRating={data.totalRating}
+                     initialRating={data.totalRating as number}
                      readOnly
                      theme={{
                         size: 24,

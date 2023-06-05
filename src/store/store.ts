@@ -10,7 +10,6 @@ import blogReducer from '~/features/blogs/blogsSlice'
 import blogCateReducer from '~/features/blogCategories/blogCateSlice'
 import enquiryReducer from '~/features/enquiry/enquirySlice'
 import couponReducer from '~/features/coupon/couponSlice'
-import orderReducer from '~/features/orders/ordersSlice'
 import uploadReducer from '~/features/upload/uploadSlice'
 import trashReducer from '~/features/trashBin/trashBinSlice'
 
@@ -25,7 +24,6 @@ export const store = configureStore({
       blogs: blogReducer,
       blogCates: blogCateReducer,
       enquiries: enquiryReducer,
-      orders: orderReducer,
       uploads: uploadReducer,
       coupons: couponReducer,
       trashBin: trashReducer,

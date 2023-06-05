@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind'
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import InputCustom from '~/components/InputCustom'
 import styles from './LoginAdmin.module.scss'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppDispatch, RootState } from '~/store/store'
 import { loginAdmin } from '~/features/admin/adminService'
@@ -17,7 +17,7 @@ function LoginAdmin() {
    const dispatch = useDispatch<AppDispatch>()
    const navigate = useNavigate()
    const { isLoading, isSuccess, message, admin, isAdmin } = useSelector((state: RootState) => state.auth)
-   const userSchema = Yup.object().shape({
+   const loginSchema = Yup.object().shape({
       email: Yup.string().email('Email should be valid').required('Email is required'),
       password: Yup.string().required('Password is required'),
    })
@@ -26,7 +26,7 @@ function LoginAdmin() {
          email: '',
          password: '',
       },
-      validationSchema: userSchema,
+      validationSchema: loginSchema,
       onSubmit: async (values) => {
          await dispatch(loginAdmin(values))
       },

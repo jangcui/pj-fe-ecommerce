@@ -6,7 +6,7 @@ const cx = classNames.bind(styles)
 import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { TiDelete } from 'react-icons/ti'
 import { BsArrowReturnLeft } from 'react-icons/bs'
 import { AppDispatch, RootState } from '~/store/store'
@@ -100,7 +100,7 @@ function ProductsTrash() {
    for (let i = 0; i < trashState.length; i++) {
       const currentDate: Date = new Date()
       const deleteDate = new Date(trashState[i]?.deleteDate)
-      const deadline = Math.floor((deleteDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24)) as number
+      const deadline = Math.floor((deleteDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24))
       console.log(deadline)
 
       data1.push({

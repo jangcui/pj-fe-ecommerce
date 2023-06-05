@@ -5,7 +5,7 @@ import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import InputCustom from '~/components/InputCustom/InputCustom'
 import { useEffect } from 'react'
 
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
@@ -15,7 +15,7 @@ import { resetCouponState } from '~/features/coupon/couponSlice'
 
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const couponSchema = Yup.object().shape({
    name: Yup.string().required('Name is required'),
    expiry: Yup.date().required('Expiry is required'),
    discount: Yup.number().positive().integer().required('Discount is required'),
@@ -58,7 +58,7 @@ function AddCoupon() {
          expiry: coupon?.expiry ? new Date(coupon.expiry).toISOString().substring(0, 10) : '',
          discount: coupon?.discount ? coupon?.discount : 0,
       },
-      validationSchema: userSchema,
+      validationSchema: couponSchema,
       onSubmit: async (values) => {
          if (couponId !== undefined) {
             dispatch(updateACoupon({ id: couponId, body: values }))

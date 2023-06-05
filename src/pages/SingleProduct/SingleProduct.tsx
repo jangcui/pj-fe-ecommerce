@@ -5,37 +5,58 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
 import { StarRating } from 'star-rating-react-ts'
-import Button from '~/layouts/components/Button/Button'
-import { CompareIcon, LikeIcon, MinusIcon, PlusIcon } from '~/components/Icon'
+import Button from '~/components/Button/Button'
+import { CompareIcon, LikeIcon } from '~/components/Icon'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getAProduct } from '~/features/products/productsService'
 import images from '~/assets/images'
-import { TfiAngleDown } from 'react-icons/tfi'
-import { addToCart } from '~/features/customers/customerService'
-import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import { addToCart, getCarts } from '~/features/customers/customerService'
+import { AiOutlineHeart, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import { StuffType } from '~/types/stuffStage'
+import { toast } from 'react-toastify'
+import { HiArrowPath } from 'react-icons/hi2'
 
 const cx = classNames.bind(styles)
 
 function SingleProduct() {
    const dispatch = useDispatch<AppDispatch>()
-   const { product } = useSelector((state: RootState) => state.products)
+   const { product, isLoading } = useSelector((state: RootState) => state.products)
+   const { cartList } = useSelector((state: RootState) => state.customer)
    const imgList = product?.images?.map((img) => img.url)
    const [color, setColor] = useState<string>('')
+   const [allReadyAdded, setAllReadyAdded] = useState<boolean>(false)
    const [quantity, setQuantity] = useState<number>(1)
    const { productId } = useParams()
 
    useEffect(() => {
       if (productId) {
          dispatch(getAProduct(productId))
+         dispatch(getCarts())
       }
    }, [dispatch, productId])
+   useEffect(() => {
+      for (const index in cartList) {
+         if (productId === cartList[index]?.productId?._id) {
+            setAllReadyAdded(true)
+         } else {
+            setAllReadyAdded(false)
+         }
+      }
+   }, [dispatch, productId, cartList])
 
-   // const handleAddToCart()=> {
-   //    dispatch(addToCart)
-   // }
+   const handleAddToCart = async () => {
+      if (!color) {
+         toast.error('Please Chose color!')
+         return
+      } else {
+         const data = { color: color, productId: product._id, price: product.price, quantity: quantity }
+         await dispatch(addToCart(data))
+         await dispatch(getCarts())
+      }
+   }
 
    return (
       <>
@@ -52,10 +73,10 @@ function SingleProduct() {
                               {...{
                                  smallImage: {
                                     isFluidWidth: true,
-                                    src: imgList !== undefined ? imgList[0] : images.errorImage,
+                                    src: imgList && imgList[0] ? imgList[0] : images.errorImage,
                                  },
                                  largeImage: {
-                                    src: imgList !== undefined ? imgList[0] : images.errorImage,
+                                    src: imgList && imgList[0] ? imgList[0] : images.errorImage,
                                     width: 2000,
                                     height: 2000,
                                  },
@@ -70,10 +91,11 @@ function SingleProduct() {
                               {...{
                                  smallImage: {
                                     isFluidWidth: true,
-                                    src: imgList !== undefined ? imgList[1] : images.errorImage,
+                                    src: imgList && imgList[1] ? imgList[1] : images.errorImage,
                                  },
                                  largeImage: {
-                                    src: imgList !== undefined ? imgList[1] : images.errorImage,
+                                    src: imgList && imgList[1] ? imgList[1] : images.errorImage,
+
                                     width: 1200,
                                     height: 1200,
                                  },
@@ -86,10 +108,10 @@ function SingleProduct() {
                               {...{
                                  smallImage: {
                                     isFluidWidth: true,
-                                    src: imgList !== undefined ? imgList[2] : images.errorImage,
+                                    src: imgList && imgList[2] ? imgList[2] : images.errorImage,
                                  },
                                  largeImage: {
-                                    src: imgList !== undefined ? imgList[2] : images.errorImage,
+                                    src: imgList && imgList[2] ? imgList[2] : images.errorImage,
                                     width: 1200,
                                     height: 1200,
                                  },
@@ -103,7 +125,7 @@ function SingleProduct() {
                      <span className={cx('price')}>$ {product.price}</span>
                      <div className={cx('star')}>
                         <StarRating
-                           initialRating={product.totalRating}
+                           initialRating={product?.totalRating}
                            theme={{
                               size: 24,
                               colors: {
@@ -132,53 +154,68 @@ function SingleProduct() {
                            <span className={cx('name')}>Tags:</span>
                            <span className={cx('value')}>{product.tags}</span>
                         </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>SKU:</span>
-                           <span className={cx('value')}>SKU027</span>
-                        </div>
+
                         <div className={cx('field')}>
                            <span className={cx('name')}>Availability:</span>
                            <span className={cx('value')}>541 in stock</span>
                         </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Size</span>
-                           <div className={cx('size')}>
-                              <p className={cx('active')}>S</p>
-                              <p>L</p>
-                              <p>XL</p>
-                           </div>
-                        </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Color</span>
-                           <div className={cx('color')}>
-                              <p />
-                              <p className={cx('active')} />
-                              <p />
-                           </div>
-                        </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Quantity:</span>
-                           <div className={cx('option')}>
-                              <div className={cx('wrap-input')}>
-                                 <Button
-                                    className={cx('input-btn')}
-                                    text
-                                    onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
-                                 >
-                                    <AiOutlineMinus className={cx('icon')} />
-                                 </Button>
-                                 <input type="number" value={quantity} min={0} step={1} max={1000} />
-                                 <Button className={cx('input-btn')} text>
-                                    <AiOutlinePlus
-                                       className={cx('icon')}
-                                       onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
-                                    />
-                                 </Button>
+
+                        {!allReadyAdded && (
+                           <div className={cx('field')}>
+                              <span className={cx('name')}>Color</span>
+
+                              <div className={cx('color')}>
+                                 {product?.color &&
+                                    product?.color.map((color: StuffType | any, index) => (
+                                       <Button
+                                          text
+                                          className={cx('btn-color')}
+                                          key={index}
+                                          onClick={() => setColor(color?._id)}
+                                          style={{ backgroundColor: color?.title }}
+                                       />
+                                    ))}
                               </div>
+                           </div>
+                        )}
+                        <div className={cx('field')}>
+                           <div className={cx('option')}>
+                              {!allReadyAdded && (
+                                 <div className={cx('wrap-input')}>
+                                    <span className={cx('name')}>Quantity:</span>
+                                    <Button
+                                       className={cx('input-btn')}
+                                       text
+                                       onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
+                                    >
+                                       <AiOutlineMinus className={cx('icon')} />
+                                    </Button>
+                                    <input
+                                       type="number"
+                                       value={quantity}
+                                       onChange={() => setQuantity}
+                                       min={0}
+                                       step={1}
+                                       max={1000}
+                                    />
+                                    <Button className={cx('input-btn')} text>
+                                       <AiOutlinePlus
+                                          className={cx('icon')}
+                                          onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
+                                       />
+                                    </Button>
+                                 </div>
+                              )}
                               <div className={cx('wrap-btn')}>
-                                 <Button className={cx('btn')} primary>
-                                    ADD TO CART
-                                 </Button>
+                                 {allReadyAdded ? (
+                                    <Button className={cx('btn')} primary to={'/cart'}>
+                                       Go To Cart
+                                    </Button>
+                                 ) : (
+                                    <Button className={cx('btn')} primary onClick={handleAddToCart}>
+                                       ADD TO CART
+                                    </Button>
+                                 )}
                                  <Button className={cx('btn')} secondary>
                                     Buy it now{' '}
                                  </Button>
@@ -189,35 +226,22 @@ function SingleProduct() {
                      <>
                         <div className={cx('other-btn')}>
                            <p>
-                              <Button text leftIcon={<CompareIcon width={'14px'} height={'14px'} />}>
+                              <Button className={cx('btn')} text leftIcon={<HiArrowPath className={cx('icon')} />}>
                                  Add to compare
                               </Button>
                            </p>
                            <p>
-                              <Button text leftIcon={<LikeIcon width={'14px'} height={'14px'} />}>
+                              <Button className={cx('btn')} text leftIcon={<AiOutlineHeart className={cx('icon')} />}>
                                  Add to wishlist
                               </Button>
                            </p>
                         </div>
                      </>
-                     <>
-                        <div className={cx('option')}>
-                           <span className={cx('text')}>Shipping and returns</span>
-                           <TfiAngleDown className={cx('icon')} />
-                        </div>
-                        <div className={cx('option')}>
-                           <span className={cx('text')}>Materials </span>
-                           <TfiAngleDown className={cx('icon')} />
-                        </div>
-                        <div className={cx('option')}>
-                           <span className={cx('text')}>Dimensions</span>
-                           <TfiAngleDown className={cx('icon')} />
-                        </div>
-                        <div className={cx('option')}>
-                           <span className={cx('text')}>Care Instructions</span>
-                           <TfiAngleDown className={cx('icon')} />
-                        </div>
-                     </>
+
+                     <div className={cx('field')}>
+                        <h2 className={cx('name')}>Shipping and returns:</h2>
+                        <p className={cx('text')}> Free shipping and returns available all orders </p>
+                     </div>
                   </div>
                </div>
                <div className={cx('description-container')}>

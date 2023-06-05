@@ -16,3 +16,6 @@ declare module '*.svg' {
    const src: string
    export default src
 }
+interface Window {
+   Razorpay: any
+}

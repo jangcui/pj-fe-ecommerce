@@ -10,18 +10,19 @@ import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteAUser, toggleCustomerToTrashBin } from '~/features/admin/adminService'
 import { getCustomersTrash } from '~/features/trashBin/trashBinService'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
-import { UserType } from '~/types/userStage'
 
 const cx = classNames.bind(styles)
 
-interface DataType extends UserType {
+interface DataType {
    key: React.Key
    name: string
+   email: string
+   mobile: string
+   deadline: string
    blocked: string
    action: JSX.Element
-   deadline: string
 }
 const columns: any = [
    {

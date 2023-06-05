@@ -3,7 +3,7 @@ import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import styles from './Products.module.scss'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { AppDispatch, RootState } from '~/store/store'
@@ -11,13 +11,19 @@ import { ProductType } from '~/types/productStage'
 import { ParamsType } from '~/types/paramsStage'
 import { toast } from 'react-toastify'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
-import { deleteProduct, getProducts, toggleProductToTrashBin } from '~/features/products/productsService'
+import { getProducts, toggleProductToTrashBin } from '~/features/products/productsService'
 
 const cx = classNames.bind(styles)
 
-interface DataType extends ProductType {
+interface DataType {
    key: React.Key
    action: JSX.Element
+   title: string
+   slug?: string
+   brand: string
+   category: string
+   sold?: number
+   price: number
 }
 
 const columns: any = [
@@ -87,7 +93,6 @@ function ProductList() {
    const handleDelete = async (id: string) => {
       hideModal()
       await dispatch(toggleProductToTrashBin(id))
-
       setTimeout(() => {
          dispatch(getProducts(params))
          toast.success('Product added to trash bin!')

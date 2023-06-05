@@ -6,7 +6,7 @@ const cx = classNames.bind(styles)
 import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { AppDispatch, RootState } from '~/store/store'

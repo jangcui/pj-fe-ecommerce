@@ -2,7 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './SingleBlog.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
-import Button from '~/layouts/components/Button'
+import Button from '~/components/Button'
 import config from '~/config/config'
 import Image from '~/components/Image/Image'
 import { FaceBookIcon, GitHubIcon, GmailIcon } from '~/components/Icon'
@@ -31,8 +31,8 @@ function SingleBlog() {
 
    return (
       <>
-         <ChangeTitle title={blog.title as string} />
-         <BreadCrumb title={blog.title as string} />
+         <ChangeTitle title={`${blog.title}`} />
+         <BreadCrumb title={`${blog.title}`} />
          <div className={cx('wrapper')}>
             <div className={cx('container')}>
                <div className={cx('content')}>

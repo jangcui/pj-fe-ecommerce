@@ -5,7 +5,7 @@ import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import InputCustom from '~/components/InputCustom/InputCustom'
 import { useEffect } from 'react'
 
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
@@ -15,7 +15,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const colorSchema = Yup.object().shape({
    title: Yup.string().required('Title is required'),
 })
 
@@ -56,7 +56,7 @@ function Color() {
       initialValues: {
          title: item.title || '',
       },
-      validationSchema: userSchema,
+      validationSchema: colorSchema,
       onSubmit: (values) => {
          if (colorId !== undefined) {
             dispatch(updateAColor({ id: colorId, title: formik.values.title }))

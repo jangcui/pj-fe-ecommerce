@@ -5,7 +5,7 @@ import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import InputCustom from '~/components/InputCustom/InputCustom'
 import { useEffect } from 'react'
 
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { toast } from 'react-toastify'
@@ -15,7 +15,7 @@ import { resetBrandState } from '~/features/brands/brandsSlice'
 
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const brandSchema = Yup.object().shape({
    title: Yup.string().required('Title is required'),
 })
 
@@ -55,7 +55,7 @@ function Brand() {
       initialValues: {
          title: name || '',
       },
-      validationSchema: userSchema,
+      validationSchema: brandSchema,
       onSubmit: async (values) => {
          if (brandId !== undefined) {
             dispatch(updateABrand({ id: brandId, title: formik.values.title }))

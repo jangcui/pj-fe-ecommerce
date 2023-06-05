@@ -1,20 +1,20 @@
 import classNames from 'classnames/bind'
-import styles from './Login.module.scss'
-import BreadCrumb from '~/components/BreadCrumb'
-import ChangeTitle from '~/components/ChangeTitle'
-import Button from '~/layouts/components/Button'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 
 import InputCustom from '~/components/InputCustom/InputCustom'
-import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import styles from './Login.module.scss'
+import BreadCrumb from '~/components/BreadCrumb'
+import ChangeTitle from '~/components/ChangeTitle'
+import Button from '~/components/Button'
 import { register } from '~/features/customers/customerService'
 const cx = classNames.bind(styles)
 
-const userSchema = Yup.object().shape({
+const signUpSchema = Yup.object().shape({
    fist_name: Yup.string().required('Fist name is required'),
    last_name: Yup.string().required('Last name is required'),
    email: Yup.string().email('Email should be valid').required('Email is required'),
@@ -47,7 +47,7 @@ function SignUp() {
          password: '',
          passwordConfirm: '',
       },
-      validationSchema: userSchema,
+      validationSchema: signUpSchema,
       onSubmit: async (values) => {
          await dispatch(register(values))
          if (loginState.isSuccess === true) {

@@ -1,10 +1,6 @@
 .wrapper {
-   display: flex;
-   width: 100%;
-   align-items: center;
-   flex-direction: column;
-   justify-content: space-between;
-   padding: 10px 0px;
+   width: 90%;
+   padding: 24px 0;
 
    h1 {
       color: var(--text-color);
@@ -13,33 +9,30 @@
    section {
       margin-bottom: 50px;
    }
-   .container {
-      width: 80%;
 
-      .marquee {
-         padding: 25px 0;
-         border-radius: 6px;
-      }
+   .marquee {
+      padding: 25px 0;
+      border-radius: 6px;
+   }
 
-      .collection {
-         display: grid;
-         grid-template-columns: repeat(4, 1fr);
-      }
-      .special {
-         display: grid;
-         grid-template-columns: repeat(3, 1fr);
-         grid-gap: 10px;
-      }
-      .popular {
-         display: grid;
-         grid-template-columns: repeat(4, 1fr);
-         grid-gap: 4px;
-      }
-      .blogs {
-         display: grid;
-         grid-template-columns: repeat(4, 1fr);
-         grid-row-gap: 20px;
-         grid-column-gap: 10px;
-      }
+   .collection {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+   }
+   .special {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+   }
+   .popular {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 4px;
+   }
+   .blogs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-row-gap: 20px;
+      grid-column-gap: 10px;
    }
 }

@@ -4,7 +4,7 @@ import { IoMdArrowBack } from 'react-icons/io'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 
 import { useDispatch, useSelector } from 'react-redux'
-import Button from '~/layouts/components/Button/Button'
+import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
 
 import { useNavigate, useParams } from 'react-router-dom'

@@ -54,53 +54,51 @@ function Home() {
    return (
       <div className={cx('wrapper')}>
          <ChangeTitle title={'E-commerce'} />
-         <div className={cx('container')}>
-            <section className={cx('banner')}>
-               <Banner />
-            </section>
-            <h1>Category</h1>
-            <section className={cx('category')}>
-               <Category />
-            </section>
-            <section className={cx('marquee')}>
-               <Marquee gradientWidth={10} gradientColor={[255, 255, 255]}>
-                  {ITEM_MARQUEE.map((item: Item, index: number) => (
-                     <Image src={item.src} key={index} className={cx('marquee-img')} />
-                  ))}
-               </Marquee>
-            </section>
-            <h1>Featured Collection</h1>
-            <section className={cx('special')}>
-               {productList?.map((product, index) => {
-                  if (product.tags === 'featured') {
-                     return <SpecialProducts data={product} key={index} />
-                  }
-               })}
-            </section>
-            <h1>Special Products</h1>
-            <section className={cx('special')}>
-               {productList?.map((product, index) => {
-                  if (product.tags === 'special') {
-                     return <SpecialProducts data={product} key={index} />
-                  }
-               })}
-            </section>
-            <h1>Popular Products</h1>
-            <section className={cx('popular')}>
-               {productList?.map((product, index) => {
-                  if (product.tags === 'popular') {
-                     return <Collection data={product} key={index} />
-                  }
-               })}
-            </section>
+         <section className={cx('banner')}>
+            <Banner />
+         </section>
+         <h1>Category</h1>
+         <section className={cx('category')}>
+            <Category />
+         </section>
+         <section className={cx('marquee')}>
+            <Marquee gradientWidth={10} gradientColor={[255, 255, 255]}>
+               {ITEM_MARQUEE.map((item: Item, index: number) => (
+                  <Image src={item.src} key={index} className={cx('marquee-img')} />
+               ))}
+            </Marquee>
+         </section>
+         <h1>Featured Collection</h1>
+         <section className={cx('special')}>
+            {productList?.map((product, index) => {
+               if (product.tags === 'featured') {
+                  return <SpecialProducts data={product} key={index} />
+               }
+            })}
+         </section>
+         <h1>Special Products</h1>
+         <section className={cx('special')}>
+            {productList?.map((product, index) => {
+               if (product.tags === 'special') {
+                  return <SpecialProducts data={product} key={index} />
+               }
+            })}
+         </section>
+         <h1>Popular Products</h1>
+         <section className={cx('popular')}>
+            {productList?.map((product, index) => {
+               if (product.tags === 'popular') {
+                  return <Collection data={product} key={index} />
+               }
+            })}
+         </section>
 
-            <h1>Blogs</h1>
-            {/* <section className={cx('blogs')}>
+         <h1>Blogs</h1>
+         {/* <section className={cx('blogs')}>
                <BlogComp />
                <BlogComp />
             
             </section> */}
-         </div>
       </div>
    )
 }

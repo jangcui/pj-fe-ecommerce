@@ -5,12 +5,13 @@ const cx = classNames.bind(styles)
 
 import Header from '../components/Header'
 import Footer from '../components/Footer/Footer'
+import Container from '../components/Container/Container'
 
 function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
    return (
       <div className={cx('wrapper')}>
          <Header />
-         <div className={cx('container')}>{children}</div>
+         <Container>{children}</Container>
          <Footer />
       </div>
    )

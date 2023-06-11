@@ -1,5 +1,6 @@
 import { ProductType } from './productStage'
-import { StuffType } from './stuffStage'
+import { ItemType } from './itemStage'
+import { UserType } from './userStage'
 
 export interface ShippingInfo {
    first_name: string
@@ -13,8 +14,8 @@ export interface ShippingInfo {
 }
 
 export interface OrderItem {
-   productId: ProductType | string | any
-   color: StuffType | string | any
+   productId: ProductType
+   color: ItemType
    quantity: number
    price: number
 }
@@ -33,5 +34,7 @@ export interface OrderDataStage {
    paymentInfo: PaymentInfo
    createdAt?: Date
    paid_at?: Date
+   user: UserType
+   _id?: string
    order_status?: string
 }

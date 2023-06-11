@@ -9,6 +9,11 @@
       font-size: 24px;
       margin: 12px 0;
    }
+
+   h4 {
+      margin-bottom: 12px;
+      margin-top: 16px;
+   }
    img {
       object-fit: cover !important;
    }
@@ -77,15 +82,9 @@
             }
             .star {
                display: flex;
+               margin: 14px 0;
             }
-            .input {
-               position: relative;
-               border: unset;
-               width: 100%;
-               border-bottom: 1px solid var(--border-color-gray);
-               margin-bottom: 12px;
-               padding: 10px 12px;
-            }
+
             .field {
                display: flex;
                flex-wrap: wrap;
@@ -188,14 +187,14 @@
                   }
                }
             }
-            .other-btn {
-               display: flex;
-               gap: 20px;
-               margin-bottom: 20px;
-               margin-left: 20px;
+            .btn-wishlist {
+               margin: 12px 0;
+               .btn {
+                  font-size: 20px;
 
-               .btn:hover {
-                  color: var(--slug-color);
+                  &:hover {
+                     color: var(--slug-color);
+                  }
                }
             }
             .option {
@@ -255,38 +254,24 @@
          }
          .form-submit {
             margin: 16px 0;
+
             h3 {
                color: var(--text-gray);
                margin-bottom: 16px;
             }
-            .form-input {
-               p {
-                  color: var(--gray);
-                  font-size: 14px;
-               }
-               .input {
-                  width: 100%;
-                  margin-bottom: 12px;
-                  padding: 12px;
-                  color: var(--text-gray);
-                  font-size: 12px;
-                  border: 1px solid var(--border-color-gray);
-               }
-
-               textarea {
-                  color: var(--text-gray);
-                  font-size: 12px;
-                  border: 1px solid var(--border-color-gray);
-                  resize: none;
-                  width: 100%;
-                  padding: 10px;
-                  height: 150px;
-               }
+            textarea {
+               color: var(--text-gray);
+               font-size: 14px;
+               border: 1px solid var(--border-color-gray);
+               resize: none;
+               width: 100%;
+               padding: 10px;
+               height: 150px;
             }
 
             .btn-submit {
                display: flex;
-               justify-content: end;
+               justify-content: flex-end;
                border-bottom: 0.5px solid var(--border-color-gray);
                padding: 20px 0;
 
@@ -342,23 +327,22 @@
                width: 100%;
                border-bottom: 0.5px solid var(--border-color-gray);
             }
+         }
+      }
+   }
 
-            .replied {
-               padding: 10px;
-               background-color: var(--bg-color);
-               margin-left: 20px;
-               margin-top: 20px;
+   .popular-container {
+      width: 100%;
+      margin-bottom: 50px;
 
-               h3 {
-                  color: var(--text-color);
-                  margin-bottom: 8px;
-               }
+      .products {
+         width: 100%;
+         display: flex;
+         flex-wrap: wrap;
+         gap: 10px;
 
-               p {
-                  font-size: 14px;
-                  color: var(--text-gray);
-               }
-            }
+         .item {
+            width: calc(25% - 10px);
          }
       }
    }

@@ -18,8 +18,15 @@ import { checkout, createOrder, getCarts } from '~/features/customers/customerSe
 import images from '~/assets/images'
 import logo from '~/assets/images/logo.png'
 import InputCustom from '~/components/InputCustom/InputCustom'
-import { OrderItem, ShippingInfo } from '~/types/orderStage'
+import { ShippingInfo } from '~/types/orderStage'
 const cx = classNames.bind(styles)
+
+interface OrderType {
+   productId: string
+   color: string
+   quantity: number
+   price: number
+}
 
 const checkOutSchema = Yup.object().shape({
    first_name: Yup.string().required('Fist name is required'),
@@ -39,7 +46,7 @@ function CheckOut() {
    const [isLoading, setIsLoading] = useState<boolean>(false)
    const navigate = useNavigate()
    const [shippingInfo, setShippingInfo] = useState<ShippingInfo>()
-   const [orderItem, setOrderItem] = useState<OrderItem[]>([])
+   const [orderItem, setOrderItem] = useState<OrderType[]>([])
 
    useEffect(() => {
       if (!user) {
@@ -52,11 +59,11 @@ function CheckOut() {
    useEffect(() => {
       const itemOrder = cartList?.map((item) => ({
          productId: item.productId?._id || '',
-         color: item.color?.title || '',
+         color: item.color?._id || '',
          quantity: item.quantity || 0,
          price: item.productId?.price || 0,
       }))
-      setOrderItem(itemOrder)
+      console.log(itemOrder), setOrderItem(itemOrder)
    }, [cartList])
 
    const formik = useFormik({
@@ -108,7 +115,7 @@ function CheckOut() {
       const { amount, id: order_id, currency } = result.payload.order
 
       const options = {
-         key: 'rzp_test_ROJNShWydm5owR', // Enter the Key ID generated from the Dashboard
+         key: 'rzp_test_ROJNShWydm5owR',
          amount: amount,
          currency: currency,
          name: 'Digitic.',

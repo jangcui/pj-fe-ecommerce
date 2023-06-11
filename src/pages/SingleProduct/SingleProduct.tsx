@@ -1,42 +1,77 @@
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+import { AiOutlineHeart, AiOutlineMinus, AiOutlinePlus, AiTwotoneHeart } from 'react-icons/ai'
 import classNames from 'classnames/bind'
 import ReactImageMagnify from 'react-image-magnify'
+import Marquee from 'react-fast-marquee'
+import { useNavigate, useParams } from 'react-router-dom'
+import { HiArrowPath } from 'react-icons/hi2'
+import { StarRating } from 'star-rating-react-ts'
+import { useDispatch, useSelector } from 'react-redux'
 
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
-import { StarRating } from 'star-rating-react-ts'
 import Button from '~/components/Button/Button'
-import { CompareIcon, LikeIcon } from '~/components/Icon'
-import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { getAProduct } from '~/features/products/productsService'
+import { getAProduct, rateProduct } from '~/features/products/productsService'
 import images from '~/assets/images'
-import { addToCart, getCarts } from '~/features/customers/customerService'
-import { AiOutlineHeart, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
-import { StuffType } from '~/types/stuffStage'
-import { toast } from 'react-toastify'
-import { HiArrowPath } from 'react-icons/hi2'
+import { addToCart, addToWishList, getCarts, getUserWishList } from '~/features/customers/customerService'
+import { ItemType } from '~/types/itemStage'
+import { ProductType } from '~/types/productStage'
+import Collection from '~/components/Collection'
 
 const cx = classNames.bind(styles)
 
 function SingleProduct() {
    const dispatch = useDispatch<AppDispatch>()
-   const { product, isLoading } = useSelector((state: RootState) => state.products)
-   const { cartList } = useSelector((state: RootState) => state.customer)
+   const { product, productList, isLoading } = useSelector((state: RootState) => state.products)
+   const { cartList, wishlist, user } = useSelector((state: RootState) => state.customer)
    const imgList = product?.images?.map((img) => img.url)
    const [color, setColor] = useState<string>('')
+   const [productPop, setProductPop] = useState<ProductType[]>([])
    const [allReadyAdded, setAllReadyAdded] = useState<boolean>(false)
+   const [isWishlist, setIsWishlist] = useState<boolean>(false)
+   const [star, setStar] = useState<number>(0)
+   const [comment, setComment] = useState<string>('')
    const [quantity, setQuantity] = useState<number>(1)
    const { productId } = useParams()
+   const navigate = useNavigate()
 
    useEffect(() => {
-      if (productId) {
+      if (!user) {
+         navigate('/login')
+      } else if (!productId) {
+         navigate('/')
+      } else {
+         navigate('')
+         dispatch(getUserWishList())
          dispatch(getAProduct(productId))
          dispatch(getCarts())
       }
-   }, [dispatch, productId])
+   }, [user, navigate, dispatch, productId])
+
+   const handleWishlist = async () => {
+      setIsWishlist(!isWishlist)
+      await dispatch(addToWishList({ prodId: productId || '' }))
+      await dispatch(getUserWishList())
+   }
+
+   useEffect(() => {
+      const data = productList?.filter((element: ProductType) => {
+         return element?.tags === 'popular'
+      })
+      setProductPop(data)
+   }, [productList])
+
+   useEffect(() => {
+      wishlist?.map((item) => {
+         if (item._id === productId) {
+            setIsWishlist(true)
+         }
+      })
+   }, [wishlist, productId])
+
    useEffect(() => {
       for (const index in cartList) {
          if (productId === cartList[index]?.productId?._id) {
@@ -55,6 +90,21 @@ function SingleProduct() {
          const data = { color: color, productId: product._id, price: product.price, quantity: quantity }
          await dispatch(addToCart(data))
          await dispatch(getCarts())
+      }
+   }
+
+   const handleRating = async () => {
+      if (star === 0) {
+         toast.error('Please add star rating')
+         return
+      } else if (comment === '') {
+         toast.error('Please write a review about product.')
+         return
+      } else {
+         if (productId) {
+            await dispatch(rateProduct({ star: star, comment: comment, prodId: productId }))
+            await dispatch(getAProduct(productId))
+         }
       }
    }
 
@@ -125,7 +175,7 @@ function SingleProduct() {
                      <span className={cx('price')}>$ {product.price}</span>
                      <div className={cx('star')}>
                         <StarRating
-                           initialRating={product?.totalRating}
+                           initialRating={product.totalRating ? product.totalRating : product.totalRating}
                            theme={{
                               size: 24,
                               colors: {
@@ -134,9 +184,8 @@ function SingleProduct() {
                               },
                            }}
                         />
-                        <span className={cx('review')}>( {product.totalRating})</span>
+                        <span className={cx('review')}>({product.totalRating})</span>
                      </div>
-                     <input className={cx('input')} type="text" placeholder="Write a review" />
                      <>
                         <div className={cx('field')}>
                            <span className={cx('name')}>Type:</span>
@@ -163,10 +212,9 @@ function SingleProduct() {
                         {!allReadyAdded && (
                            <div className={cx('field')}>
                               <span className={cx('name')}>Color</span>
-
                               <div className={cx('color')}>
                                  {product?.color &&
-                                    product?.color.map((color: StuffType | any, index) => (
+                                    product?.color.map((color: ItemType | any, index) => (
                                        <Button
                                           text
                                           className={cx('btn-color')}
@@ -223,24 +271,31 @@ function SingleProduct() {
                            </div>
                         </div>
                      </>
-                     <>
-                        <div className={cx('other-btn')}>
-                           <p>
-                              <Button className={cx('btn')} text leftIcon={<HiArrowPath className={cx('icon')} />}>
-                                 Add to compare
-                              </Button>
-                           </p>
-                           <p>
-                              <Button className={cx('btn')} text leftIcon={<AiOutlineHeart className={cx('icon')} />}>
-                                 Add to wishlist
-                              </Button>
-                           </p>
-                        </div>
-                     </>
+                     <div className={cx('btn-wishlist')}>
+                        {!isLoading && (
+                           <Button
+                              onClick={handleWishlist}
+                              className={cx('btn')}
+                              text
+                              leftIcon={
+                                 isWishlist ? (
+                                    <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
+                                 ) : (
+                                    <AiOutlineHeart
+                                       style={{ color: '#dd551b' }}
+                                       className={cx('icon', 'icon-active')}
+                                    />
+                                 )
+                              }
+                           >
+                              Add to wishlist
+                           </Button>
+                        )}
+                     </div>
 
                      <div className={cx('field')}>
                         <h2 className={cx('name')}>Shipping and returns:</h2>
-                        <p className={cx('text')}> Free shipping and returns available all orders </p>
+                        <i> Free shipping and returns available all orders </i>
                      </div>
                   </div>
                </div>
@@ -254,9 +309,8 @@ function SingleProduct() {
                <div className={cx('review-container')}>
                   <h2>Review</h2>
                   <div className={cx('reviews')}>
-                     <h3>Customer Review</h3>
-                     <div className={cx('rating')}>
-                        <span>
+                     {/* <h3>Customer Review</h3> */}
+                     {/* <div className={cx('rating')}>
                            <StarRating
                               initialRating={5}
                               readOnly
@@ -265,85 +319,75 @@ function SingleProduct() {
                               }}
                            />{' '}
                            Based on 2 reviews
-                        </span>
                         <span>
                            <p>write a review</p>
                         </span>
-                     </div>
+                     </div> */}
                      <div className={cx('form-submit')}>
-                        <h3>Write a review</h3>
-                        <span className={cx('form-input')}>
-                           <p>Name</p>
-                           <input className={cx('input')} type="text" placeholder="Enter your name" />
-                        </span>
-                        <span className={cx('form-input')}>
-                           <p>Email</p>
-                           <input className={cx('input')} type="text" placeholder="jangcui@example.com" />
-                        </span>{' '}
-                        <div className={cx('form-input')}>
-                           <p>Rating</p>
-                           <StarRating
-                              initialRating={0}
-                              theme={{
-                                 size: 14,
-                              }}
-                           />{' '}
-                        </div>
-                        <span className={cx('form-input')}>
-                           <p>Review title</p>
-                           <input className={cx('input')} type="text" placeholder="Give your review a title" />
-                        </span>{' '}
-                        <span className={cx('form-input')}>
-                           <p>Review title</p>
-                           <textarea className={cx('textarea')} placeholder="Give your review a title" />
-                        </span>
+                        <h4>Rating</h4>
+                        <StarRating
+                           initialRating={star}
+                           onClick={(e) => setStar(e)}
+                           theme={{
+                              size: 20,
+                              colors: {
+                                 backgroundColorHover: '#ffd333',
+                                 backgroundColorActive: '#ffd333',
+                              },
+                           }}
+                        />{' '}
+                        <h4>Comments</h4>
+                        <textarea
+                           value={comment}
+                           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
+                           className={cx('textarea')}
+                           placeholder="Give your review a title"
+                        />
                         <div className={cx('btn-submit')}>
-                           <Button primary className={cx('btn')}>
+                           <Button primary className={cx('btn')} onClick={handleRating}>
                               Submit review
                            </Button>
                         </div>
-                        <div className={cx('comments')}>
+                     </div>
+                     {product?.ratings?.map((item, index) => (
+                        <div className={cx('comments')} key={index}>
                            <span className={cx('btn-report')}>Report as inappropriate </span>
                            <StarRating
-                              initialRating={4}
+                              initialRating={item.star}
+                              readOnly
                               theme={{
                                  size: 18,
+                                 colors: {
+                                    backgroundColorHover: '#ffd333',
+                                    backgroundColorActive: '#ffd333',
+                                 },
                               }}
                            />{' '}
-                           <h3 className={cx('content')}>Good</h3>
-                           <div className={cx('date')}>
+                           <h3 className={cx('content')}>{item.comment}</h3>
+                           {/* <div className={cx('date')}>
                               <span>jangcui</span>on
                               <span>jun 20 2020</span>
                            </div>
-                           <p className={cx('text')}>
-                              Dạ, giá sản phẩm bên mình đã bao gồm VAT rồi bạn nha. Để được hỗ trợ chi tiết, bạn hãy để
-                              lại SĐT hoặc bớt chút thời gian liên hệ tổng đài miễn phí 1800
-                           </p>
+                           <p className={cx('text')}>{item.comment}</p> */}
+                           <p className={cx('text')}>(anonymous)</p>
                            <input className={cx('reply')} type="text" />
                         </div>
-                        <div className={cx('comments')}>
-                           <span className={cx('btn-report')}>Report as inappropriate </span>
-                           <StarRating
-                              initialRating={4}
-                              theme={{
-                                 size: 18,
-                              }}
-                           />{' '}
-                           <h3 className={cx('content')}>Good</h3>
-                           <div className={cx('date')}>
-                              <span>jangcui</span>on
-                              <span>jun 20 2020</span>
-                           </div>
-                           <p className={cx('text')}>
-                              Dạ, giá sản phẩm bên mình đã bao gồm VAT rồi bạn nha. Để được hỗ trợ chi tiết, bạn hãy để
-                              lại SĐT hoặc bớt chút thời gian liên hệ tổng đài miễn phí 1800
-                           </p>
-                           <div className={cx('replied')}>
-                              <h3>-Jangcui</h3>
-                              <p>Giá này đã bao gồm VAT chưa shop? 1 ngày trước Thích Trả lời</p>
-                           </div>
-                        </div>
-                     </div>
+                     ))}
+                  </div>
+               </div>
+
+               <div className={cx('popular-container')}>
+                  <h2>Our Products Popular</h2>
+                  <div className={cx('products')}>
+                     <Marquee delay={4} pauseOnHover={true} gradientWidth={10} gradientColor={[255, 255, 255]}>
+                        {productPop?.map((product, index) => {
+                           return (
+                              <div key={index} className={cx('item')}>
+                                 <Collection data={product} />
+                              </div>
+                           )
+                        })}
+                     </Marquee>
                   </div>
                </div>
             </div>

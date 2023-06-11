@@ -9,12 +9,12 @@ import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { AppDispatch, RootState } from '~/store/store'
-import { StuffType } from '~/types/stuffStage'
+import { ItemType } from '~/types/itemStage'
 import { deleteBrand, getBrands } from '~/features/brands/brandService'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
-interface DataType extends StuffType {
+interface DataType extends ItemType {
    key: React.Key
    action: JSX.Element
 }
@@ -37,7 +37,7 @@ const columns: any = [
 
 function BrandList() {
    const dispatch = useDispatch<AppDispatch>()
-   const brandState = useSelector((state: RootState) => state.brands.stuff)
+   const brandState = useSelector((state: RootState) => state.brands.itemList)
 
    const [brandId, setBrandId] = useState<string>('')
    const [open, setOpen] = useState(false)

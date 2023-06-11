@@ -7,6 +7,9 @@
       font-size: 20px;
       margin-bottom: 16px;
    }
+   span {
+      text-transform: capitalize;
+   }
    .filter-list {
       flex-basis: 20%;
       max-width: 20%;
@@ -15,65 +18,47 @@
          display: flex;
          flex-direction: column;
          border: 4px;
-         padding: 18px 12px;
          border-radius: 6px;
-         margin-bottom: 16px;
          background-color: var(--white);
-         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
 
-         .option {
-            display: flex;
-            flex-direction: column;
-            color: #545252bd;
-         }
-         .availability {
-            display: flex;
-            flex-direction: column;
+         .filter-container {
+            margin: 10px 0;
+            padding: 10px;
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+            border-radius: 4px;
 
             .price {
                display: flex;
                width: 100%;
                justify-content: space-between;
+               gap: 10px;
 
-               .price-range {
-                  width: 48%;
-                  padding: 12px 14px;
+               .input {
+                  width: 100%;
+                  padding: 12px;
                   font-size: 16px;
                   cursor: pointer;
                   border: 1px solid var(--text-color);
                   border-radius: 4px;
                }
             }
-            .color {
-               display: grid;
-               grid-template-columns: repeat(5, 1fr);
-               grid-row-gap: 10px;
-
-               .color-circle {
-                  width: 24px;
-                  height: 24px;
-                  border-radius: 100%;
-                  background-color: red;
-                  cursor: pointer;
-               }
-            }
-
-            h2 {
-               margin: 12px 0;
-               font-size: 14px;
-            }
          }
-         .product-tags {
+         .option {
             display: flex;
             flex-wrap: wrap;
+            gap: 8px;
 
-            span {
+            .btn {
                border-radius: 4px;
-               padding: 8px 10px;
-               margin-right: 4px;
-               margin-bottom: 4px;
-               color: #545252bd;
-               background-color: #f8f9fa;
+               font-weight: 600;
+               padding: 12px 8px;
+               color: var(--text-color);
+               background-color: var(--bg-color);
+
+               &:hover {
+                  color: var(--white);
+                  background-color: var(--text-gray);
+               }
             }
          }
       }
@@ -87,6 +72,7 @@
          width: 100%;
          align-items: center;
          padding: 0 10px;
+         font-size: 16px;
          justify-content: space-between;
          box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
          background-color: var(--white);
@@ -96,23 +82,7 @@
          .sort-by {
             display: flex;
             align-items: center;
-
-            .option {
-               display: flex;
-               background-color: #f8f9fa;
-               color: #000;
-               padding: 6px 10px;
-               justify-content: space-between;
-               cursor: pointer;
-               width: 200px;
-               border-radius: 6px;
-               align-items: center;
-               margin-left: 24px;
-
-               p {
-                  color: #545252bd;
-               }
-            }
+            gap: 10px;
          }
          .sort-icons {
             display: flex;
@@ -144,6 +114,7 @@
                font-size: 16px;
                color: #545252bd;
                margin-right: 16px;
+               margin-bottom: 0;
             }
          }
       }

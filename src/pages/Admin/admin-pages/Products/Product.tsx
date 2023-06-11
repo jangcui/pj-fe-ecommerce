@@ -15,7 +15,7 @@ import styles from './Products.module.scss'
 import InputCustom from '~/components/InputCustom'
 import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
-import { StuffType } from '~/types/stuffStage'
+import { ItemType } from '~/types/itemStage'
 import { uploadImgs } from '~/features/upload/uploadSlice'
 import Image from '~/components/Image/Image'
 import { ImgType } from '~/types/imageStage'
@@ -43,9 +43,9 @@ const productSchema = Yup.object().shape({
 function Product() {
    const dispatch = useDispatch<AppDispatch>()
 
-   const brandState = useSelector((state: RootState) => state.brands.stuff)
-   const prodCateState = useSelector((state: RootState) => state.prodCates.stuff)
-   const colorState = useSelector((state: RootState) => state.colors.stuff)
+   const brandState = useSelector((state: RootState) => state.brands.itemList)
+   const prodCateState = useSelector((state: RootState) => state.prodCates.itemList)
+   const colorState = useSelector((state: RootState) => state.colors.itemList)
    const uploadState = useSelector((state: RootState) => state.uploads)
    const { product, isLoading } = useSelector((state: RootState) => state.products)
 
@@ -193,7 +193,7 @@ function Product() {
                >
                   <option>Select Brand</option>
                   {brandState &&
-                     brandState.map((el: StuffType, index: number) => (
+                     brandState.map((el: ItemType, index: number) => (
                         <option key={index} value={el.title}>
                            {el.title}
                         </option>
@@ -211,7 +211,7 @@ function Product() {
                   className={cx('form-select')}
                >
                   <option>Select Category</option>
-                  {prodCateState?.map((el: StuffType, index: number) => (
+                  {prodCateState?.map((el: ItemType, index: number) => (
                      <option key={index} value={el.title}>
                         {el.title}
                      </option>

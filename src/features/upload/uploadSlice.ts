@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import * as httpRequest from '~/untils/httpRequest'
+import * as adminRequest from '~/untils/adminRequest'
 import { ImgStageType } from '~/types/imageStage'
 
 const initialState: ImgStageType = {
@@ -17,7 +17,7 @@ export const uploadImgs = createAsyncThunk('images/uploadImgs', async (data: any
       for (let i = 0; i < data.length; i++) {
          formData.append('images', data[i])
       }
-      const response = await httpRequest.post('upload', formData, {
+      const response = await adminRequest.post('upload', formData, {
          headers: {
             'Content-Type': 'multipart/form-data',
          },

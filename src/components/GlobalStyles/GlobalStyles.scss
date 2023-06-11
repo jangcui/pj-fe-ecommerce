@@ -11,7 +11,7 @@
    --white: #ffff;
    --blue: #3760ff;
    --green: #48bb78;
-   --font-family: 'Roboto', sans-serif;
+   font-family: 'Roboto', sans-serif;
    --default-layout-width: 1150px;
    --orange-color: #ffd333;
    --slug-color: #dd551b;
@@ -27,7 +27,6 @@ html {
    font-size: 62.5%;
 }
 body {
-   font-family: var(--font-family);
    font-size: 1.6rem;
    line-height: 1.5;
    color: var(--black);
@@ -59,12 +58,25 @@ input,
 Link [tabIndex] {
    border: none;
    outline: none;
+   font-size: 14px;
 }
-
+span,
+select,
+div,
+p,
+b,
+i,
+a {
+   font-size: 16px;
+}
 a[href] {
    border: none;
    text-decoration: none;
    color: var(--white);
+
+   &:active {
+      background-color: unset;
+   }
 }
 
 .icon {

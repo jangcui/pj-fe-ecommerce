@@ -1,10 +1,10 @@
 import { createSlice, createAction } from '@reduxjs/toolkit'
 
-import { StuffStageType } from '~/types/stuffStage'
+import { ItemStageType } from '~/types/itemStage'
 import { createColor, deleteColor, getColor, getColors, updateAColor } from './colorService'
 
-const initialState: StuffStageType = {
-   stuff: [],
+const initialState: ItemStageType = {
+   itemList: [],
    item: {},
    itemCreate: {},
    itemUpdate: {},
@@ -29,7 +29,7 @@ export const colorSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.stuff = action.payload
+            state.itemList = action.payload
          })
          .addCase(getColors.rejected, (state, action) => {
             state.isError = true

@@ -99,7 +99,7 @@ function BlogsTrash() {
    for (let i = 0; i < trashState.length; i++) {
       const currentDate: Date = new Date()
       const deleteDate = new Date(trashState[i]?.deleteDate)
-      const deadline = Math.floor((deleteDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24)) as number
+      const deadline = Math.floor((deleteDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24))
       data1.push({
          key: i + 1,
          title: trashState[i].title,

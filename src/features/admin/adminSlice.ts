@@ -1,14 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAction, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { AdminStageType } from '~/types/userStage'
 import {
    deleteAUser,
+   deleteOrder,
    getAOrder,
    getAllOrders,
+   getMonthlyOrders,
    getUsers,
+   getYearlyOrders,
    loginAdmin,
    toggleBlockAUser,
    toggleCustomerToTrashBin,
+   updateOrderStatus,
 } from './adminService'
 import { toast } from 'react-toastify'
 
@@ -19,12 +23,15 @@ const initialState: AdminStageType = {
    userList: [],
    admin: admin,
    orderList: [],
+   monthlyIncome: [],
+   yearlyIncome: [],
    isAdmin: admin ? true : false,
    isError: false,
    isLoading: false,
    isSuccess: false,
    message: '',
 }
+export const logOutAdmin = createAction('admin_log_out')
 
 export const adminSlice = createSlice({
    name: 'auth',
@@ -32,6 +39,12 @@ export const adminSlice = createSlice({
    reducers: {},
    extraReducers: (builder) => {
       builder
+         .addCase(logOutAdmin, (state) => {
+            localStorage.removeItem('ADMIN')
+            localStorage.removeItem('ADMIN_TOKEN')
+            state.admin = null
+            state.isAdmin = false
+         })
          .addCase(loginAdmin.pending, (state) => {
             state.isLoading = true
          })
@@ -44,7 +57,7 @@ export const adminSlice = createSlice({
             state.message = 'Login successful'
             if (state.isSuccess === true) {
                localStorage.setItem('ADMIN', JSON.stringify(action.payload))
-               localStorage.setItem('TOKEN', JSON.stringify(action.payload.token))
+               localStorage.setItem('ADMIN_TOKEN', JSON.stringify(action.payload.token))
                toast.success(state.message)
             }
          })
@@ -138,9 +151,71 @@ export const adminSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            // state.order = action.payload
+            state.order = action.payload
          })
          .addCase(getAOrder.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(updateOrderStatus.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(updateOrderStatus.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.order = action.payload
+            toast.success('Order Status Updated')
+         })
+         .addCase(updateOrderStatus.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(deleteOrder.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(deleteOrder.fulfilled, (state) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            toast.info('Deleted')
+         })
+         .addCase(deleteOrder.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+            toast.info('Smt Went Wrong')
+         })
+         .addCase(getMonthlyOrders.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(getMonthlyOrders.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.monthlyIncome = action.payload
+         })
+         .addCase(getMonthlyOrders.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+         })
+         .addCase(getYearlyOrders.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(getYearlyOrders.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.yearlyIncome = action.payload
+         })
+         .addCase(getYearlyOrders.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false

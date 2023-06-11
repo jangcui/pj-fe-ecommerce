@@ -1,4 +1,5 @@
 import { Layout, Menu } from 'antd'
+import { useDispatch } from 'react-redux'
 import classNames from 'classnames/bind'
 import React, { useEffect, useState } from 'react'
 import {
@@ -9,7 +10,7 @@ import {
    AiOutlineMenuUnfold,
    AiOutlineShoppingCart,
 } from 'react-icons/ai'
-import { BiCategory, BiCategoryAlt, BiColorFill } from 'react-icons/bi'
+import { BiCategory, BiCategoryAlt, BiColorFill, BiLogOutCircle } from 'react-icons/bi'
 import { FaBlog, FaBlogger, FaClipboardList, FaListAlt, FaTrashAlt } from 'react-icons/fa'
 import { FiUsers } from 'react-icons/fi'
 import { RiCoupon2Line, RiCoupon3Line, RiCoupon4Fill, RiProductHuntLine } from 'react-icons/ri'
@@ -23,11 +24,11 @@ import Button from '~/components/Button'
 import styles from './Admin.module.scss'
 import { Blog, BlogList } from './admin-pages/Blogs'
 import Dashboard from './admin-pages/Dashboard'
-
 import ChangeTitle from '~/components/ChangeTitle'
 import { BlogCateList, BlogCategory } from './admin-pages/BlogCategories'
 import { Brand, BrandList } from './admin-pages/Brands'
 import Color from './admin-pages/Colors/Color'
+import ModalCustom from '~/components/ModalCustom'
 import ColorList from './admin-pages/Colors/ColorList'
 import { Coupon, CouponList } from './admin-pages/Coupon'
 import Customers from './admin-pages/Customers'
@@ -36,11 +37,17 @@ import { Order, OrderList } from './admin-pages/Order'
 import { ProdCategoriesList, ProdCategory } from './admin-pages/ProductCategories'
 import { Product, ProductList } from './admin-pages/Products'
 import { BlogsTrash, CustomerTrash, ProductsTrash } from './admin-pages/Trash'
+import { AppDispatch } from '~/store/store'
+import { logOutAdmin } from '~/features/admin/adminSlice'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 
 const Admin: React.FC = () => {
+   const dispatch = useDispatch<AppDispatch>()
+
    const [collapsed, setCollapsed] = useState(false)
+   const [openModal, setOpenModal] = useState(false)
 
    const navigate = useNavigate()
    const getAdminFromLocalStorage: string | null = localStorage.getItem('ADMIN')
@@ -51,6 +58,11 @@ const Admin: React.FC = () => {
          navigate('/admin/login')
       }
    })
+   const handleLogOut = () => {
+      dispatch(logOutAdmin())
+      toast.info('Logged out')
+      navigate('/admin/login')
+   }
 
    return (
       <>
@@ -60,6 +72,12 @@ const Admin: React.FC = () => {
             <Sider trigger={null} collapsible collapsed={collapsed}>
                <div className={cx('logo')}>
                   <h2>Dev Conner</h2>{' '}
+                  <ModalCustom
+                     title={'Log Out'}
+                     open={openModal}
+                     onOk={handleLogOut}
+                     onCancel={() => setOpenModal(false)}
+                  />
                </div>
                <Menu
                   theme="dark"
@@ -67,8 +85,8 @@ const Admin: React.FC = () => {
                   mode="inline"
                   defaultSelectedKeys={[' ']}
                   onClick={({ key }) => {
-                     if (key === 'signout') {
-                        return
+                     if (key === 'log_out') {
+                        setOpenModal(true)
                      } else {
                         navigate(key)
                      }
@@ -206,6 +224,11 @@ const Admin: React.FC = () => {
                         key: 'enquiries',
                         icon: <FaListAlt className={cx('icon')} />,
                         label: 'Enquires',
+                     },
+                     {
+                        key: 'log_out',
+                        icon: <BiLogOutCircle className={cx('icon')} />,
+                        label: 'Log out',
                      },
                   ]}
                />

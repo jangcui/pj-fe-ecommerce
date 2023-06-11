@@ -85,7 +85,7 @@
          .wrap-product {
             height: 350px;
             overflow: overlay;
-            padding: 0 10px;
+            padding: 10px;
             background-color: var(--white);
             border-radius: 4px;
 
@@ -141,7 +141,7 @@
                      font-size: 14px;
                      color: var(--white);
                      z-index: 4;
-                     background-color: var(--gray);
+                     background-color: var(--bs-red);
                   }
                   .img {
                      width: 60px;

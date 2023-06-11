@@ -1,9 +1,9 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
-import { StuffStageType } from '~/types/stuffStage'
+import { ItemStageType } from '~/types/itemStage'
 import { createBrand, deleteBrand, getBrand, getBrands, updateABrand } from './brandService'
 
-const initialState: StuffStageType = {
-   stuff: [],
+const initialState: ItemStageType = {
+   itemList: [],
    item: {},
    itemCreate: {},
    itemUpdate: {},
@@ -28,7 +28,7 @@ export const brandsSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.stuff = action.payload
+            state.itemList = action.payload
          })
          .addCase(getBrands.rejected, (state, action) => {
             state.isError = true

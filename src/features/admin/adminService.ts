@@ -1,14 +1,18 @@
-import * as httpRequest from '~/untils/httpRequest'
+import * as adminRequest from '~/untils/adminRequest'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
 interface LoginType {
    email: string
    password: string
 }
+interface UpdateStatusOrderType {
+   id: string
+   order_status: string
+}
 
 export const loginAdmin = createAsyncThunk('admin/login', async (user: LoginType, thunkAPI) => {
    try {
-      const response = await httpRequest.post('user/admin-login', user, {
+      const response = await adminRequest.post('user/admin-login', user, {
          signal: thunkAPI.signal,
       })
       return response
@@ -16,9 +20,9 @@ export const loginAdmin = createAsyncThunk('admin/login', async (user: LoginType
       return thunkAPI.rejectWithValue(error.response.data)
    }
 })
-export const toggleCustomerToTrashBin = createAsyncThunk('admin/add-to-trash-bin', async (id: string, thunkAPI) => {
+export const toggleCustomerToTrashBin = createAsyncThunk('admin/add-to-trash-bin', async (data: string, thunkAPI) => {
    try {
-      const response = await httpRequest.put(`user/trash/${id}`, {
+      const response = await adminRequest.put(`user/trash/${data}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -29,7 +33,7 @@ export const toggleCustomerToTrashBin = createAsyncThunk('admin/add-to-trash-bin
 
 export const getUsers = createAsyncThunk('admin/get-user', async (__, thunkAPI) => {
    try {
-      return await httpRequest.get('user', {
+      return await adminRequest.get('user', {
          signal: thunkAPI.signal,
       })
    } catch (err) {
@@ -38,7 +42,7 @@ export const getUsers = createAsyncThunk('admin/get-user', async (__, thunkAPI) 
 })
 export const toggleBlockAUser = createAsyncThunk('admin/toggle-block-user', async (id: string, thunkAPI) => {
    try {
-      return await httpRequest.put(`user/toggle-block/${id}`, {
+      return await adminRequest.put(`user/toggle-block/${id}`, {
          signal: thunkAPI.signal,
       })
    } catch (err) {
@@ -48,7 +52,7 @@ export const toggleBlockAUser = createAsyncThunk('admin/toggle-block-user', asyn
 
 export const deleteAUser = createAsyncThunk('admin/delete-user', async (id: string, thunkAPI) => {
    try {
-      return await httpRequest.Delete(`user/${id}`, {
+      return await adminRequest.Delete(`user/${id}`, {
          signal: thunkAPI.signal,
       })
    } catch (err) {
@@ -56,9 +60,9 @@ export const deleteAUser = createAsyncThunk('admin/delete-user', async (id: stri
    }
 })
 
-export const getAOrder = createAsyncThunk('enquiry/get', async (id: string, thunkAPI) => {
+export const getAOrder = createAsyncThunk('admin/order/get', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.get(`user/order-user/${id}`, {
+      const response = await adminRequest.get(`user/order/${id}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -66,9 +70,56 @@ export const getAOrder = createAsyncThunk('enquiry/get', async (id: string, thun
       return thunkAPI.rejectWithValue(error.response.data)
    }
 })
-export const getAllOrders = createAsyncThunk('orders', async (__, thunkAPI) => {
+export const getAllOrders = createAsyncThunk('admin/orders/get-all', async (__, thunkAPI) => {
    try {
-      const response = await httpRequest.get('user/all-orders', {
+      const response = await adminRequest.get('user/all-orders', {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const deleteOrder = createAsyncThunk('admin/orders/delete', async (id: string, thunkAPI) => {
+   try {
+      const response = await adminRequest.Delete(`user/order/${id}`, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const updateOrderStatus = createAsyncThunk(
+   'admin/orders/updateStatus',
+   async (data: UpdateStatusOrderType, thunkAPI) => {
+      try {
+         const response = await adminRequest.put(
+            `user/order/${data.id}`,
+            { order_status: data.order_status },
+            {
+               signal: thunkAPI.signal,
+            },
+         )
+         return response
+      } catch (error: any) {
+         return thunkAPI.rejectWithValue(error.response.data)
+      }
+   },
+)
+export const getMonthlyOrders = createAsyncThunk('admin/orders/monthly-income-data', async (__, thunkAPI) => {
+   try {
+      const response = await adminRequest.get('user/month-wise-order-income', {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const getYearlyOrders = createAsyncThunk('admin/orders/yearly-income-data', async (__, thunkAPI) => {
+   try {
+      const response = await adminRequest.get('user/year-total-orders', {
          signal: thunkAPI.signal,
       })
       return response

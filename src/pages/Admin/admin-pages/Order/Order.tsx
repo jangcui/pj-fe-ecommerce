@@ -3,72 +3,125 @@ import { Table } from 'antd'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getAOrder } from '~/features/admin/adminService'
+import { deleteOrder, getAOrder, getAllOrders } from '~/features/admin/adminService'
+import { BsTrashFill } from 'react-icons/bs'
 
 const cx = classNames.bind(styles)
 interface DataType {
-   key: React.Key
    name: string
-   amount: number | any
+   amount?: number
    product: JSX.Element
-   date: string
-   action: JSX.Element
+   price: JSX.Element
+   color: JSX.Element
+   brand: JSX.Element
+   dPrice?: number
+   status: string
 }
 
 const columns: any = [
    {
-      title: 'SNo',
-      dataIndex: 'key',
-   },
-   {
-      title: 'Name',
+      title: 'User Order',
       dataIndex: 'name',
    },
    {
-      title: 'Product',
+      title: 'Name Product',
       dataIndex: 'product',
    },
+   {
+      title: 'Color',
+      dataIndex: 'color',
+   },
+   {
+      title: 'Brand',
+      dataIndex: 'brand',
+   },
 
+   {
+      title: 'Price',
+      dataIndex: 'price',
+   },
    {
       title: 'Amount',
       dataIndex: 'amount',
    },
    {
-      title: 'Date',
-      dataIndex: 'date',
-   },
-   {
-      title: 'Action',
-      dataIndex: 'action',
+      title: 'Total Price',
+      dataIndex: 'dPrice',
    },
 ]
 
 function Order() {
    const dispatch = useDispatch<AppDispatch>()
-   // const orderState = useSelector((state: RootState) => state.orders.order)
+   const { order } = useSelector((state: RootState) => state.auth)
+   const { orderId } = useParams()
+   const data1: DataType[] = []
 
-   // const navigate = useNavigate()
-   // const { orderId } = useParams()
+   useEffect(() => {
+      if (orderId !== undefined) {
+         dispatch(getAOrder(orderId))
+      }
+   }, [dispatch, orderId])
 
-   // useEffect(() => {
-   //    if (orderId !== undefined) {
-   //       dispatch(getAOrder('6418838bd2090623d32d3a35'))
-   //    } else {
-   //       dispatch(resetOrderState())
-   //    }
-   // }, [dispatch, orderId])
+   data1.push({
+      name: (order && order?.user.fist_name + ' ' + order?.user.last_name) || '',
+      product: (
+         <>
+            {order?.orderItems.map((item, index) => (
+               <ul key={index} className="list-unstyled">
+                  <li style={{ fontWeight: '600' }}>{item.productId.title} </li>
+               </ul>
+            ))}
+         </>
+      ),
+      brand: (
+         <>
+            {order?.orderItems.map((item, index) => (
+               <ul key={index} className="list-unstyled">
+                  <li style={{ fontWeight: '600' }}>{item.productId.brand} </li>
+               </ul>
+            ))}
+         </>
+      ),
+      price: (
+         <>
+            {order?.orderItems.map((item, index) => (
+               <ul key={index} className="list-unstyled">
+                  <li style={{ fontWeight: '600' }}>{item.productId.price}</li>
+               </ul>
+            ))}
+         </>
+      ),
+      color: (
+         <>
+            {order?.orderItems.map((item, index) => (
+               <ul key={index} className="list-unstyled">
+                  <li
+                     style={{ backgroundColor: item.color.title, width: '16px', height: '16px', borderRadius: '100%' }}
+                  >
+                     {' '}
+                  </li>
+               </ul>
+            ))}
+         </>
+      ),
+      amount: order?.orderItems.length,
+      status: `${order?.order_status}`,
+      dPrice: order?.total_price_after_discount,
+   })
 
    return (
       <div className={cx('wrapper')}>
          <h1>View Order </h1>
          <div className={cx('chart')}>
-            <div className={cx('content')}>{/* <Table columns={columns} dataSource={data1} /> */}</div>
+            <div className={cx('content')}>
+               <Table columns={columns} dataSource={data1} />
+            </div>
          </div>
       </div>
    )

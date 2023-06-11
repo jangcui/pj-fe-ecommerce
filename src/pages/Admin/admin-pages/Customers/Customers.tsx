@@ -65,7 +65,7 @@ function Customers() {
    const handleDelete = async (id: string) => {
       hideModal()
       await dispatch(toggleCustomerToTrashBin(id))
-      toast.success('Delete!')
+      toast.success('Deleted!')
       await dispatch(getUsers())
    }
 

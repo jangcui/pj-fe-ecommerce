@@ -8,14 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
-import { StuffType } from '~/types/stuffStage'
+import { ItemType } from '~/types/itemStage'
 import { AppDispatch, RootState } from '~/store/store'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { toast } from 'react-toastify'
 import { deleteColor, getColors } from '~/features/colors/colorService'
 import { BiEdit } from 'react-icons/bi'
 
-interface DataType extends StuffType {
+interface DataType extends ItemType {
    key: React.Key
    action: JSX.Element
 }
@@ -37,7 +37,7 @@ const columns: any = [
 
 function ColorList() {
    const dispatch = useDispatch<AppDispatch>()
-   const colorState = useSelector((state: RootState) => state.colors.stuff)
+   const colorState = useSelector((state: RootState) => state.colors.itemList)
    const [colorId, setColorId] = useState<string>('')
 
    const [open, setOpen] = useState(false)

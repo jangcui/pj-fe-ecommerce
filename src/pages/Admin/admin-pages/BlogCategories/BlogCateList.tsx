@@ -1,20 +1,21 @@
 import classNames from 'classnames/bind'
 import { Table } from 'antd'
+import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
-import { StuffType } from '~/types/stuffStage'
+import Button from '~/components/Button'
+import { ItemType } from '~/types/itemStage'
 import { deleteBlogCate, getBlogCates } from '~/features/blogCategories/blogCateService'
-import { toast } from 'react-toastify'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
+
 const cx = classNames.bind(styles)
 
-interface DataType extends StuffType {
+interface DataType extends ItemType {
    key: React.Key
    action: JSX.Element
 }
@@ -37,7 +38,7 @@ const columns: any = [
 
 function BlogCateList() {
    const dispatch = useDispatch<AppDispatch>()
-   const blogCateState = useSelector((state: RootState) => state.blogCates.stuff)
+   const blogCateState = useSelector((state: RootState) => state.blogCates.itemList)
 
    useEffect(() => {
       dispatch(getBlogCates())
@@ -53,7 +54,7 @@ function BlogCateList() {
          setColorId(value)
       }
    }
-
+   console.log(blogCateState)
    const hideModal = () => {
       setOpen(false)
    }

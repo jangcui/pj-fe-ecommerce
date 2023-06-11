@@ -48,7 +48,7 @@ export const customerSlice = createSlice({
       builder
          .addCase(logOutUser, (state) => {
             localStorage.removeItem('USER')
-            localStorage.removeItem('TOKEN')
+            localStorage.removeItem('USER_TOKEN')
             state.user = null
          })
          .addCase(login.pending, (state) => {
@@ -61,7 +61,7 @@ export const customerSlice = createSlice({
             state.user = action.payload
             state.message = 'fulfilled'
             localStorage.setItem('USER', JSON.stringify(action.payload))
-            localStorage.setItem('TOKEN', JSON.stringify(action.payload.token))
+            localStorage.setItem('USER_TOKEN', JSON.stringify(action.payload.token))
          })
          .addCase(login.rejected, (state, action: PayloadAction<any>) => {
             state.isError = true
@@ -91,11 +91,10 @@ export const customerSlice = createSlice({
          .addCase(register.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(register.fulfilled, (state, action: PayloadAction<any>) => {
+         .addCase(register.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.user = action.payload
             state.message = 'fulfilled'
             toast.success('Register Successfully')
          })
@@ -109,10 +108,11 @@ export const customerSlice = createSlice({
          .addCase(addToWishList.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(addToWishList.fulfilled, (state) => {
+         .addCase(addToWishList.fulfilled, (state, action: PayloadAction<any>) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
+            toast.info(action.payload.message)
             state.message = 'fulfilled'
          })
          .addCase(addToWishList.rejected, (state) => {
@@ -164,7 +164,6 @@ export const customerSlice = createSlice({
             state.isSuccess = true
             state.cartList = action.payload
             state.message = 'fulfilled'
-
             state.totalPrice = action.payload.reduce((accumulator: number, item: CartType) => {
                const totalPrice = item?.quantity && item?.productId?.price && item.quantity * item?.productId?.price
                if (totalPrice) {
@@ -296,7 +295,7 @@ export const customerSlice = createSlice({
          .addCase(resetPwdToken.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(resetPwdToken.fulfilled, (state, action: PayloadAction<any>) => {
+         .addCase(resetPwdToken.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true

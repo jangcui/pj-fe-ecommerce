@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { EnquiryType } from '~/types/enquiryState'
 import * as httpRequest from '~/untils/httpRequest'
+import * as adminRequest from '~/untils/adminRequest'
 
 export const getAEnquiry = createAsyncThunk('enquiry/get', async (id: string, thunkAPI) => {
    try {
@@ -55,7 +56,7 @@ export const updateStatusEnquiry = createAsyncThunk(
 
 export const deleteEnquiry = createAsyncThunk('enquiry/delete', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.Delete(`enquiry/${id}`)
+      const response = await adminRequest.Delete(`enquiry/${id}`)
       return response
    } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data)

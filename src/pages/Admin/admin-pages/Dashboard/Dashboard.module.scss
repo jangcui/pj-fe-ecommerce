@@ -1,38 +1,20 @@
 .wrapper {
-   overflow-y: scroll;
+   display: flex;
+   flex-direction: column;
+   gap: 30px;
 
-   .title {
-      margin-bottom: 30px;
-   }
-   h1 {
-      margin-bottom: 30px;
-   }
-
-   .up {
-      color: var(--green);
-   }
-   .down {
-      color: var(--slug-color);
-   }
-   .icon {
-      margin-right: 8px;
-   }
    .wrap-blocks {
       display: flex;
       justify-content: space-between;
       gap: 16px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid var(--border-color-gray);
 
       .block {
          background-color: var(--white);
          padding: 12px;
          border-radius: 4px;
          flex: 1;
-
-         h3 {
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--bg-header);
-         }
       }
       .statistic {
          display: flex;
@@ -40,7 +22,7 @@
          align-items: flex-end;
 
          .money {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 600;
             color: var(--black);
          }
@@ -52,19 +34,17 @@
 
             p {
                font-size: 14px;
-            }
-
-            .percent {
-               display: flex;
-               justify-content: flex-end;
-               align-items: center;
+               font-style: italic;
             }
          }
       }
    }
    .chart {
-      margin-top: 40px;
-
+      flex: 1;
+      width: 50%;
+      border-bottom: 1px solid var(--border-color-gray);
+      padding-bottom: 20px;
+      margin-bottom: 50px;
       .content {
          padding: 0 10px;
          width: 100%;

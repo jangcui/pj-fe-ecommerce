@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { OrderDataStage, PaymentInfo } from '~/types/orderStage'
+import { PaymentInfo } from '~/types/orderStage'
 import * as httpRequest from '~/untils/httpRequest'
 
 interface LoginType {
@@ -10,6 +10,13 @@ type itemType = {
    cartItemId: string
    quantity: number
 }
+interface OrderType {
+   productId: string
+   color: string
+   quantity: number
+   price: number
+}
+
 interface RegisterType extends LoginType {
    fist_name: string
    last_name: string
@@ -128,7 +135,7 @@ export const updateQuantityProductFromCart = createAsyncThunk(
       }
    },
 )
-export const createOrder = createAsyncThunk('user/order/create', async (data: OrderDataStage, thunkAPI) => {
+export const createOrder = createAsyncThunk('user/order/create', async (data: any, thunkAPI) => {
    try {
       const response = await httpRequest.post(`user/cart/order`, data, {
          signal: thunkAPI.signal,

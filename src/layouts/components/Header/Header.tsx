@@ -22,6 +22,7 @@ import styles from './Header.module.scss'
 import { logOutUser } from '~/features/customers/customerSlice'
 import { BiLogOut } from 'react-icons/bi'
 import { ProductType } from '~/types/productStage'
+import ModalCustom from '~/components/ModalCustom/ModalCustom'
 const cx = classNames.bind(styles)
 
 interface SearchProductType {
@@ -38,6 +39,7 @@ function Header() {
    const [productOpt, setProductOpt] = useState<SearchProductType[]>([])
    const navigate = useNavigate()
 
+   const [openModal, setOpenModal] = useState(false)
    const [isScroll, setIsScroll] = useState(false)
    const [paginate, setPaginate] = useState(true)
    const dropdownRef = useRef<HTMLDivElement>(null)
@@ -55,7 +57,6 @@ function Header() {
          window.scrollY >= 40 ? setIsScroll(true) : setIsScroll(false)
       }
       window.addEventListener('scroll', onScroll, { passive: true })
-
       return () => {
          window.removeEventListener('scroll', onScroll)
       }
@@ -83,11 +84,12 @@ function Header() {
 
    const handleLogout = () => {
       dispatch(logOutUser())
-      setIsDropDown(false)
+      window.location.reload()
    }
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container')}>
+            <ModalCustom title={'Log Out'} open={openModal} onOk={handleLogout} onCancel={() => setOpenModal(false)} />
             <div className={cx('contact')}>
                <div className={cx('contact-container')}>
                   <span>Free Ship Over 100$ And Free Return </span>
@@ -115,10 +117,12 @@ function Header() {
                         }}
                         inputProps={{
                            style: {
-                              padding: '10px ',
+                              padding: '8px',
                               borderRadius: '4px 0 0 4px',
                               fontWeight: 600,
+                              fontSize: '14px',
                               minWidth: '400px',
+                              height: '36px',
                               maxWidth: '500px',
                            },
                         }}
@@ -126,13 +130,8 @@ function Header() {
                         paginate={paginate}
                         labelKey={'name'}
                         placeholder="Search for product here..."
-                        renderMenuItemChildren={(option: any) => (
-                           <div className={cx('search-result')}>
-                              <div className={cx('result')}>{option.name}</div>
-                           </div>
-                        )}
+                        renderMenuItemChildren={(option: any) => <span className="text-body ">{option.name}</span>}
                      />
-
                      <RxMagnifyingGlass className={cx('icon-search')} />
                   </div>
                   <div className={cx('option-wrapper')}>
@@ -183,7 +182,7 @@ function Header() {
                                  {isDropDown && (
                                     <ul className={cx('drop-down')}>
                                        <li>
-                                          <Button className={cx('btn-tooltip')} text onClick={() => handleLogout()}>
+                                          <Button className={cx('btn-tooltip')} text onClick={() => setOpenModal(true)}>
                                              Log Out
                                           </Button>
                                           <BiLogOut className={cx('icon')} />
@@ -220,7 +219,7 @@ function Header() {
                      rightIcon={<IoIosArrowDown className={cx('icon')} />}
                      className={cx('menu-drop')}
                   >
-                     SHOP CATEGORIES
+                     <span>SHOP CATEGORIES</span>
                   </Button>
                   <div className={cx('menu-option')}>
                      <Button text className={cx('btn')} to={config.routes.home}>

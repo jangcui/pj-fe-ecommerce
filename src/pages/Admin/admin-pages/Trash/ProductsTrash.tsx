@@ -10,13 +10,13 @@ import Button from '~/components/Button/Button'
 import { TiDelete } from 'react-icons/ti'
 import { BsArrowReturnLeft } from 'react-icons/bs'
 import { AppDispatch, RootState } from '~/store/store'
-import { StuffType } from '~/types/stuffStage'
+import { ItemType } from '~/types/itemStage'
 import { toast } from 'react-toastify'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { getProductTrash } from '~/features/trashBin/trashBinService'
 import { deleteProduct, toggleProductToTrashBin } from '~/features/products/productsService'
 
-interface DataType extends StuffType {
+interface DataType extends ItemType {
    key: React.Key
    action: JSX.Element
    category?: string
@@ -101,8 +101,6 @@ function ProductsTrash() {
       const currentDate: Date = new Date()
       const deleteDate = new Date(trashState[i]?.deleteDate)
       const deadline = Math.floor((deleteDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24))
-      console.log(deadline)
-
       data1.push({
          key: i + 1,
          title: trashState[i].title,

@@ -7,10 +7,10 @@ import config from '~/config'
 import { ProductType } from '~/types/productStage'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
-import { addToWishList } from '~/features/customers/customerService'
+import { addToWishList, getUserWishList } from '~/features/customers/customerService'
 import { AiOutlineHeart, AiTwotoneHeart } from 'react-icons/ai'
 import { HiArrowPath } from 'react-icons/hi2'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 import { FaEye } from 'react-icons/fa'
 import images from '~/assets/images'
@@ -20,12 +20,22 @@ const cx = classNames.bind(styles)
 function Collection({ data, isSort = false }: { data: ProductType; isSort?: boolean }) {
    const dispatch = useDispatch<AppDispatch>()
    const [isActive, setIsActive] = useState<boolean>(false)
-   const productData = useSelector((state: RootState) => state.products.productList)
+   const { wishlist } = useSelector((state: RootState) => state.customer)
+
    const imgList = data.images?.map((img) => img.url)
 
-   const handleAddToWishList = (productId: string) => {
-      dispatch(addToWishList({ prodId: productId }))
+   const handleAddToWishList = async () => {
+      setIsActive(!isActive)
+      await dispatch(addToWishList({ prodId: data._id || '' }))
+      await dispatch(getUserWishList())
    }
+   useEffect(() => {
+      wishlist?.map((item) => {
+         if (item._id === data._id) {
+            setIsActive(true)
+         }
+      })
+   }, [])
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container', isSort && 'sort')}>
@@ -33,9 +43,6 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
                <Image className={cx('img')} src={imgList && imgList[0] ? imgList[0] : images.errorImage} />
             </div>
             <div className={cx('wrap-btn')}>
-               <Button text to={config.routes.compare} secondary className={cx('btn')}>
-                  <HiArrowPath className={cx('icon')} />
-               </Button>
                <Button text to={`/product/${data._id}`} secondary className={cx('btn')}>
                   <FaEye className={cx('icon')} />
                </Button>
@@ -46,11 +53,11 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
             <div className={cx('info')}>
                <div className={cx('slug')}>
                   <p>{data.slug}</p>
-                  <Button text className={cx('btn')} onClick={() => handleAddToWishList(data._id as string)}>
+                  <Button text className={cx('btn')} onClick={handleAddToWishList}>
                      {isActive ? (
-                        <AiOutlineHeart className={cx('icon')} />
+                        <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
                      ) : (
-                        <AiTwotoneHeart className={cx('icon', 'icon-active')} />
+                        <AiOutlineHeart style={{ color: '#dd551b' }} className={cx('icon')} />
                      )}
                   </Button>
                </div>

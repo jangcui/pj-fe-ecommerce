@@ -10,12 +10,12 @@ import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { AppDispatch, RootState } from '~/store/store'
-import { StuffType } from '~/types/stuffStage'
+import { ItemType } from '~/types/itemStage'
 import { deleteProdCate, getProdCates } from '~/features/prodCategories/productCateService'
 import { toast } from 'react-toastify'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 
-interface DataType extends StuffType {
+interface DataType extends ItemType {
    key: React.Key
    action: JSX.Element
 }
@@ -38,7 +38,7 @@ const columns: any = [
 
 function Categories() {
    const dispatch = useDispatch<AppDispatch>()
-   const prodCateState = useSelector((state: RootState) => state.prodCates.stuff)
+   const prodCateState = useSelector((state: RootState) => state.prodCates.itemList)
    const [blogCateId, setColorId] = useState<string>('')
 
    useEffect(() => {

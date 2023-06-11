@@ -16,7 +16,7 @@ import { AppDispatch, RootState } from '~/store/store'
 import { uploadImgs } from '~/features/upload/uploadSlice'
 import { ImgType } from '~/types/imageStage'
 import Image from '~/components/Image/Image'
-import { StuffType } from '~/types/stuffStage'
+import { ItemType } from '~/types/itemStage'
 import { createBlog, getBlog, updateABlog } from '~/features/blogs/blogService'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -35,7 +35,7 @@ const blogSchema = Yup.object().shape({
 function CreateBlog() {
    const dispatch = useDispatch<AppDispatch>()
 
-   const blogCateState = useSelector((state: RootState) => state.blogCates.stuff)
+   const blogCateState = useSelector((state: RootState) => state.blogCates.itemList)
    const blogState = useSelector((state: RootState) => state.blogs)
    const uploadState = useSelector((state: RootState) => state.uploads)
    const { isError, isLoading, isSuccess, blog, blogUpdate, blogCreate } = blogState
@@ -153,7 +153,7 @@ function CreateBlog() {
                   className={cx('form-select')}
                >
                   <option>Select Category</option>
-                  {blogCateState?.map((el: StuffType, index: number) => (
+                  {blogCateState?.map((el: ItemType, index: number) => (
                      <option key={index} value={el.title}>
                         {el.title}
                      </option>

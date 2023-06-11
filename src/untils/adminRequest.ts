@@ -12,7 +12,7 @@ export const requests = axios.create({
 
 requests.interceptors.request.use(
    function (config) {
-      const token: string | null = localStorage.getItem('USER_TOKEN')
+      const token: string | null = localStorage.getItem('ADMIN_TOKEN')
       if (token) {
          const tokenParse: string = JSON.parse(token)
          config.headers.Authorization = `Bearer ${tokenParse}`

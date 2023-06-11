@@ -1,12 +1,18 @@
 import { ImgType } from './imageStage'
-import { StuffType } from './stuffStage'
+import { ItemType } from './itemStage'
+import { UserType } from './userStage'
 
+interface RatingType {
+   star: number
+   comment: string
+   postedBy: UserType
+}
 export interface ProductType {
    _id?: string
    isDelete?: boolean
    deleteDate?: Date | any
    totalRating?: number
-   ratings?: string[]
+   ratings?: RatingType[]
    __v?: number | string
    slug?: string
    sold?: number
@@ -19,7 +25,7 @@ export interface ProductType {
    quantity: number
    category: string
    brand: string
-   color: StuffType[] | string[]
+   color: ItemType[] | string[]
 }
 
 export interface ProductStageType {

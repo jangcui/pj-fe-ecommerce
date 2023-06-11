@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { StuffType } from '~/types/stuffStage'
-import * as httpRequest from '~/untils/httpRequest'
+import { ItemType } from '~/types/itemStage'
+import * as adminRequest from '~/untils/adminRequest'
 
 export const getBlogCates = createAsyncThunk('blogCategory/get-all', async (__, thunkAPI) => {
    try {
-      const response = await httpRequest.get('blog-category', {
+      const response = await adminRequest.get('blog-category', {
          signal: thunkAPI.signal,
       })
       return response
@@ -12,9 +12,9 @@ export const getBlogCates = createAsyncThunk('blogCategory/get-all', async (__, 
       return thunkAPI.rejectWithValue(error.response.data)
    }
 })
-export const updateABlogCate = createAsyncThunk('blogCategory/update', async (body: StuffType, thunkAPI) => {
+export const updateABlogCate = createAsyncThunk('blogCategory/update', async (body: ItemType, thunkAPI) => {
    try {
-      const response = await httpRequest.put(`blog-category/${body.id}`, body, {
+      const response = await adminRequest.put(`blog-category/${body.id}`, body, {
          signal: thunkAPI.signal,
       })
       return response
@@ -25,7 +25,7 @@ export const updateABlogCate = createAsyncThunk('blogCategory/update', async (bo
 
 export const deleteBlogCate = createAsyncThunk('blogCategory/delete', async (id: string | any, thunkAPI) => {
    try {
-      const response = await httpRequest.Delete(`blog-category/${id}`)
+      const response = await adminRequest.Delete(`blog-category/${id}`)
       return response
    } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data)
@@ -33,7 +33,7 @@ export const deleteBlogCate = createAsyncThunk('blogCategory/delete', async (id:
 })
 export const getBlogCate = createAsyncThunk('blogCategory/get', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.get(`blog-category/${id}`, {
+      const response = await adminRequest.get(`blog-category/${id}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -41,9 +41,9 @@ export const getBlogCate = createAsyncThunk('blogCategory/get', async (id: strin
       return thunkAPI.rejectWithValue(error.response.data)
    }
 })
-export const createBlogCate = createAsyncThunk('blogCategory/create', async (data: StuffType, thunkAPI) => {
+export const createBlogCate = createAsyncThunk('blogCategory/create', async (data: ItemType, thunkAPI) => {
    try {
-      const response = await httpRequest.post('blog-category', data, {
+      const response = await adminRequest.post('blog-category', data, {
          signal: thunkAPI.signal,
       })
       return response

@@ -1,10 +1,10 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
 
-import { StuffStageType } from '~/types/stuffStage'
+import { ItemStageType } from '~/types/itemStage'
 import { createProdCate, deleteProdCate, getProdCate, getProdCates, updateAProdCate } from './productCateService'
 
-const initialState: StuffStageType = {
-   stuff: [],
+const initialState: ItemStageType = {
+   itemList: [],
    item: {},
    itemCreate: {},
    itemUpdate: {},
@@ -29,7 +29,7 @@ export const prodCateSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.stuff = action.payload
+            state.itemList = action.payload
          })
          .addCase(getProdCates.rejected, (state, action) => {
             state.isError = true

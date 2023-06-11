@@ -1,10 +1,13 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
 import { ProductStageType } from '~/types/productStage'
+import type { PayloadAction } from '@reduxjs/toolkit'
+
 import {
    createProduct,
    deleteProduct,
    getAProduct,
    getProducts,
+   rateProduct,
    toggleProductToTrashBin,
    updateAProduct,
 } from './productsService'
@@ -20,6 +23,7 @@ const initialProduct = {
    category: '',
    brand: '',
    color: [],
+   rating: [],
    totalRating: 0,
 }
 
@@ -109,7 +113,6 @@ export const productSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            toast.success('Product Deleted')
          })
          .addCase(deleteProduct.rejected, (state, action) => {
             state.isError = true
@@ -127,6 +130,24 @@ export const productSlice = createSlice({
             state.isSuccess = true
          })
          .addCase(toggleProductToTrashBin.rejected, (state, action) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = action.error as string
+            toast.error('Something went wrong')
+         })
+         .addCase(rateProduct.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(rateProduct.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            toast.success('Ratting added successfully')
+            state.product = action.payload
+            console.log(action.payload)
+         })
+         .addCase(rateProduct.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false

@@ -16,6 +16,7 @@ export interface UserType {
    deleteDate: Date | any
    token: string
 }
+
 export interface AdminType {
    _id: string
    fist_name: string
@@ -24,6 +25,13 @@ export interface AdminType {
    email: string
    mobile: string
    token: string
+}
+export interface IncomeType {
+   _id: {
+      month: string
+   }
+   amount: number
+   count: number
 }
 
 export interface UserStageType {
@@ -43,9 +51,12 @@ export interface UserStageType {
 
 export interface AdminStageType {
    isAdmin: boolean
-   admin: AdminType
+   admin: AdminType | null
    userList: UserType[]
+   order?: OrderDataStage
    orderList: OrderDataStage[]
+   monthlyIncome: IncomeType[]
+   yearlyIncome: IncomeType[]
    isError: boolean
    isLoading: boolean
    isSuccess: boolean

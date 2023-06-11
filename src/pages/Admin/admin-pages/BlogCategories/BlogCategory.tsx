@@ -32,7 +32,7 @@ function BlogCategory() {
          dispatch(resetBlogCateState())
       }
       if (isSuccess && Object.keys(itemUpdate).length) {
-         toast.success('Color Updated Successfully!')
+         toast.success('BlogCategory Updated Successfully!')
          navigate('/admin/blog-category-list')
          dispatch(resetBlogCateState())
       }

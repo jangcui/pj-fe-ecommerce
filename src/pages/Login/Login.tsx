@@ -77,7 +77,7 @@ function Login() {
                ) : null}
 
                <Button to={config.routes.forgotPwd} text className={cx('sub')} type={'button'}>
-                  Forgot your password?
+                  <p className="fs-5">Forgot your password?</p>
                </Button>
                <div className={cx('login-btn')}>
                   <Button className={cx('btn')} type={'submit'} lazyLoad={isLoading}>

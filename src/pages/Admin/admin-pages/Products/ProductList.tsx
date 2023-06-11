@@ -66,9 +66,7 @@ const columns: any = [
       dataIndex: 'action',
    },
 ]
-const params: ParamsType = {
-   sort: true,
-}
+const params: ParamsType = {}
 function ProductList() {
    const dispatch = useDispatch<AppDispatch>()
    const productData = useSelector((state: RootState) => state.products.productList)

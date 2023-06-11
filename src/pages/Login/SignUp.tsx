@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +11,7 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Button from '~/components/Button'
 import { register } from '~/features/customers/customerService'
+
 const cx = classNames.bind(styles)
 
 const signUpSchema = Yup.object().shape({
@@ -26,17 +26,10 @@ const signUpSchema = Yup.object().shape({
 })
 function SignUp() {
    const dispatch = useDispatch<AppDispatch>()
+   const { isLoading } = useSelector((state: RootState) => state.customer)
 
-   const loginState = useSelector((state: RootState) => state.auth)
    const navigate = useNavigate()
-   useEffect(() => {
-      if (loginState.isSuccess === true) {
-         navigate('/')
-      } else {
-         navigate('')
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [loginState])
+
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
@@ -49,13 +42,12 @@ function SignUp() {
       },
       validationSchema: signUpSchema,
       onSubmit: async (values) => {
-         await dispatch(register(values))
-         if (loginState.isSuccess === true) {
-            formik.resetForm()
+         const result = await dispatch(register(values))
+         if (result.payload._id) {
+            navigate('/login')
          }
       },
    })
-
    return (
       <>
          <ChangeTitle title={'SignUp'} />
@@ -141,7 +133,7 @@ function SignUp() {
                      </span>
                   </div>
                   <div className={cx('signup-btn')}>
-                     <Button primary className={cx('btn')} type={'submit'} lazyLoad={loginState.isLoading}>
+                     <Button primary className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
                         Sign Up
                      </Button>
                   </div>

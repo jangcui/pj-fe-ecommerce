@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import moment from 'moment'
 
@@ -14,11 +15,18 @@ const cx = classNames.bind(styles)
 function MyOrder() {
    const dispatch = useDispatch<AppDispatch>()
 
-   const { orderList, isLoading } = useSelector((state: RootState) => state.customer)
+   const { orderList, user } = useSelector((state: RootState) => state.customer)
+
+   const navigate = useNavigate()
+
    useEffect(() => {
-      dispatch(getMyOrder())
-   }, [dispatch])
-   console.log(orderList)
+      if (!user) {
+         navigate('/login')
+      } else {
+         dispatch(getMyOrder())
+      }
+   }, [user, navigate, dispatch])
+
    return (
       <>
          <ChangeTitle title={'Our Store'} />

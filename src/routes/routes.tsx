@@ -3,7 +3,6 @@ import Admin from '~/pages/Admin'
 import BlogPage from '~/pages/BlogPage'
 import CartPage from '~/pages/CartPage'
 import CheckOut from '~/pages/CheckOut'
-import CompareProducts from '~/pages/CompareProducts'
 import Contact from '~/pages/Contact'
 import Home from '~/pages/Home'
 import Login, { ResetPwd } from '~/pages/Login'
@@ -33,7 +32,6 @@ const publicRouter: Route[] = [
    { path: config.routes.store, component: OurStore },
    { path: config.routes.blogs, component: BlogPage },
    { path: config.routes.blog, component: SingleBlog },
-   { path: config.routes.compare, component: CompareProducts },
    { path: config.routes.contact, component: Contact },
    { path: config.routes.wishlist, component: WishList },
    { path: config.routes.cart, component: CartPage },

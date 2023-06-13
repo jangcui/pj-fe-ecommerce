@@ -14,7 +14,7 @@ import * as httpRequest from '~/untils/httpRequest'
 import Image from '~/components/Image/Image'
 import config from '~/config/config'
 import { AppDispatch, RootState } from '~/store/store'
-import { checkout, createOrder, getCarts } from '~/features/customers/customerService'
+import { checkout, createOrder, emptyCart, getCarts } from '~/features/customers/customerService'
 import images from '~/assets/images'
 import logo from '~/assets/images/logo.png'
 import InputCustom from '~/components/InputCustom/InputCustom'
@@ -140,7 +140,9 @@ function CheckOut() {
             )
             if (result.payload.success === true) {
                formik.resetForm()
-               navigate('/cart')
+               navigate('/order')
+               dispatch(emptyCart())
+               dispatch(getCarts())
             }
             setIsLoading(false)
          },
@@ -289,7 +291,7 @@ function CheckOut() {
                         Country to shipping
                      </Button>
                      <Button type={'submit'} primary className={cx('btn-country')} lazyLoad={isLoading}>
-                        Create Order
+                        Order
                      </Button>
                   </div>
                </form>

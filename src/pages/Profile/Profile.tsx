@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineEdit } from 'react-icons/ai'
 import * as Yup from 'yup'
@@ -12,6 +12,7 @@ import { AppDispatch, RootState } from '~/store/store'
 import InputCustom from '~/components/InputCustom'
 import Button from '~/components/Button'
 import { updateProfile } from '~/features/customers/customerService'
+import { useNavigate } from 'react-router-dom'
 const cx = classNames.bind(styles)
 
 const profileSchema = Yup.object().shape({
@@ -25,6 +26,15 @@ function Profile() {
    const dispatch = useDispatch<AppDispatch>()
    const { user } = useSelector((state: RootState) => state.customer)
    const [isEdit, setIsEdit] = useState<boolean>(true)
+   const navigate = useNavigate()
+
+   useEffect(() => {
+      if (!user) {
+         navigate('/login')
+      } else {
+         return
+      }
+   }, [user, navigate, dispatch])
 
    const formik = useFormik({
       enableReinitialize: true,

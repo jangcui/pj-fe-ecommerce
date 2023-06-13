@@ -1,16 +1,12 @@
-import classNames from 'classnames/bind'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { Table } from 'antd'
+import classNames from 'classnames/bind'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { AiFillDelete } from 'react-icons/ai'
-import { BiEdit } from 'react-icons/bi'
-import Button from '~/components/Button/Button'
+import { getAOrder } from '~/features/admin/adminService'
 import { AppDispatch, RootState } from '~/store/store'
-import { useNavigate, useParams } from 'react-router-dom'
-import { deleteOrder, getAOrder, getAllOrders } from '~/features/admin/adminService'
-import { BsTrashFill } from 'react-icons/bs'
 
 const cx = classNames.bind(styles)
 interface DataType {

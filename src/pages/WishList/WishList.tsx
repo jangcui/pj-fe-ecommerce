@@ -3,7 +3,6 @@ import styles from './WishList.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Image from '~/components/Image'
-import { CloseIcon } from '~/components/Icon'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { useEffect, useState } from 'react'
@@ -14,6 +13,7 @@ import Button from '~/components/Button'
 import Loading from '~/components/Loading/Loading'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { useNavigate } from 'react-router-dom'
+import { AiOutlineClose } from 'react-icons/ai'
 
 const cx = classNames.bind(styles)
 interface ValueType {
@@ -87,7 +87,10 @@ function WishList() {
                                     setOpen(true)
                                  }}
                               >
-                                 <CloseIcon className={cx('icon')} />
+                                 <AiOutlineClose
+                                    style={{ width: '24px', height: '24px', color: '#fff' }}
+                                    className={cx('icon')}
+                                 />
                               </Button>
                               <div className={cx('wrap-img')}>
                                  <Image className={cx('img')} src={imgList ? imgList[0] : ''} />

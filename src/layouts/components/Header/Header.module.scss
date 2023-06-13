@@ -139,7 +139,7 @@
                   background-color: #fff;
                   top: 50px;
                   width: 162px;
-                  z-index: 10;
+                  z-index: 999;
                   border-radius: 4px;
                   list-style-type: none;
                   transition: all 0.3s;
@@ -266,6 +266,7 @@
          width: 100px;
          font-size: 18px;
          text-transform: capitalize;
+         padding: 10px 0;
 
          &:hover {
             background-color: #6481a5;

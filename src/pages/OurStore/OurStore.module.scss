@@ -88,10 +88,6 @@
             display: flex;
             align-items: center;
 
-            .icon {
-               width: 18px;
-               height: 18px;
-            }
             .wrap-icon {
                display: flex;
                align-items: center;
@@ -108,6 +104,10 @@
                   border-radius: 6px;
                   background-color: #000000;
                   color: #f8f9fa;
+
+                  .icon {
+                     fill: #fff;
+                  }
                }
             }
             p {

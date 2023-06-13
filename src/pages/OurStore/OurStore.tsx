@@ -12,6 +12,7 @@ import Button from '~/components/Button/Button'
 import Loading from '~/components/Loading/Loading'
 import { ProductType } from '~/types/productStage'
 import { BiReset } from 'react-icons/bi'
+import { Sort2Icon, Sort3Icon, Sort4Icon, SortHorizon } from '~/components/Icon'
 const cx = classNames.bind(styles)
 
 function OurStore() {
@@ -23,11 +24,21 @@ function OurStore() {
          id: 0,
          isActive: true,
          classSort: 'sort-4',
-         icon: <TfiAlignJustify className={cx('icon')} style={{ transform: 'rotate(90deg)' }} />,
+         icon: <Sort4Icon className={cx('icon')} />,
       },
-      { id: 1, isActive: false, classSort: 'sort-3', icon: <TfiLayoutColumn3 className={cx('icon')} /> },
-      { id: 2, isActive: false, classSort: 'sort-2', icon: <TfiLayoutColumn2 className={cx('icon')} /> },
-      { id: 3, isActive: false, classSort: 'sort-1', icon: <TfiAlignJustify className={cx('icon')} /> },
+      { id: 1, isActive: false, classSort: 'sort-3', icon: <Sort3Icon className={cx('icon')} /> },
+      {
+         id: 2,
+         isActive: false,
+         classSort: 'sort-2',
+         icon: <Sort2Icon className={cx('icon')} />,
+      },
+      {
+         id: 3,
+         isActive: false,
+         classSort: 'sort-1',
+         icon: <SortHorizon className={cx('icon')} />,
+      },
    ])
    const [brands, setBrands] = useState<string[]>([])
    const [categories, setCategories] = useState<string[]>([])

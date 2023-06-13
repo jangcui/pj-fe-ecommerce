@@ -4,6 +4,7 @@ import {
    addToWishList,
    checkout,
    createOrder,
+   emptyCart,
    forgotPwdToken,
    getCarts,
    getMyOrder,
@@ -79,6 +80,16 @@ export const customerSlice = createSlice({
             state.isSuccess = true
             state.user = action.payload
             state.message = 'fulfilled'
+            const userResult = {
+               _id: action.payload._id,
+               fist_name: action.payload.fist_name,
+               last_name: action.payload.last_name,
+               email: action.payload.email,
+               mobile: action.payload.mobile,
+               token: action.payload.refreshToken,
+            }
+            localStorage.setItem('USER', JSON.stringify(userResult))
+            console.log(userResult)
             toast.success('Updated')
          })
          .addCase(updateProfile.rejected, (state, action: PayloadAction<any>) => {
@@ -188,6 +199,23 @@ export const customerSlice = createSlice({
             toast.success('Product removed from cart')
          })
          .addCase(removeProductFromCart.rejected, (state) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = 'rejected'
+            toast.error('Something went wrong')
+         })
+         .addCase(emptyCart.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(emptyCart.fulfilled, (state) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.message = 'fulfilled'
+            toast.info('Cart Empty Now')
+         })
+         .addCase(emptyCart.rejected, (state) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false

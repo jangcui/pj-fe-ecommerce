@@ -82,37 +82,35 @@ function Enquires() {
    }
    const data1: DataType[] = []
    for (let i = 0; i < enquiryState.length; i++) {
-      if (enquiryState[i].role !== 'admin') {
-         data1.push({
-            key: i + 1,
-            name: enquiryState[i].name,
-            email: enquiryState[i].email,
-            mobile: enquiryState[i].mobile,
-            select: (
-               <>
-                  <select
-                     defaultValue={enquiryState[i].status ? enquiryState[i].status : 'Submitted'}
-                     onChange={(e) => setEnquiryStatus(enquiryState[i]._id, e.target.value)}
-                  >
-                     <option value="Contacted">Contacted</option>
-                     <option value="Submitted">Submitted</option>
-                     <option value="In progress">In progress</option>
-                     <option value="Resolved">Resolved</option>
-                  </select>
-               </>
-            ),
-            action: (
-               <>
-                  <Button text to={`/admin/enquiry/${enquiryState[i]._id}`}>
-                     <AiFillEye className={cx('icon')} />
-                  </Button>
-                  <Button text onClick={() => showModal(enquiryState[i]._id)}>
-                     <AiFillDelete className={cx('icon')} />
-                  </Button>
-               </>
-            ),
-         })
-      }
+      data1.push({
+         key: i + 1,
+         name: enquiryState[i].name,
+         email: enquiryState[i].email,
+         mobile: enquiryState[i].mobile,
+         select: (
+            <>
+               <select
+                  defaultValue={enquiryState[i].status ? enquiryState[i].status : 'Submitted'}
+                  onChange={(e) => setEnquiryStatus(enquiryState[i]._id, e.target.value)}
+               >
+                  <option value="Contacted">Contacted</option>
+                  <option value="Submitted">Submitted</option>
+                  <option value="In progress">In progress</option>
+                  <option value="Resolved">Resolved</option>
+               </select>
+            </>
+         ),
+         action: (
+            <>
+               <Button text to={`/admin/enquiry/${enquiryState[i]._id}`}>
+                  <AiFillEye className={cx('icon')} />
+               </Button>
+               <Button text onClick={() => showModal(enquiryState[i]._id)}>
+                  <AiFillDelete className={cx('icon')} />
+               </Button>
+            </>
+         ),
+      })
    }
    return (
       <div className={cx('wrapper')}>

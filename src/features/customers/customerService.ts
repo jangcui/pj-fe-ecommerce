@@ -121,6 +121,16 @@ export const removeProductFromCart = createAsyncThunk(
       }
    },
 )
+export const emptyCart = createAsyncThunk('user/cart/clear', async (__, thunkAPI) => {
+   try {
+      const response = await httpRequest.Delete(`user/cart`, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
 
 export const updateQuantityProductFromCart = createAsyncThunk(
    'user/cart/update-product-quantity',

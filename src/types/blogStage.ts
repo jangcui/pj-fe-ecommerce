@@ -7,7 +7,6 @@ export interface BlogType {
    numViews?: string
    category?: string
    author?: string
-   role?: string
    images?: ImgType[]
    likes?: string[]
    dislikes?: string[]

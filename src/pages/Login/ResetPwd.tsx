@@ -36,7 +36,7 @@ function ResetPwd() {
       onSubmit: async (values) => {
          const result = await dispatch(resetPwdToken({ password: values.pwdConfirm, token: token }))
          console.log(result)
-         if (result.payload.role) {
+         if (result.payload._id) {
             navigate('/login')
          }
       },

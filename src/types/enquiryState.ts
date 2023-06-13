@@ -5,7 +5,6 @@ export interface EnquiryType {
    status?: string
    mobile?: string
    comment?: string
-   role?: string
    __v?: number
 }
 

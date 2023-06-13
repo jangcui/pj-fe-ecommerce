@@ -138,14 +138,6 @@ function Header() {
                      <>
                         <Button
                            text
-                           leftIcon={<HiArrowPath className={cx('icon')} />}
-                           to={config.routes.compare}
-                           className={cx('option')}
-                        >
-                           <p>Compare Products</p>
-                        </Button>
-                        <Button
-                           text
                            leftIcon={<AiOutlineHeart className={cx('icon')} />}
                            to={config.routes.wishlist}
                            className={cx('option')}
@@ -182,7 +174,14 @@ function Header() {
                                  {isDropDown && (
                                     <ul className={cx('drop-down')}>
                                        <li>
-                                          <Button className={cx('btn-tooltip')} text onClick={() => setOpenModal(true)}>
+                                          <Button
+                                             className={cx('btn-tooltip')}
+                                             text
+                                             onClick={() => {
+                                                console.log(123)
+                                                setOpenModal(true)
+                                             }}
+                                          >
                                              Log Out
                                           </Button>
                                           <BiLogOut className={cx('icon')} />

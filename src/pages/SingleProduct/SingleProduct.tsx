@@ -5,7 +5,6 @@ import classNames from 'classnames/bind'
 import ReactImageMagnify from 'react-image-magnify'
 import Marquee from 'react-fast-marquee'
 import { useNavigate, useParams } from 'react-router-dom'
-import { HiArrowPath } from 'react-icons/hi2'
 import { StarRating } from 'star-rating-react-ts'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -14,7 +13,7 @@ import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
 import Button from '~/components/Button/Button'
 import { AppDispatch, RootState } from '~/store/store'
-import { getAProduct, rateProduct } from '~/features/products/productsService'
+import { getAProduct, getProducts, rateProduct } from '~/features/products/productsService'
 import images from '~/assets/images'
 import { addToCart, addToWishList, getCarts, getUserWishList } from '~/features/customers/customerService'
 import { ItemType } from '~/types/itemStage'
@@ -28,7 +27,7 @@ function SingleProduct() {
    const { product, productList, isLoading } = useSelector((state: RootState) => state.products)
    const { cartList, wishlist, user } = useSelector((state: RootState) => state.customer)
    const imgList = product?.images?.map((img) => img.url)
-   const [color, setColor] = useState<string>('')
+   const [colorId, setColorId] = useState<string>('')
    const [productPop, setProductPop] = useState<ProductType[]>([])
    const [allReadyAdded, setAllReadyAdded] = useState<boolean>(false)
    const [isWishlist, setIsWishlist] = useState<boolean>(false)
@@ -48,6 +47,7 @@ function SingleProduct() {
          dispatch(getUserWishList())
          dispatch(getAProduct(productId))
          dispatch(getCarts())
+         dispatch(getProducts({}))
       }
    }, [user, navigate, dispatch, productId])
 
@@ -71,7 +71,6 @@ function SingleProduct() {
          }
       })
    }, [wishlist, productId])
-
    useEffect(() => {
       for (const index in cartList) {
          if (productId === cartList[index]?.productId?._id) {
@@ -83,11 +82,11 @@ function SingleProduct() {
    }, [dispatch, productId, cartList])
 
    const handleAddToCart = async () => {
-      if (!color) {
+      if (!colorId) {
          toast.error('Please Chose color!')
          return
       } else {
-         const data = { color: color, productId: product._id, price: product.price, quantity: quantity }
+         const data = { color: colorId, productId: product._id, price: product.price, quantity: quantity }
          await dispatch(addToCart(data))
          await dispatch(getCarts())
       }
@@ -104,6 +103,8 @@ function SingleProduct() {
          if (productId) {
             await dispatch(rateProduct({ star: star, comment: comment, prodId: productId }))
             await dispatch(getAProduct(productId))
+            setComment('')
+            setStar(0)
          }
       }
    }
@@ -173,13 +174,13 @@ function SingleProduct() {
                   <div className={cx('content')}>
                      <h3 className={cx('title')}>{product.title}</h3>
                      <span className={cx('price')}>$ {product.price}</span>
-                     <div className={cx('star')}>
+                     <div className={cx('d-flex')}>
                         <StarRating
-                           initialRating={product.totalRating ? product.totalRating : product.totalRating}
+                           initialRating={product?.totalRating as number}
+                           readOnly
                            theme={{
                               size: 24,
                               colors: {
-                                 backgroundColorHover: '#ffd333',
                                  backgroundColorActive: '#ffd333',
                               },
                            }}
@@ -211,18 +212,21 @@ function SingleProduct() {
 
                         {!allReadyAdded && (
                            <div className={cx('field')}>
-                              <span className={cx('name')}>Color</span>
+                              <span className={cx('name')}>Color:</span>
                               <div className={cx('color')}>
-                                 {product?.color &&
-                                    product?.color.map((color: ItemType | any, index) => (
+                                 {product?.color.map((color: ItemType | any, index) => (
+                                    <div
+                                       key={index}
+                                       className={cx('color-select', colorId === color?._id ? 'active' : '')}
+                                    >
                                        <Button
                                           text
                                           className={cx('btn-color')}
-                                          key={index}
-                                          onClick={() => setColor(color?._id)}
+                                          onClick={() => setColorId(color?._id)}
                                           style={{ backgroundColor: color?.title }}
                                        />
-                                    ))}
+                                    </div>
+                                 ))}
                               </div>
                            </div>
                         )}
@@ -260,7 +264,12 @@ function SingleProduct() {
                                        Go To Cart
                                     </Button>
                                  ) : (
-                                    <Button className={cx('btn')} primary onClick={handleAddToCart}>
+                                    <Button
+                                       className={cx('btn')}
+                                       primary
+                                       onClick={handleAddToCart}
+                                       lazyLoad={isLoading}
+                                    >
                                        ADD TO CART
                                     </Button>
                                  )}
@@ -309,20 +318,6 @@ function SingleProduct() {
                <div className={cx('review-container')}>
                   <h2>Review</h2>
                   <div className={cx('reviews')}>
-                     {/* <h3>Customer Review</h3> */}
-                     {/* <div className={cx('rating')}>
-                           <StarRating
-                              initialRating={5}
-                              readOnly
-                              theme={{
-                                 size: 14,
-                              }}
-                           />{' '}
-                           Based on 2 reviews
-                        <span>
-                           <p>write a review</p>
-                        </span>
-                     </div> */}
                      <div className={cx('form-submit')}>
                         <h4>Rating</h4>
                         <StarRating
@@ -344,7 +339,7 @@ function SingleProduct() {
                            placeholder="Give your review a title"
                         />
                         <div className={cx('btn-submit')}>
-                           <Button primary className={cx('btn')} onClick={handleRating}>
+                           <Button primary className={cx('btn')} lazyLoad={isLoading} onClick={handleRating}>
                               Submit review
                            </Button>
                         </div>
@@ -364,13 +359,7 @@ function SingleProduct() {
                               }}
                            />{' '}
                            <h3 className={cx('content')}>{item.comment}</h3>
-                           {/* <div className={cx('date')}>
-                              <span>jangcui</span>on
-                              <span>jun 20 2020</span>
-                           </div>
-                           <p className={cx('text')}>{item.comment}</p> */}
                            <p className={cx('text')}>(anonymous)</p>
-                           <input className={cx('reply')} type="text" />
                         </div>
                      ))}
                   </div>

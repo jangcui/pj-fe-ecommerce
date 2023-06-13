@@ -87,6 +87,7 @@
    "scripts": {
       "start": "react-app-rewired start",
       "test": "react-app-rewired test",
+      "deploy": "npm install --force && vercel --prod",
       "dev": "webpack-dev-server --mode development",
       "build": "react-app-rewired build",
       "build:analyze": "webpack --mode production --env analyze",

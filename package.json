@@ -13,6 +13,7 @@
       "@testing-library/jest-dom": "^5.16.5",
       "@testing-library/react": "^13.4.0",
       "@testing-library/user-event": "^13.5.0",
+      "@types/antd": "^1.0.0",
       "@types/axios": "^0.14.0",
       "@types/jest": "^27.5.2",
       "@types/node": "^16.18.18",
@@ -116,6 +117,8 @@
       ]
    },
    "devDependencies": {
-      "@types/lodash.debounce": "^4.0.7"
+      "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+      "@types/lodash.debounce": "^4.0.7",
+      "ajv": "^7.2.4"
    }
 }

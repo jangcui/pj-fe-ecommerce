@@ -1,9 +1,9 @@
 import classNames from 'classnames/bind'
-import { Table } from 'antd'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
+import ForwardTable from 'antd/lib/table/Table'
 import { BiEdit } from 'react-icons/bi'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
@@ -90,7 +90,7 @@ function BlogCateList() {
          <h1>Blogs Categories </h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'This brand will be delete?'}

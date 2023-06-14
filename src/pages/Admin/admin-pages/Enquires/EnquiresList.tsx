@@ -1,16 +1,17 @@
 import classNames from 'classnames/bind'
-
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import { Table } from 'antd'
+import { toast } from 'react-toastify'
+import { AiFillEye, AiFillDelete } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import Button from '~/components/Button/Button'
-import { AiFillEye, AiFillDelete } from 'react-icons/ai'
+import ForwardTable from 'antd/lib/table/Table'
+
+import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { EnquiryType } from '~/types/enquiryState'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
-import { toast } from 'react-toastify'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteEnquiry, getEnquiries, updateStatusEnquiry } from '~/features/enquiry/enquiryService'
+
 const cx = classNames.bind(styles)
 
 interface DataType extends EnquiryType {
@@ -117,7 +118,7 @@ function Enquires() {
          <h1>Enquires</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'This enquiry will be delete?'}

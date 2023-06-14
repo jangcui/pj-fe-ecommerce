@@ -1,12 +1,12 @@
 import classNames from 'classnames/bind'
-
-import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import { BsArrowReturnLeft } from 'react-icons/bs'
+import ForwardTable from 'antd/lib/table/Table'
 import { TiDelete } from 'react-icons/ti'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+
+import ModalCustom from '~/components/ModalCustom'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteAUser, toggleCustomerToTrashBin } from '~/features/admin/adminService'
 import { getCustomersTrash } from '~/features/trashBin/trashBinService'
@@ -126,7 +126,7 @@ function CustomerTrash() {
          <h1>Customers Trash</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'Delete Now?'}

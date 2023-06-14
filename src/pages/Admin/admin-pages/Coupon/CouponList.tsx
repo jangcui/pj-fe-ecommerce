@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind'
-import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
+import ForwardTable from 'antd/lib/table/Table'
+import { toast } from 'react-toastify'
 import { BiEdit } from 'react-icons/bi'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
@@ -11,7 +12,6 @@ import { AppDispatch, RootState } from '~/store/store'
 import { CouponType } from '~/types/couponStage'
 import { deleteCoupon, getCoupons } from '~/features/coupon/couponService'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
-import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 
 interface DataType extends CouponType {
@@ -111,7 +111,7 @@ function CouponList() {
          <h1>Coupon List </h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'This brand will be delete?'}

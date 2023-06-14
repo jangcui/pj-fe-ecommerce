@@ -1,15 +1,12 @@
-import classNames from 'classnames/bind'
-import { Table } from 'antd'
-
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { AiFillDelete } from 'react-icons/ai'
-import { BiEdit } from 'react-icons/bi'
-import Button from '~/components/Button/Button'
+import classNames from 'classnames/bind'
+import { useDispatch, useSelector } from 'react-redux'
+
+import Button from '~/components/Button'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
+import { getAllOrders, updateOrderStatus } from '~/features/admin/adminService'
 import { AppDispatch, RootState } from '~/store/store'
-import { deleteOrder, getAllOrders, updateOrderStatus } from '~/features/admin/adminService'
-import { BsTrashFill } from 'react-icons/bs'
+import ForwardTable from 'antd/lib/table/Table'
 
 const cx = classNames.bind(styles)
 
@@ -112,7 +109,7 @@ function OrderList() {
          <h1>Orders</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
          </div>
       </div>

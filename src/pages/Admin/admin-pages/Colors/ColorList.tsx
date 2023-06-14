@@ -1,19 +1,18 @@
-import classNames from 'classnames/bind'
-
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-
-const cx = classNames.bind(styles)
-import { Table } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import Button from '~/components/Button/Button'
 import { AiFillDelete } from 'react-icons/ai'
+import { useDispatch, useSelector } from 'react-redux'
+import classNames from 'classnames/bind'
+const cx = classNames.bind(styles)
+import ForwardTable from 'antd/lib/table/Table'
+import { BiEdit } from 'react-icons/bi'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
+
+import Button from '~/components/Button'
 import { ItemType } from '~/types/itemStage'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
-import { toast } from 'react-toastify'
 import { deleteColor, getColors } from '~/features/colors/colorService'
-import { BiEdit } from 'react-icons/bi'
 
 interface DataType extends ItemType {
    key: React.Key
@@ -88,7 +87,7 @@ function ColorList() {
          <h1>Color List</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'This brand will be delete?'}

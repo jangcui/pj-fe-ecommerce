@@ -1,16 +1,16 @@
 import classNames from 'classnames/bind'
-
-import { Table } from 'antd'
 import { useEffect, useState } from 'react'
 import { BsArrowReturnLeft } from 'react-icons/bs'
 import { TiDelete } from 'react-icons/ti'
+import ForwardTable from 'antd/lib/table/Table'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
+
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteBlog, toggleBlogToTrashBin } from '~/features/blogs/blogService'
 import { geBlogsTrash } from '~/features/trashBin/trashBinService'
-import Button from '~/components/Button/Button'
+import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { BlogType } from '~/types/blogStage'
 
@@ -124,7 +124,7 @@ function BlogsTrash() {
          <h1>Blogs Trash</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'Delete Now?'}

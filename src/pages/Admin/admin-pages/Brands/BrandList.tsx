@@ -1,18 +1,17 @@
 import classNames from 'classnames/bind'
-
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import { Table } from 'antd'
-
+import { toast } from 'react-toastify'
+import ForwardTable from 'antd/lib/table/Table'
 import { useDispatch, useSelector } from 'react-redux'
-import Button from '~/components/Button/Button'
 import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
+
+import Button from '~/components/Button'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import { ItemType } from '~/types/itemStage'
 import { deleteBrand, getBrands } from '~/features/brands/brandService'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
-import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 interface DataType extends ItemType {
    key: React.Key
@@ -87,7 +86,7 @@ function BrandList() {
          <h1>Brand List</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'This brand will be delete?'}

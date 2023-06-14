@@ -9,9 +9,9 @@ interface MyModalProps extends Omit<ModalProps, 'visible'> {
 }
 
 function ModalCustom(props: MyModalProps) {
-   const { open, onOk, onCancel, title } = props
+   const { open, onOk, onCancel, title = 'Are U Sure?' } = props
    return (
-      <Modal title="Are U Sure?" open={open} onOk={onOk} onCancel={onCancel} okText="Confirm" cancelText="Cancel">
+      <Modal title={title} open={open} onOk={onOk} onCancel={onCancel} okText="Confirm" cancelText="Cancel">
          <p> {title}</p>
       </Modal>
    )

@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Table } from 'antd'
 import classNames from 'classnames/bind'
+import ForwardTable from 'antd/lib/table/Table'
 
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { getAOrder } from '~/features/admin/adminService'
@@ -116,7 +116,7 @@ function Order() {
          <h1>View Order </h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
          </div>
       </div>

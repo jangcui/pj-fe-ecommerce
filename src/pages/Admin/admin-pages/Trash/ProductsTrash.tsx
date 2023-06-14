@@ -1,20 +1,20 @@
 import classNames from 'classnames/bind'
 
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-
-const cx = classNames.bind(styles)
-import { Table } from 'antd'
+import { toast } from 'react-toastify'
+import ForwardTable from 'antd/lib/table/Table'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import Button from '~/components/Button/Button'
 import { TiDelete } from 'react-icons/ti'
 import { BsArrowReturnLeft } from 'react-icons/bs'
+
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import { ItemType } from '~/types/itemStage'
-import { toast } from 'react-toastify'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { getProductTrash } from '~/features/trashBin/trashBinService'
 import { deleteProduct, toggleProductToTrashBin } from '~/features/products/productsService'
+const cx = classNames.bind(styles)
 
 interface DataType extends ItemType {
    key: React.Key
@@ -125,7 +125,7 @@ function ProductsTrash() {
          <h1>Products Trash</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'Delete Now?'}

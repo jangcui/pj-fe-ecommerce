@@ -1,14 +1,12 @@
-import classNames from 'classnames/bind'
-import { BsArrowDownRight, BsArrowUpRight, BsArrowRight, BsArrowReturnLeft, BsTrashFill } from 'react-icons/bs'
 import { Column } from '@ant-design/plots'
-import { Table } from 'antd'
-
-import styles from './Dashboard.module.scss'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '~/store/store'
+import classNames from 'classnames/bind'
+import ForwardTable from 'antd/lib/table/Table'
 import { useEffect, useState } from 'react'
-import { deleteOrder, getAllOrders, getMonthlyOrders, getYearlyOrders } from '~/features/admin/adminService'
-import Button from '~/components/Button/Button'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { getAllOrders, getMonthlyOrders, getYearlyOrders } from '~/features/admin/adminService'
+import { AppDispatch, RootState } from '~/store/store'
+import styles from './Dashboard.module.scss'
 const cx = classNames.bind(styles)
 
 interface DataType {
@@ -18,7 +16,6 @@ interface DataType {
    dPrice: number
    product: number
    status: string
-   // action: JSX.Element
 }
 type DataIncomeType = {
    type?: string
@@ -206,7 +203,7 @@ function Dashboard() {
          </div>
          <div className="w-100 ">
             <h1 className="mb-5 ">Recent Orders</h1>
-            <Table className="w-100" columns={columns} dataSource={dataOrders} />
+            <ForwardTable className="w-100" columns={columns} dataSource={dataOrders} />
          </div>
       </div>
    )

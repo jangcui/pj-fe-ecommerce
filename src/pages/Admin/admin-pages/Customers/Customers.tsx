@@ -1,15 +1,17 @@
 import classNames from 'classnames/bind'
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-const cx = classNames.bind(styles)
-import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { AppDispatch, RootState } from '~/store/store'
-import { getUsers, toggleCustomerToTrashBin } from '~/features/admin/adminService'
-import Button from '~/components/Button/Button'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
 import { toast } from 'react-toastify'
 import { AiFillDelete } from 'react-icons/ai'
+import ForwardTable from 'antd/lib/table/Table'
+
+import { AppDispatch, RootState } from '~/store/store'
+import { getUsers, toggleCustomerToTrashBin } from '~/features/admin/adminService'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
+import Button from '~/components/Button/Button'
+import ModalCustom from '~/components/ModalCustom/ModalCustom'
+
+const cx = classNames.bind(styles)
 
 interface DataType {
    key: React.Key
@@ -99,7 +101,7 @@ function Customers() {
          <h1>Customers</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'Remove from trash bin?'}

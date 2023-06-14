@@ -1,19 +1,19 @@
-import classNames from 'classnames/bind'
-
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-
-const cx = classNames.bind(styles)
-import { Table } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import Button from '~/components/Button/Button'
+import ForwardTable from 'antd/lib/table/Table'
 import { AiFillDelete } from 'react-icons/ai'
+import { toast } from 'react-toastify'
+import { useEffect, useState } from 'react'
+import classNames from 'classnames/bind'
 import { BiEdit } from 'react-icons/bi'
+
+import Button from '~/components/Button'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import { ItemType } from '~/types/itemStage'
 import { deleteProdCate, getProdCates } from '~/features/prodCategories/productCateService'
-import { toast } from 'react-toastify'
 import ModalCustom from '~/components/ModalCustom/ModalCustom'
+
+const cx = classNames.bind(styles)
 
 interface DataType extends ItemType {
    key: React.Key
@@ -88,7 +88,7 @@ function Categories() {
          <h1>Categories</h1>
          <div className={cx('chart')}>
             <div className={cx('content')}>
-               <Table columns={columns} dataSource={data1} />
+               <ForwardTable columns={columns} dataSource={data1} />
             </div>
             <ModalCustom
                title={'This brand will be delete?'}

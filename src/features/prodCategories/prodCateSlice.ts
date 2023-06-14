@@ -85,7 +85,7 @@ export const prodCateSlice = createSlice({
          .addCase(deleteProdCate.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(deleteProdCate.fulfilled, (state, action) => {
+         .addCase(deleteProdCate.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true

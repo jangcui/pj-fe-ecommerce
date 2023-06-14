@@ -1,19 +1,17 @@
 import classNames from 'classnames/bind'
 import { useFormik } from 'formik'
-import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
-import InputCustom from '~/components/InputCustom'
-import { AppDispatch, RootState } from '~/store/store'
 import * as Yup from 'yup'
 
-import styles from './Login.module.scss'
+import InputCustom from '~/components/InputCustom'
+import { AppDispatch } from '~/store/store'
 import BreadCrumb from '~/components/BreadCrumb'
-import ChangeTitle from '~/components/ChangeTitle'
 import Button from '~/components/Button'
+import ChangeTitle from '~/components/ChangeTitle'
 import config from '~/config'
 import { forgotPwdToken } from '~/features/customers/customerService'
+import styles from './Login.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -30,11 +28,9 @@ function ForgotPwd() {
       validationSchema: forgotPwdSchema,
       onSubmit: async (values) => {
          const result = await dispatch(forgotPwdToken(values))
-         console.log(result)
-
-         // if (result.payload.token) {
-         //    navigate(`/reset-password/${result.payload.token}`)
-         // }
+         if (result.payload.token) {
+            navigate(`/reset-password/${result.payload.token}`)
+         }
       },
    })
    return (

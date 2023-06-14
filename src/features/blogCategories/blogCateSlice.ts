@@ -84,7 +84,7 @@ export const blogCateSlice = createSlice({
          .addCase(deleteBlogCate.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(deleteBlogCate.fulfilled, (state, action) => {
+         .addCase(deleteBlogCate.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true

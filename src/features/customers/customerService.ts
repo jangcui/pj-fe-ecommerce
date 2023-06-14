@@ -10,12 +10,6 @@ type itemType = {
    cartItemId: string
    quantity: number
 }
-interface OrderType {
-   productId: string
-   color: string
-   quantity: number
-   price: number
-}
 
 interface RegisterType extends LoginType {
    fist_name: string

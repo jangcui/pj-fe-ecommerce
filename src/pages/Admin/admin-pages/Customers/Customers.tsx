@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '~/store/store'
 import { getUsers, toggleCustomerToTrashBin } from '~/features/admin/adminService'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import Button from '~/components/Button/Button'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 
 const cx = classNames.bind(styles)
 

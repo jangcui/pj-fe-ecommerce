@@ -84,7 +84,7 @@ const Admin: React.FC = () => {
                   className={cx('menu')}
                   mode="inline"
                   defaultSelectedKeys={[' ']}
-                  onClick={({ key }) => {
+                  onClick={(key: any) => {
                      if (key === 'log_out') {
                         setOpenModal(true)
                      } else {

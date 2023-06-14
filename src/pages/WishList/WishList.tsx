@@ -11,7 +11,7 @@ import { ProductType } from '~/types/productStage'
 import { ImgType } from '~/types/imageStage'
 import Button from '~/components/Button'
 import Loading from '~/components/Loading/Loading'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineClose } from 'react-icons/ai'
 

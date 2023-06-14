@@ -6,7 +6,7 @@ import ForwardTable from 'antd/lib/table/Table'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteBlog, toggleBlogToTrashBin } from '~/features/blogs/blogService'
 import { geBlogsTrash } from '~/features/trashBin/trashBinService'

@@ -10,7 +10,7 @@ import styles from './Products.module.scss'
 import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { ParamsType } from '~/types/paramsStage'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import { getProducts, toggleProductToTrashBin } from '~/features/products/productsService'
 
 const cx = classNames.bind(styles)

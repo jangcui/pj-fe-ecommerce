@@ -11,7 +11,7 @@ import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import { CouponType } from '~/types/couponStage'
 import { deleteCoupon, getCoupons } from '~/features/coupon/couponService'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 const cx = classNames.bind(styles)
 
 interface DataType extends CouponType {

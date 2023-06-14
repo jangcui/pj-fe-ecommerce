@@ -11,7 +11,7 @@ import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import { ItemType } from '~/types/itemStage'
 import { deleteBrand, getBrands } from '~/features/brands/brandService'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 const cx = classNames.bind(styles)
 interface DataType extends ItemType {
    key: React.Key

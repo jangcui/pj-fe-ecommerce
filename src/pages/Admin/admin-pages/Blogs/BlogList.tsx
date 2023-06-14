@@ -12,7 +12,7 @@ import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { BlogType } from '~/types/blogStage'
 import { getBlogs, toggleBlogToTrashBin } from '~/features/blogs/blogService'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 
 const cx = classNames.bind(styles)
 

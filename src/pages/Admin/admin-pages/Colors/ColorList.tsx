@@ -11,7 +11,7 @@ import Button from '~/components/Button'
 import { ItemType } from '~/types/itemStage'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import { deleteColor, getColors } from '~/features/colors/colorService'
 
 interface DataType extends ItemType {

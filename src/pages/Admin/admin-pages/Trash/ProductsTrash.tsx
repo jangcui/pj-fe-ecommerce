@@ -11,9 +11,10 @@ import { BsArrowReturnLeft } from 'react-icons/bs'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { AppDispatch, RootState } from '~/store/store'
 import { ItemType } from '~/types/itemStage'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import { getProductTrash } from '~/features/trashBin/trashBinService'
 import { deleteProduct, toggleProductToTrashBin } from '~/features/products/productsService'
+
 const cx = classNames.bind(styles)
 
 interface DataType extends ItemType {

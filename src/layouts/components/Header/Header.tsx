@@ -13,7 +13,7 @@ import { BiLogOut } from 'react-icons/bi'
 
 import images from '~/assets/images'
 import Image from '~/components/Image'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import config from '~/config/config'
 import { getCarts } from '~/features/customers/customerService'
 import { logOutUser } from '~/features/customers/customerSlice'

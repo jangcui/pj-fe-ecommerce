@@ -8,7 +8,7 @@ import ForwardTable from 'antd/lib/table/Table'
 import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { EnquiryType } from '~/types/enquiryState'
-import ModalCustom from '~/components/ModalCustom/ModalCustom'
+import ModalCustom from '~/components/ModalCustom'
 import styles from '~/components/StyleModule/AdminStyle.module.scss'
 import { deleteEnquiry, getEnquiries, updateStatusEnquiry } from '~/features/enquiry/enquiryService'
 

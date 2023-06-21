@@ -30,19 +30,20 @@ function ProductPrice({ data }: { data: CartType }) {
    }, [data])
 
    useEffect(() => {
-      if (data?.productId?.price && data?.quantity) {
-         setTotal(data?.productId.price * data?.quantity)
-      }
+      const totalOrigin = data?.productId.price * data?.quantity
+      const totalAfterDiscount = data?.productId?.price_after_discount * data?.quantity
+      setTotal(data?.productId?.discountCode ? totalAfterDiscount : totalOrigin)
    }, [quantity, data])
 
    useEffect(() => {
       const debouncedUpdateQuantity = debounce(async (cartItemId, quantity) => {
          await dispatch(updateQuantityProductFromCart({ cartItemId, quantity }))
       }, 1000)
-
-      if (data?._id && data?.productId?.price) {
+      const priceOrigin = data?.productId.price * quantity
+      const priceAfterDiscount = data?.productId?.price_after_discount * quantity
+      if (data?.productId && data?._id) {
          debouncedUpdateQuantity(data._id, quantity)
-         setTotal(data.productId.price * quantity)
+         setTotal(data?.productId?.discountCode ? priceAfterDiscount : priceOrigin)
       }
 
       return () => {
@@ -54,25 +55,40 @@ function ProductPrice({ data }: { data: CartType }) {
       <div className={cx('section')}>
          <div className={cx('block')}>
             <div className={cx('product-detail')}>
-               <span className={cx('info')}>
-                  <Image
-                     className={cx('img')}
-                     src={data?.productId?.images?.[0]?.url ? data?.productId?.images?.[0]?.url : images.errorImage}
-                  />
-                  <span className={cx('content')}>
-                     <p dangerouslySetInnerHTML={{ __html: data.productId?.description as string }}></p>
-
+               <div className={cx('info')}>
+                  <Button text to={`/product/${data?.productId?.slug}`}>
+                     <Image
+                        className={cx('img')}
+                        src={data?.productId?.images?.[0]?.url ? data?.productId?.images?.[0]?.url : images.errorImage}
+                     />
+                  </Button>
+                  <div className={cx('content')}>
+                     <Button text to={`/product/${data?.productId?.slug}`}>
+                        {' '}
+                        <h3>{data?.productId?.title}</h3>
+                     </Button>
                      <p>
-                        Color:
                         <span
                            className={cx('color')}
                            style={{ backgroundColor: data?.color?.title ? data?.color?.title : ' ' }}
                         ></span>
                      </p>
-                  </span>
-               </span>
+                     {data?.productId?.price_after_discount ? (
+                        <div className="d-flex gap-2" style={{ color: '#99a2aa' }}>
+                           <s className="fs-3">${data?.productId.price}</s>{' '}
+                           <span className="fs-3 fw-bolder" style={{ color: '#dd551b' }}>
+                              ${data?.productId?.price_after_discount}
+                           </span>
+                        </div>
+                     ) : (
+                        <p className="fs-3 ">${data?.productId.price}</p>
+                     )}
+                  </div>
+               </div>
             </div>
-            <span className={cx('price')}>${data.productId?.price}</span>
+            <span className={cx('price')}>
+               ${data.productId?.price_after_discount ? data.productId?.price_after_discount : data.productId?.price}
+            </span>
          </div>
          <div className={cx('block')}>
             <div className={cx('quantity')}>

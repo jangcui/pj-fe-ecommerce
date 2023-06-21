@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 import ReactImageMagnify from 'react-image-magnify'
 import Marquee from 'react-fast-marquee'
 import { useNavigate, useParams } from 'react-router-dom'
-import { StarRating } from 'star-rating-react-ts'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import BreadCrumb from '~/components/BreadCrumb'
@@ -19,6 +19,8 @@ import { addToCart, addToWishList, getCarts, getUserWishList } from '~/features/
 import { ItemType } from '~/types/itemStage'
 import { ProductType } from '~/types/productStage'
 import Collection from '~/components/Collection'
+import Loading from '~/components/Loading/Loading'
+import StarRatingCustom from '~/components/StarRatingCustom'
 
 const cx = classNames.bind(styles)
 
@@ -28,32 +30,32 @@ function SingleProduct() {
    const { cartList, wishlist, user } = useSelector((state: RootState) => state.customer)
    const imgList = product?.images?.map((img) => img.url)
    const [colorId, setColorId] = useState<string>('')
+
    const [productPop, setProductPop] = useState<ProductType[]>([])
    const [allReadyAdded, setAllReadyAdded] = useState<boolean>(false)
    const [isWishlist, setIsWishlist] = useState<boolean>(false)
    const [star, setStar] = useState<number>(0)
    const [comment, setComment] = useState<string>('')
    const [quantity, setQuantity] = useState<number>(1)
-   const { productId } = useParams()
+   const { slug } = useParams()
    const navigate = useNavigate()
 
    useEffect(() => {
-      if (!user) {
-         navigate('/login')
-      } else if (!productId) {
+      if (!slug) {
          navigate('/')
       } else {
          navigate('')
-         dispatch(getUserWishList())
-         dispatch(getAProduct(productId))
-         dispatch(getCarts())
+         dispatch(getAProduct(slug))
          dispatch(getProducts({}))
+         if (user) {
+            dispatch(getUserWishList())
+            dispatch(getCarts())
+         }
       }
-   }, [user, navigate, dispatch, productId])
-
+   }, [user, navigate, dispatch, slug])
    const handleWishlist = async () => {
       setIsWishlist(!isWishlist)
-      await dispatch(addToWishList({ prodId: productId || '' }))
+      await dispatch(addToWishList({ prodId: product._id || '' }))
       await dispatch(getUserWishList())
    }
 
@@ -66,27 +68,27 @@ function SingleProduct() {
 
    useEffect(() => {
       wishlist?.map((item) => {
-         if (item._id === productId) {
+         if (item?._id === product?._id) {
             setIsWishlist(true)
          }
       })
-   }, [wishlist, productId])
+   }, [wishlist, product])
    useEffect(() => {
       for (const index in cartList) {
-         if (productId === cartList[index]?.productId?._id) {
+         if (product?._id === cartList[index]?.productId?._id) {
             setAllReadyAdded(true)
          } else {
             setAllReadyAdded(false)
          }
       }
-   }, [dispatch, productId, cartList])
+   }, [dispatch, product, cartList])
 
    const handleAddToCart = async () => {
       if (!colorId) {
          toast.error('Please Chose color!')
          return
       } else {
-         const data = { color: colorId, productId: product._id, price: product.price, quantity: quantity }
+         const data = { color: colorId, productId: product?._id, price: product?.price, quantity: quantity }
          await dispatch(addToCart(data))
          await dispatch(getCarts())
       }
@@ -100,9 +102,9 @@ function SingleProduct() {
          toast.error('Please write a review about product.')
          return
       } else {
-         if (productId) {
-            await dispatch(rateProduct({ star: star, comment: comment, prodId: productId }))
-            await dispatch(getAProduct(productId))
+         if (slug) {
+            await dispatch(rateProduct({ star: star, comment: comment, prodId: product?._id }))
+            await dispatch(getAProduct(slug))
             setComment('')
             setStar(0)
          }
@@ -115,222 +117,241 @@ function SingleProduct() {
          <BreadCrumb title={`${product?.title}`} />
          <div className={cx('wrapper')}>
             <div className={cx('detail-container')}>
-               <div className={cx('detail')}>
-                  <div className={cx('wrap-img')}>
-                     <div className={cx('img-zoom')}>
-                        <div className={cx('img')}>
-                           <ReactImageMagnify
-                              enlargedImagePosition="over"
-                              {...{
-                                 smallImage: {
-                                    isFluidWidth: true,
-                                    src: imgList && imgList[0] ? imgList[0] : images.errorImage,
-                                 },
-                                 largeImage: {
-                                    src: imgList && imgList[0] ? imgList[0] : images.errorImage,
-                                    width: 2000,
-                                    height: 2000,
-                                 },
-                              }}
-                           />
-                        </div>
-                     </div>
-                     <div className={cx('grid')}>
-                        <div className={cx('img')}>
-                           <ReactImageMagnify
-                              enlargedImagePosition="over"
-                              {...{
-                                 smallImage: {
-                                    isFluidWidth: true,
-                                    src: imgList && imgList[1] ? imgList[1] : images.errorImage,
-                                 },
-                                 largeImage: {
-                                    src: imgList && imgList[1] ? imgList[1] : images.errorImage,
-
-                                    width: 1200,
-                                    height: 1200,
-                                 },
-                              }}
-                           />
-                        </div>
-                        <div className={cx('img')}>
-                           <ReactImageMagnify
-                              enlargedImagePosition="over"
-                              {...{
-                                 smallImage: {
-                                    isFluidWidth: true,
-                                    src: imgList && imgList[2] ? imgList[2] : images.errorImage,
-                                 },
-                                 largeImage: {
-                                    src: imgList && imgList[2] ? imgList[2] : images.errorImage,
-                                    width: 1200,
-                                    height: 1200,
-                                 },
-                              }}
-                           />
-                        </div>
-                     </div>
+               {isLoading ? (
+                  <div className={cx('loading')}>
+                     <Loading />
                   </div>
-                  <div className={cx('content')}>
-                     <h3 className={cx('title')}>{product.title}</h3>
-                     <span className={cx('price')}>$ {product.price}</span>
-                     <div className={cx('d-flex')}>
-                        <StarRating
-                           initialRating={product?.totalRating as number}
-                           readOnly
-                           theme={{
-                              size: 24,
-                              colors: {
-                                 backgroundColorActive: '#ffd333',
-                              },
-                           }}
-                        />
-                        <span className={cx('review')}>({product.totalRating})</span>
-                     </div>
-                     <>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Type:</span>
-                           <span className={cx('value')}>Headsets</span>
-                        </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Brand:</span>
-                           <span className={cx('value')}>{product.brand}</span>
-                        </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Categories:</span>
-                           <span className={cx('value')}>{product.category}</span>
-                        </div>
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Tags:</span>
-                           <span className={cx('value')}>{product.tags}</span>
-                        </div>
-
-                        <div className={cx('field')}>
-                           <span className={cx('name')}>Availability:</span>
-                           <span className={cx('value')}>541 in stock</span>
-                        </div>
-
-                        {!allReadyAdded && (
-                           <div className={cx('field')}>
-                              <span className={cx('name')}>Color:</span>
-                              <div className={cx('color')}>
-                                 {product?.color.map((color: ItemType | any, index) => (
-                                    <div
-                                       key={index}
-                                       className={cx('color-select', colorId === color?._id ? 'active' : '')}
-                                    >
-                                       <Button
-                                          text
-                                          className={cx('btn-color')}
-                                          onClick={() => setColorId(color?._id)}
-                                          style={{ backgroundColor: color?.title }}
-                                       />
-                                    </div>
-                                 ))}
-                              </div>
+               ) : (
+                  <div className={cx('detail')}>
+                     <div className={cx('wrap-img')}>
+                        <div className={cx('img-zoom')}>
+                           <div className={cx('img')}>
+                              <ReactImageMagnify
+                                 enlargedImagePosition="over"
+                                 {...{
+                                    smallImage: {
+                                       isFluidWidth: true,
+                                       src: imgList && imgList[0] ? imgList[0] : images.errorImage,
+                                    },
+                                    largeImage: {
+                                       src: imgList && imgList[0] ? imgList[0] : images.errorImage,
+                                       width: 2000,
+                                       height: 2000,
+                                    },
+                                 }}
+                              />
                            </div>
-                        )}
-                        <div className={cx('field')}>
-                           <div className={cx('option')}>
-                              {!allReadyAdded && (
-                                 <div className={cx('wrap-input')}>
-                                    <span className={cx('name')}>Quantity:</span>
-                                    <Button
-                                       className={cx('input-btn')}
-                                       text
-                                       onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
-                                    >
-                                       <AiOutlineMinus className={cx('icon')} />
-                                    </Button>
-                                    <input
-                                       type="number"
-                                       value={quantity}
-                                       onChange={() => setQuantity}
-                                       min={0}
-                                       step={1}
-                                       max={1000}
-                                    />
-                                    <Button className={cx('input-btn')} text>
-                                       <AiOutlinePlus
-                                          className={cx('icon')}
-                                          onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
+                        </div>
+                        <div className={cx('grid')}>
+                           <div className={cx('img')}>
+                              <ReactImageMagnify
+                                 enlargedImagePosition="over"
+                                 {...{
+                                    smallImage: {
+                                       isFluidWidth: true,
+                                       src: imgList && imgList[1] ? imgList[1] : images.errorImage,
+                                    },
+                                    largeImage: {
+                                       src: imgList && imgList[1] ? imgList[1] : images.errorImage,
+
+                                       width: 1200,
+                                       height: 1200,
+                                    },
+                                 }}
+                              />
+                           </div>
+                           <div className={cx('img')}>
+                              <ReactImageMagnify
+                                 enlargedImagePosition="over"
+                                 {...{
+                                    smallImage: {
+                                       isFluidWidth: true,
+                                       src: imgList && imgList[2] ? imgList[2] : images.errorImage,
+                                    },
+                                    largeImage: {
+                                       src: imgList && imgList[2] ? imgList[2] : images.errorImage,
+                                       width: 1200,
+                                       height: 1200,
+                                    },
+                                 }}
+                              />
+                           </div>
+                        </div>
+                     </div>
+                     <div className={cx('content')}>
+                        <h3 className={cx('title')}>{product?.title} </h3>
+                        <div className={cx('price')}>
+                           {product?.discountCode ? (
+                              <>
+                                 {' '}
+                                 <s className="fw-bold "> ${product.price}</s>
+                                 <p className={cx('origin-price')}> ${product?.price_after_discount}</p>
+                              </>
+                           ) : (
+                              <p className={cx('origin-price')}> ${product.price}</p>
+                           )}
+                        </div>
+                        <div className={cx('d-flex')}>
+                           <span className="me-3">({product?.ratings?.length}) reviews</span>
+                           <StarRatingCustom initStar={product.totalRating as number} readOnly={true} />{' '}
+                        </div>
+                        <>
+                           <div className={cx('field')}>
+                              <span className={cx('name')}>Brand:</span>
+                              <Button
+                                 text
+                                 className={cx('value')}
+                                 onClick={() => {
+                                    navigate('/product')
+                                 }}
+                              >
+                                 {product?.brand}
+                              </Button>
+                           </div>
+                           <div className={cx('field')}>
+                              <span className={cx('name')}>Type:</span>
+                              <Button
+                                 className={cx('value')}
+                                 onClick={() => {
+                                    navigate('/product')
+                                 }}
+                              >
+                                 {product?.category}
+                              </Button>
+                           </div>
+                           <div className={cx('field')}>
+                              <span className={cx('name')}>Tags:</span>
+                              <Button
+                                 className={cx('value')}
+                                 onClick={() => {
+                                    navigate('/product')
+                                 }}
+                              >
+                                 {product?.tags}
+                              </Button>
+                           </div>
+                           {/* 
+                           <div className={cx('field')}>
+                              <span className={cx('name')}>Availability:</span>
+                              <span className={cx('value')}>541 in stock</span>
+                           </div> */}
+
+                           {!allReadyAdded && (
+                              <div className={cx('field')}>
+                                 <span className={cx('name')}>Color:</span>
+                                 <div className={cx('color')}>
+                                    {product?.color.map((color: ItemType | any, index) => (
+                                       <div
+                                          key={index}
+                                          className={cx('color-select', colorId === color?._id ? 'active' : '')}
+                                       >
+                                          <Button
+                                             text
+                                             className={cx('btn-color')}
+                                             onClick={() => setColorId(color?._id)}
+                                             style={{ backgroundColor: color?.title }}
+                                          />
+                                       </div>
+                                    ))}
+                                 </div>
+                              </div>
+                           )}
+                           <div className={cx('field')}>
+                              <div className={cx('option')}>
+                                 {!allReadyAdded && (
+                                    <div className={cx('wrap-input')}>
+                                       <span className={cx('name')}>Quantity:</span>
+                                       <Button
+                                          className={cx('input-btn')}
+                                          text
+                                          onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
+                                       >
+                                          <AiOutlineMinus className={cx('icon')} />
+                                       </Button>
+                                       <input
+                                          type="number"
+                                          value={quantity}
+                                          onChange={() => setQuantity}
+                                          min={0}
+                                          step={1}
+                                          max={1000}
                                        />
+                                       <Button className={cx('input-btn')} text>
+                                          <AiOutlinePlus
+                                             className={cx('icon')}
+                                             onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
+                                          />
+                                       </Button>
+                                    </div>
+                                 )}
+                                 <div className={cx('wrap-btn')}>
+                                    {allReadyAdded ? (
+                                       <Button className={cx('btn')} primary to={'/cart'}>
+                                          Go To Cart
+                                       </Button>
+                                    ) : (
+                                       <Button
+                                          className={cx('btn')}
+                                          primary
+                                          onClick={
+                                             !user
+                                                ? () => {
+                                                     return
+                                                  }
+                                                : handleAddToCart
+                                          }
+                                          lazyLoad={isLoading}
+                                          to={!user ? '/login' : ''}
+                                       >
+                                          ADD TO CART
+                                       </Button>
+                                    )}
+                                    <Button className={cx('btn')} secondary to={!user ? '/checkout' : ''}>
+                                       Buy it now{' '}
                                     </Button>
                                  </div>
-                              )}
-                              <div className={cx('wrap-btn')}>
-                                 {allReadyAdded ? (
-                                    <Button className={cx('btn')} primary to={'/cart'}>
-                                       Go To Cart
-                                    </Button>
-                                 ) : (
-                                    <Button
-                                       className={cx('btn')}
-                                       primary
-                                       onClick={handleAddToCart}
-                                       lazyLoad={isLoading}
-                                    >
-                                       ADD TO CART
-                                    </Button>
-                                 )}
-                                 <Button className={cx('btn')} secondary>
-                                    Buy it now{' '}
-                                 </Button>
                               </div>
                            </div>
+                        </>
+                        <div className={cx('btn-wishlist')}>
+                           {!isLoading && (
+                              <Button
+                                 onClick={handleWishlist}
+                                 className={cx('btn')}
+                                 text
+                                 leftIcon={
+                                    isWishlist ? (
+                                       <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
+                                    ) : (
+                                       <AiOutlineHeart
+                                          style={{ color: '#dd551b' }}
+                                          className={cx('icon', 'icon-active')}
+                                       />
+                                    )
+                                 }
+                              >
+                                 Add to wishlist
+                              </Button>
+                           )}
                         </div>
-                     </>
-                     <div className={cx('btn-wishlist')}>
-                        {!isLoading && (
-                           <Button
-                              onClick={handleWishlist}
-                              className={cx('btn')}
-                              text
-                              leftIcon={
-                                 isWishlist ? (
-                                    <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
-                                 ) : (
-                                    <AiOutlineHeart
-                                       style={{ color: '#dd551b' }}
-                                       className={cx('icon', 'icon-active')}
-                                    />
-                                 )
-                              }
-                           >
-                              Add to wishlist
-                           </Button>
-                        )}
-                     </div>
 
-                     <div className={cx('field')}>
-                        <h2 className={cx('name')}>Shipping and returns:</h2>
-                        <i> Free shipping and returns available all orders </i>
+                        <div className={cx('field')}>
+                           <h2 className={cx('name')}>Shipping and returns:</h2>
+                           <i> Free shipping and returns available all orders </i>
+                        </div>
                      </div>
                   </div>
-               </div>
+               )}
                <div className={cx('description-container')}>
                   <h2>Description</h2>
-                  <p
-                     className={cx('description')}
-                     dangerouslySetInnerHTML={{ __html: product.description as string }}
-                  ></p>
+                  <p className={cx('description')} dangerouslySetInnerHTML={{ __html: product?.description || '' }}></p>
                </div>
                <div className={cx('review-container')}>
                   <h2>Review</h2>
                   <div className={cx('reviews')}>
                      <div className={cx('form-submit')}>
                         <h4>Rating</h4>
-                        <StarRating
-                           initialRating={star}
-                           onClick={(e) => setStar(e)}
-                           theme={{
-                              size: 20,
-                              colors: {
-                                 backgroundColorHover: '#ffd333',
-                                 backgroundColorActive: '#ffd333',
-                              },
-                           }}
-                        />{' '}
+                        <StarRatingCustom initStar={star} readOnly={false} onClick={(e) => setStar(e)} />{' '}
                         <h4>Comments</h4>
                         <textarea
                            value={comment}
@@ -347,18 +368,7 @@ function SingleProduct() {
                      {product?.ratings?.map((item, index) => (
                         <div className={cx('comments')} key={index}>
                            <span className={cx('btn-report')}>Report as inappropriate </span>
-                           <StarRating
-                              initialRating={item.star}
-                              readOnly
-                              theme={{
-                                 size: 18,
-                                 colors: {
-                                    backgroundColorHover: '#ffd333',
-                                    backgroundColorActive: '#ffd333',
-                                 },
-                              }}
-                           />{' '}
-                           <h3 className={cx('content')}>{item.comment}</h3>
+                           <StarRatingCustom initStar={item.star} /> <h3 className={cx('content')}>{item.comment}</h3>
                            <p className={cx('text')}>(anonymous)</p>
                         </div>
                      ))}
@@ -368,10 +378,16 @@ function SingleProduct() {
                <div className={cx('popular-container')}>
                   <h2>Our Products Popular</h2>
                   <div className={cx('products')}>
-                     <Marquee delay={4} pauseOnHover={true} gradientWidth={10} gradientColor={[255, 255, 255]}>
+                     <Marquee
+                        delay={4}
+                        pauseOnHover={true}
+                        gradientWidth={10}
+                        gradientColor={[255, 255, 255]}
+                        className="w-100"
+                     >
                         {productPop?.map((product, index) => {
                            return (
-                              <div key={index} className={cx('item')}>
+                              <div key={index} className="w-50">
                                  <Collection data={product} />
                               </div>
                            )

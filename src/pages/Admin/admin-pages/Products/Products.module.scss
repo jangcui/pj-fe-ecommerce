@@ -32,18 +32,15 @@
                border-radius: 4px;
                overflow: hidden;
 
-               .icon-remove {
+               .btn-remove {
                   position: absolute;
                   width: 24px;
                   height: 24px;
                   top: -2px;
                   z-index: 11;
                   right: -2px;
-                  color: var(--white);
-
-                  &:hover {
-                     cursor: pointer;
-                  }
+                  color: var(--black);
+                  cursor: pointer;
                }
                .img-product {
                   height: 100%;

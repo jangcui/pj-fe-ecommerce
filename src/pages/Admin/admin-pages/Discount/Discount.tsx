@@ -1,55 +1,53 @@
 import classNames from 'classnames/bind'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useFormik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import InputCustom from '~/components/InputCustom/InputCustom'
+
 import { useEffect } from 'react'
 
 import Button from '~/components/Button'
-import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
-import { createCoupon, getCoupon, updateACoupon } from '~/features/coupon/couponService'
-import { useNavigate, useParams } from 'react-router-dom'
-import { resetCouponState } from '~/features/coupon/couponSlice'
+import styles from '~/components/StyleModule/AdminStyle.module.scss'
+import InputCustom from '~/components/InputCustom/InputCustom'
+import { createDiscount, getDiscount, updateADiscount } from '~/features/discount/discountService'
+import { resetDiscountState } from '~/features/discount/discountSlice'
 
 const cx = classNames.bind(styles)
 
 const couponSchema = Yup.object().shape({
    name: Yup.string().required('Name is required'),
    expiry: Yup.date().required('Expiry is required'),
-   discount: Yup.number().positive().integer().required('Discount is required'),
+   percentage: Yup.number().positive().integer().required('Discount is required'),
 })
 
-function AddCoupon() {
+function CreateDiscount() {
    const dispatch = useDispatch<AppDispatch>()
-   const colorState = useSelector((state: RootState) => state.coupons)
+   const { isLoading, discount } = useSelector((state: RootState) => state.discount)
    const navigate = useNavigate()
-   const { couponId } = useParams()
-   const { isLoading, coupon } = colorState
+   const { discountId } = useParams()
 
    useEffect(() => {
-      if (couponId !== undefined) {
-         dispatch(getCoupon(couponId))
+      if (discountId !== undefined) {
+         dispatch(getDiscount(discountId))
       } else {
-         dispatch(resetCouponState())
+         dispatch(resetDiscountState())
       }
-   }, [couponId, dispatch])
+   }, [discountId, dispatch])
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         name: coupon?.name ? coupon?.name : '',
-         expiry: coupon?.expiry ? new Date(coupon.expiry).toISOString().substring(0, 10) : '',
-         discount: coupon?.discount ? coupon?.discount : 0,
+         name: discount?.name ? discount?.name : '',
+         expiry: discount?.expiry ? new Date(discount.expiry).toISOString().substring(0, 10) : '',
+         percentage: discount?.percentage ? discount?.percentage : 0,
       },
       validationSchema: couponSchema,
       onSubmit: async (values) => {
-         if (couponId !== undefined) {
-            await dispatch(updateACoupon({ id: couponId, body: values }))
-            navigate('/admin/coupon-list')
-            dispatch(resetCouponState())
+         if (discountId !== undefined) {
+            await dispatch(updateADiscount({ id: discountId, body: values }))
+            navigate('/admin/discount-list')
          } else {
-            await dispatch(createCoupon(values))
-            dispatch(resetCouponState())
+            await dispatch(createDiscount(values))
             formik.resetForm()
          }
       },
@@ -57,17 +55,17 @@ function AddCoupon() {
 
    return (
       <div className={cx('wrapper')}>
-         <h1 className={cx('name')}>{couponId !== undefined ? 'Edit' : 'Add'} Coupon</h1>
+         <h1 className={cx('name')}>{discountId !== undefined ? 'Edit' : 'Create New'} discount</h1>
          <form className={cx('form')} action="" onSubmit={formik.handleSubmit}>
             <div className={cx('field')}>
-               <h4>Name Coupon :</h4>
+               <h4>Name Event :</h4>
                <InputCustom
                   type={'text'}
                   value={formik.values.name}
                   onChange={formik.handleChange('name')}
                   onBlur={formik.handleBlur('name')}
                   className={cx('input')}
-                  placeholder="Enter Name Coupon"
+                  placeholder="Enter Discount Code"
                   lazyLoad={isLoading}
                />
                <p className={cx('error')}>{formik.touched.name && formik.errors.name}</p>
@@ -88,21 +86,21 @@ function AddCoupon() {
                <h4>Percent Discount(%) :</h4>
                <InputCustom
                   type={'number'}
-                  value={formik.values.discount}
-                  onChange={formik.handleChange('discount')}
+                  value={formik.values.percentage}
+                  onChange={formik.handleChange('percentage')}
                   className={cx('input')}
-                  onBlur={formik.handleBlur('discount')}
+                  onBlur={formik.handleBlur('percentage')}
                   placeholder="Enter Expiry"
                   lazyLoad={isLoading}
                />
-               <p className={cx('error')}>{formik.touched.discount && formik.errors.discount}</p>
+               <p className={cx('error')}>{formik.touched.percentage && formik.errors.percentage}</p>
             </div>
             <Button className={cx('form-btn')} primary type={'submit'}>
-               {couponId !== undefined ? 'Update' : 'Add'} Coupon
+               {discountId !== undefined ? 'Update' : 'Create New'} Coupon
             </Button>
          </form>
       </div>
    )
 }
 
-export default AddCoupon
+export default CreateDiscount

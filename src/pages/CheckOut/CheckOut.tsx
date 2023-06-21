@@ -312,11 +312,25 @@ function CheckOut() {
                                  <span className={cx('count')}>{item.quantity}</span>
                                  <span className={cx('wrap-name')}>
                                     <p className={cx('name-prod')}>{item.productId?.title}</p>
-                                    <p dangerouslySetInnerHTML={{ __html: item.productId?.description as string }}></p>
                                     <p className={cx('color')} style={{ backgroundColor: item.color?.title }}></p>
+                                    {item?.productId?.price_after_discount ? (
+                                       <>
+                                          <s className="fs-4">${item?.productId.price}</s>{' '}
+                                          <span className="fs-4 fw-bold" style={{ color: '#dd551b' }}>
+                                             ${item?.productId?.price_after_discount}
+                                          </span>
+                                       </>
+                                    ) : (
+                                       <p className="fs-4">${item?.productId.price}</p>
+                                    )}
                                  </span>
                               </div>
-                              <span className={cx('price')}>${item.productId?.price} </span>
+                              <span className={cx('price')}>
+                                 $
+                                 {item?.productId?.price_after_discount
+                                    ? item?.productId?.price_after_discount * item.quantity
+                                    : item?.productId?.price * item.quantity}
+                              </span>
                            </div>
                         ))}
                   </div>

@@ -64,7 +64,7 @@ function Home() {
          <section className={cx('marquee')}>
             <Marquee gradientWidth={10} gradientColor={[255, 255, 255]}>
                {ITEM_MARQUEE.map((item: Item, index: number) => (
-                  <Image src={item.src} key={index} className={cx('marquee-img')} />
+                  <Image src={item.src} key={index} />
                ))}
             </Marquee>
          </section>

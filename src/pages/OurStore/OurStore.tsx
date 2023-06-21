@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { BiReset } from 'react-icons/bi'
+
 import { useDispatch, useSelector } from 'react-redux'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button/Button'
@@ -12,6 +13,8 @@ import { AppDispatch, RootState } from '~/store/store'
 import { ProductType } from '~/types/productStage'
 import Collection from '../../components/Collection/Collection'
 import styles from './OurStore.module.scss'
+import { useParams } from 'react-router-dom'
+import debounce from 'lodash.debounce'
 const cx = classNames.bind(styles)
 
 function OurStore() {
@@ -47,22 +50,26 @@ function OurStore() {
    const [brand, setBrand] = useState<string>('')
    const [category, setCategory] = useState<string>('')
    const [tag, setTag] = useState<string>('')
-   const [minPrice, setMinPrice] = useState<number>(1)
-   const [maxPrice, setMaxPrice] = useState<number>(999)
+   const [minPrice, setMinPrice] = useState<number | undefined>(undefined)
+   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined)
    const [sort, setSort] = useState<string>('')
 
    useEffect(() => {
-      dispatch(
-         getProducts({
-            brand: brand,
-            category: category,
-            tags: tag,
-            sort: sort,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-         }),
-      )
-   }, [dispatch, brand, category, tag, sort, minPrice, maxPrice])
+      const queryParams = [
+         brand && `brand=${brand}`,
+         tag && `tag=${tag}`,
+         category && `category=${category}`,
+         minPrice && `price[gte]=${minPrice}`,
+         maxPrice && `price[lte]=${maxPrice}`,
+         sort && `sort=${sort}`,
+      ].filter(Boolean)
+
+      const queryString = queryParams.join('&&')
+      const url = `product${queryString ? `?${queryString}` : ''}`
+
+      window.history.pushState({}, '', url)
+      dispatch(getProducts({ brand, category, tag, sort, minPrice, maxPrice }))
+   }, [dispatch, brand, category, sort, minPrice, maxPrice, tag])
 
    useEffect(() => {
       const activeSortBtn = sortBtn.find((btn) => btn.isActive)
@@ -99,10 +106,19 @@ function OurStore() {
       setBrand('')
       setCategory('')
       setTag('')
-      setMinPrice(1)
-      setMaxPrice(999)
+      setMinPrice(undefined)
+      setMaxPrice(undefined)
       setSort('')
    }
+
+   const handleMinPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
+      const newValue = +e.target.value
+      setMinPrice(newValue > 0 ? newValue : 0)
+   }, 1000)
+   const handleMaxPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
+      const newValue = +e.target.value
+      setMaxPrice(newValue)
+   }, 1000)
 
    return (
       <>
@@ -127,21 +143,27 @@ function OurStore() {
 
                <div className={cx('filter-block')}>
                   <div className={cx('filter-container')}>
-                     <h1 className={cx('title')}>Price</h1>
+                     <h1 className={cx('title')}>Price :</h1>
                      <div className={cx('price')}>
                         <input
                            value={minPrice}
                            className={cx('input')}
-                           onChange={(e: any) => e.target.value > 0 && setMinPrice(e.target.value)}
+                           onChange={handleMinPriceChange}
                            type="number"
+                           step={10}
                            placeholder="From"
+                           inputMode="numeric"
+                           pattern="[0-9]*"
                         />
                         <input
                            className={cx('input')}
                            value={maxPrice}
-                           onChange={(e: any) => setMaxPrice(e.target.value)}
+                           onChange={handleMaxPriceChange}
                            type="number"
                            placeholder="To"
+                           inputMode="numeric"
+                           step={10}
+                           pattern="[0-9]*"
                         />
                      </div>
                   </div>

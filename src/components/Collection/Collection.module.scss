@@ -1,9 +1,21 @@
 .wrapper {
+   position: relative;
    background-color: var(--white);
    color: #000;
    display: flex;
    height: 100%;
 
+   .badge {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      font-size: 16px;
+      background-color: var(--orange-color);
+      color: var(--text-color);
+      padding: 0px 10px;
+      z-index: 9;
+      border-radius: 2px;
+   }
    .container {
       width: 100%;
       position: relative;
@@ -33,7 +45,7 @@
          opacity: 0;
       }
       &:hover .overlay {
-         background-color: #89888869;
+         background-color: #99969615;
          transition: all 0.4s;
          width: 100%;
          height: 100%;
@@ -45,15 +57,17 @@
          justify-content: center;
 
          .img {
-            height: 300px;
-            object-fit: cover;
+            height: 236px;
+            object-fit: contain;
             transition: all 0.2s;
             border-radius: 4px;
          }
       }
 
       .info {
-         margin-top: 12px;
+         flex: 1;
+         padding: 12px 10px;
+
          .slug {
             position: relative;
             display: flex;
@@ -64,6 +78,11 @@
 
             p {
                color: var(--slug-color);
+               word-break: break-word;
+               text-overflow: ellipsis;
+               overflow: hidden;
+               width: 120px;
+               white-space: nowrap;
             }
             .btn {
                right: 0;
@@ -74,18 +93,14 @@
          .title {
             margin-top: 12px;
             font-size: 24px;
-            font-weight: 600;
-         }
-         .description {
-            word-break: break-word;
-            text-overflow: ellipsis;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
             overflow: hidden;
-            font-size: 16px;
-            font-weight: 600;
-            line-height: 1.5;
-            max-width: 200px;
-            white-space: nowrap;
-            color: #545252bd;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            word-break: break-word;
          }
 
          .price {
@@ -93,8 +108,11 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            p {
+            color: var(--text-color);
+
+            .origin-price {
                margin-left: 4px;
+               margin-bottom: 0;
                font-weight: 700;
                color: #cb1c22;
                line-height: normal;
@@ -102,7 +120,7 @@
          }
          .sold {
             margin-top: 12px;
-            color: #a7a7b1;
+            color: var(--text-gray);
             line-height: 16px;
             font-size: 14px;
          }

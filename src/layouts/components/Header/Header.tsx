@@ -38,7 +38,6 @@ function Header() {
 
    const [openModal, setOpenModal] = useState(false)
    const [isScroll, setIsScroll] = useState(false)
-   const [paginate, setPaginate] = useState(true)
    const dropdownRef = useRef<HTMLDivElement>(null)
 
    useEffect(() => {
@@ -70,10 +69,11 @@ function Header() {
          document.removeEventListener('click', handleOutsideClick)
       }
    }, [])
+
    useEffect(() => {
       const data = productList?.map((element, index) => ({
          id: index,
-         product: element?._id || ' ',
+         product: element?.slug || ' ',
          name: element?.title || ' ',
       }))
       setProductOpt(data)
@@ -106,9 +106,9 @@ function Header() {
                         options={productOpt}
                         onChange={(selected: any) => {
                            if (selected.length > 0) {
-                              const productId = selected[0].product
-                              if (productId) {
-                                 navigate(`/product/${productId}`)
+                              const slug = selected[0].product
+                              if (slug) {
+                                 navigate(`/product/${slug}`)
                               }
                            }
                         }}
@@ -124,7 +124,6 @@ function Header() {
                            },
                         }}
                         minLength={2}
-                        paginate={paginate}
                         labelKey={'name'}
                         placeholder="Search for product here..."
                         renderMenuItemChildren={(option: any) => <span className="text-body ">{option.name}</span>}
@@ -133,14 +132,16 @@ function Header() {
                   </div>
                   <div className={cx('option-wrapper')}>
                      <>
-                        <Button
-                           text
-                           leftIcon={<AiOutlineHeart className={cx('icon')} />}
-                           to={config.routes.wishlist}
-                           className={cx('option')}
-                        >
-                           <p>Favorite Wishlist </p>
-                        </Button>
+                        {user && (
+                           <Button
+                              text
+                              leftIcon={<AiOutlineHeart className={cx('icon')} />}
+                              to={config.routes.wishlist}
+                              className={cx('option')}
+                           >
+                              <p>Favorite Wishlist </p>
+                           </Button>
+                        )}
                         {!user ? (
                            <Button
                               text
@@ -148,7 +149,7 @@ function Header() {
                               to={config.routes.login}
                               className={cx('option')}
                            >
-                              <p>Log In My Account</p>
+                              <p>Log In</p>
                            </Button>
                         ) : (
                            <>
@@ -221,7 +222,7 @@ function Header() {
                      <Button text className={cx('btn')} to={config.routes.home}>
                         home
                      </Button>
-                     <Button text className={cx('btn')} to={config.routes.store}>
+                     <Button text className={cx('btn')} to={config.routes.products}>
                         our store
                      </Button>
                      <Button text className={cx('btn')} to={config.routes.blogs}>

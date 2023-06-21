@@ -2,9 +2,9 @@ export interface ParamsType {
    page?: number
    limit?: number
    brand?: string
-   tags?: string
-   minPrice?: number
-   maxPrice?: number
+   tag?: string
+   minPrice?: number | undefined
+   maxPrice?: number | undefined
    category?: string
    sort?: string
    fields?: boolean

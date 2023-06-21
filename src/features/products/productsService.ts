@@ -9,10 +9,14 @@ interface RatingType {
    comment: string
    prodId?: string
 }
+interface DiscountType {
+   nameProduct: string
+   discountCode: string
+}
 
-export const getAProduct = createAsyncThunk('product/get', async (id: string, thunkAPI) => {
+export const getAProduct = createAsyncThunk('product/get', async (slug: string, thunkAPI) => {
    try {
-      const response = await httpRequest.get(`product/${id}`, {
+      const response = await httpRequest.get(`product/${slug.trim()}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -23,7 +27,7 @@ export const getAProduct = createAsyncThunk('product/get', async (id: string, th
 
 export const toggleProductToTrashBin = createAsyncThunk('product/add-to-trash-bin', async (id: string, thunkAPI) => {
    try {
-      const response = await httpRequest.put(`product/trash/${id}`, {
+      const response = await adminRequest.put(`product/trash/${id}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -34,16 +38,15 @@ export const toggleProductToTrashBin = createAsyncThunk('product/add-to-trash-bi
 
 export const getProducts = createAsyncThunk('product/get-all', async (data: ParamsType, thunkAPI) => {
    try {
-      const response = await httpRequest.get(
-         `product?${data?.brand ? `brand=${data?.brand}&&` : ''}${data?.tags ? `tags=${data?.tags}&&` : ''}${
-            data?.category ? `category=${data?.category}&&` : ''
-         }${data?.minPrice ? `price[gte]=${data?.minPrice}&&` : ''}${
-            data?.maxPrice ? `price[lte]=${data?.maxPrice}&&` : ''
-         }${data?.sort ? `sort=${data?.sort}&&` : ''}`,
-         {
-            signal: thunkAPI.signal,
-         },
-      )
+      const queryString = `?${data?.brand ? `brand=${data?.brand}&&` : ''}${data?.tag ? `tags=${data?.tag}&&` : ''}${
+         data?.category ? `category=${data?.category}&&` : ''
+      }${data?.minPrice ? `price[gte]=${data?.minPrice}&&` : ''}${
+         data?.maxPrice ? `price[lte]=${data?.maxPrice}&&` : ''
+      }${data?.sort ? `sort=${data?.sort}&&` : ''}`
+
+      const response = await httpRequest.get(`product${data ? queryString : ''}`, {
+         signal: thunkAPI.signal,
+      })
       return response
    } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data)
@@ -87,6 +90,26 @@ export const deleteProduct = createAsyncThunk('product/delete', async (id: strin
 export const rateProduct = createAsyncThunk('product/rating', async (data: RatingType, thunkAPI) => {
    try {
       const response = await httpRequest.put('product/rating', data, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const applyDiscount = createAsyncThunk('product/apply-discount', async (data: DiscountType, thunkAPI) => {
+   try {
+      const response = await adminRequest.put('product/discount', data, {
+         signal: thunkAPI.signal,
+      })
+      return response
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
+   }
+})
+export const removeDiscount = createAsyncThunk('product/remove-discount', async (productId: string, thunkAPI) => {
+   try {
+      const response = await adminRequest.put(`product/discount/${productId}`, {
          signal: thunkAPI.signal,
       })
       return response

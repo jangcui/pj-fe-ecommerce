@@ -22,7 +22,7 @@
          background-color: var(--white);
 
          .filter-container {
-            margin: 10px 0;
+            margin-bottom: 10px;
             padding: 10px;
             box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
             border-radius: 4px;
@@ -35,10 +35,10 @@
 
                .input {
                   width: 100%;
-                  padding: 12px;
+                  padding: 4px 10px;
                   font-size: 16px;
                   cursor: pointer;
-                  border: 1px solid var(--text-color);
+                  border: 1px solid var(--border-color-gray);
                   border-radius: 4px;
                }
             }
@@ -123,32 +123,32 @@
          flex-wrap: wrap;
 
          .collection {
-            width: 50%;
-            margin: 10px auto;
+            max-width: 25%;
+            margin: 10px 0;
          }
       }
       .sort-1 {
          .collection {
-            width: 100%;
-            margin: 10px auto;
+            max-width: 100%;
+            margin: 10px 0;
          }
       }
       .sort-2 {
          .collection {
-            width: 50%;
-            margin: 10px auto;
+            max-width: 50%;
+            margin: 10px 0;
          }
       }
       .sort-3 {
          .collection {
-            width: 33%;
-            margin: 10px auto;
+            max-width: 33%;
+            margin: 10px 0;
          }
       }
       .sort-4 {
          .collection {
-            width: 25%;
-            margin: 10px auto;
+            max-width: 25%;
+            margin: 10px 0;
          }
       }
    }

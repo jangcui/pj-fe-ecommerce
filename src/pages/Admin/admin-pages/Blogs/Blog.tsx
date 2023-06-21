@@ -111,6 +111,7 @@ function CreateBlog() {
             await dispatch(createBlog(values))
             setFiles([])
             setImgConvert([])
+            setImgUrl([])
             formik.resetForm()
          }
       },

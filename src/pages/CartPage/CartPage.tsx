@@ -43,10 +43,15 @@ function CartPage() {
                   <h3>Quantity</h3>
                   <h3>Total</h3>
                </div>
-            </div>
+            </div>{' '}
+            ,
             {cartList &&
                cartList?.map((data, index) => {
-                  return <ProductPrice data={data} key={index} />
+                  return (
+                     <div key={index}>
+                        <ProductPrice data={data} />
+                     </div>
+                  )
                })}
             <div className={cx('section')}>
                <div className={cx('country')}>

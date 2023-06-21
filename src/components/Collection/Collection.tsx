@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './Collection.module.scss'
 import Image from '~/components/Image/Image'
-import { StarRating } from 'star-rating-react-ts'
 import Button from '~/components/Button/Button'
 
 import { ProductType } from '~/types/productStage'
@@ -10,8 +9,9 @@ import { AppDispatch, RootState } from '~/store/store'
 import { addToWishList, getUserWishList } from '~/features/customers/customerService'
 import { AiOutlineHeart, AiTwotoneHeart } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
-import images from '~/assets/images'
 import { useNavigate } from 'react-router-dom'
+import StarRatingCustom from '../StarRatingCustom'
+import images from '~/assets/images'
 
 const cx = classNames.bind(styles)
 
@@ -36,22 +36,20 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
       })
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
-
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container', isSort && 'sort')}>
-            <Button text className={cx('overlay')} onClick={() => navigate(`/product/${data._id}`)}>
-               <p style={{ color: '#fff' }} className="fw-2 fs-3">
-                  Click to see more detail...
-               </p>
-            </Button>
+            {!!data.discountCode && (
+               <span className={cx('badge')}>-{data.discountCode && data.discountCode.percentage}%</span>
+            )}
+            <Button text className={cx('overlay')} onClick={() => navigate(`/product/${data?.slug}`)}></Button>
             <div className={cx('wrap-img')}>
                <Image className={cx('img')} src={imgList && imgList[0] ? imgList[0] : images.errorImage} />
             </div>
 
             <div className={cx('info')}>
                <div className={cx('slug')}>
-                  <p>{data.slug}</p>
+                  <p>{data.brand}</p>
                   {user && (
                      <Button text className={cx('btn')} onClick={handleAddToWishList}>
                         {isActive ? (
@@ -63,19 +61,20 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
                   )}
                </div>
                <h2 className={cx('title')}>{data.title}</h2>
-               <p className={cx('description')} dangerouslySetInnerHTML={{ __html: data.description as string }}></p>
-               <div className={cx('sold')}>sold : {data.sold}</div>
+               <div className={cx('sold')}>Sold : {data.sold}</div>
                <div className={cx('price')}>
-                  $ <p className="mb-0">{data.price}</p>
+                  {data?.discountCode ? (
+                     <>
+                        {' '}
+                        <s className="fw-bold "> ${data.price}</s>
+                        <p className={cx('origin-price')}> ${data?.price_after_discount}</p>
+                     </>
+                  ) : (
+                     <p className={cx('origin-price')}> ${data.price}</p>
+                  )}
                </div>
                <div className={cx('rating')}>
-                  <StarRating
-                     initialRating={data.totalRating as number}
-                     readOnly
-                     theme={{
-                        size: 24,
-                     }}
-                  />
+                  <StarRatingCustom initStar={data.totalRating as number} readOnly size={24} />
                </div>
             </div>
          </div>

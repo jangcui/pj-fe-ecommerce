@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import classNames from 'classnames/bind'
-import ForwardTable from 'antd/lib/table/Table'
+import { useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import classNames from "classnames/bind"
+import ForwardTable from "antd/lib/table/Table"
 
-import styles from '~/components/StyleModule/AdminStyle.module.scss'
-import { getAOrder } from '~/features/admin/adminService'
-import { AppDispatch, RootState } from '~/store/store'
+import styles from "~/components/StyleModule/AdminStyle.module.scss"
+import { getAOrder } from "~/features/admin/adminService"
+import { AppDispatch, RootState } from "~/store/store"
 
 const cx = classNames.bind(styles)
 interface DataType {
@@ -22,33 +22,33 @@ interface DataType {
 
 const columns: any = [
    {
-      title: 'User Order',
-      dataIndex: 'name',
+      title: "User Order",
+      dataIndex: "name",
    },
    {
-      title: 'Name Product',
-      dataIndex: 'product',
+      title: "Name Product",
+      dataIndex: "product",
    },
    {
-      title: 'Color',
-      dataIndex: 'color',
+      title: "Color",
+      dataIndex: "color",
    },
    {
-      title: 'Brand',
-      dataIndex: 'brand',
+      title: "Brand",
+      dataIndex: "brand",
    },
 
    {
-      title: 'Price',
-      dataIndex: 'price',
+      title: "Price",
+      dataIndex: "price",
    },
    {
-      title: 'Amount',
-      dataIndex: 'amount',
+      title: "Amount",
+      dataIndex: "amount",
    },
    {
-      title: 'Total Price',
-      dataIndex: 'dPrice',
+      title: "Total Price",
+      dataIndex: "dPrice",
    },
 ]
 
@@ -65,12 +65,12 @@ function Order() {
    }, [dispatch, orderId])
 
    data1.push({
-      name: (order && order?.user.fist_name + ' ' + order?.user.last_name) || '',
+      name: (order && order?.user.fist_name + " " + order?.user.last_name) || "",
       product: (
          <>
             {order?.orderItems.map((item, index) => (
                <ul key={index} className="list-unstyled">
-                  <li style={{ fontWeight: '600' }}>{item.productId.title} </li>
+                  <li style={{ fontWeight: "600" }}>{item.productId.title} </li>
                </ul>
             ))}
          </>
@@ -79,7 +79,7 @@ function Order() {
          <>
             {order?.orderItems.map((item, index) => (
                <ul key={index} className="list-unstyled">
-                  <li style={{ fontWeight: '600' }}>{item.productId.brand} </li>
+                  <li style={{ fontWeight: "600" }}>{item.productId.brand} </li>
                </ul>
             ))}
          </>
@@ -88,7 +88,7 @@ function Order() {
          <>
             {order?.orderItems.map((item, index) => (
                <ul key={index} className="list-unstyled">
-                  <li style={{ fontWeight: '600' }}>{item.productId.price}</li>
+                  <li style={{ fontWeight: "600" }}>{item.productId.price}</li>
                </ul>
             ))}
          </>
@@ -98,9 +98,9 @@ function Order() {
             {order?.orderItems.map((item, index) => (
                <ul key={index} className="list-unstyled">
                   <li
-                     style={{ backgroundColor: item.color.title, width: '16px', height: '16px', borderRadius: '100%' }}
+                     style={{ backgroundColor: item.color.title, width: "16px", height: "16px", borderRadius: "100%" }}
                   >
-                     {' '}
+                     {" "}
                   </li>
                </ul>
             ))}
@@ -112,10 +112,10 @@ function Order() {
    })
 
    return (
-      <div className={cx('wrapper')}>
+      <div className={cx("wrapper")}>
          <h1>View Order </h1>
-         <div className={cx('chart')}>
-            <div className={cx('content')}>
+         <div className={cx("chart")}>
+            <div className={cx("content")}>
                <ForwardTable columns={columns} dataSource={data1} />
             </div>
          </div>

@@ -6,14 +6,18 @@ import {
    AiOutlineBell,
    AiOutlineBgColors,
    AiOutlineDashboard,
+   AiOutlineInteraction,
    AiOutlineMenuFold,
    AiOutlineMenuUnfold,
    AiOutlineShoppingCart,
 } from 'react-icons/ai'
 import { BiCategory, BiCategoryAlt, BiColorFill, BiLogOutCircle } from 'react-icons/bi'
 import { FaBlog, FaBlogger, FaClipboardList, FaListAlt, FaTrashAlt } from 'react-icons/fa'
+import { GrActions } from 'react-icons/gr'
+import { toast } from 'react-toastify'
 import { FiUsers } from 'react-icons/fi'
 import { RiCoupon2Line, RiCoupon3Line, RiCoupon4Fill, RiProductHuntLine } from 'react-icons/ri'
+import { MdDiscount, MdOutlineDiscount } from 'react-icons/md'
 import { SiBlogger, SiBrandfolder, SiProducthunt } from 'react-icons/si'
 import { TbBrandShopee } from 'react-icons/tb'
 import { Route, Routes, useNavigate } from 'react-router-dom'
@@ -39,7 +43,9 @@ import { Product, ProductList } from './admin-pages/Products'
 import { BlogsTrash, CustomerTrash, ProductsTrash } from './admin-pages/Trash'
 import { AppDispatch } from '~/store/store'
 import { logOutAdmin } from '~/features/admin/adminSlice'
-import { toast } from 'react-toastify'
+import { Discount, DiscountList } from './admin-pages/Discount'
+import { ApplyDiscount, RemoveDiscount } from './admin-pages/Action'
+import { CgRemoveR } from 'react-icons/cg'
 
 const cx = classNames.bind(styles)
 
@@ -59,15 +65,14 @@ const Admin: React.FC = () => {
       }
    })
    const handleLogOut = () => {
-      dispatch(logOutAdmin())
       toast.info('Logged out')
-      navigate('/admin/login')
+      dispatch(logOutAdmin())
+      window.location.reload()
    }
 
    return (
       <>
          <ChangeTitle title={'Admin'} />
-
          <Layout className={cx('wrapper')}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                <div className={cx('logo')}>
@@ -189,12 +194,22 @@ const Admin: React.FC = () => {
                            {
                               key: 'coupon',
                               icon: <RiCoupon4Fill className={cx('icon')} />,
-                              label: 'Add Coupon',
+                              label: 'Create new Coupon',
                            },
                            {
                               key: 'coupon-list',
                               icon: <RiCoupon3Line className={cx('icon')} />,
                               label: 'Coupon List',
+                           },
+                           {
+                              key: 'discount',
+                              icon: <MdOutlineDiscount className={cx('icon')} />,
+                              label: 'Create new Discount',
+                           },
+                           {
+                              key: 'discount-list',
+                              icon: <MdDiscount className={cx('icon')} />,
+                              label: 'Discount List',
                            },
                         ],
                      },
@@ -217,6 +232,23 @@ const Admin: React.FC = () => {
                               key: 'trash/customer',
                               icon: <FiUsers className={cx('icon')} />,
                               label: 'Customer trash',
+                           },
+                        ],
+                     },
+                     {
+                        key: 'action',
+                        icon: <AiOutlineInteraction className={cx('icon')} />,
+                        label: 'Action',
+                        children: [
+                           {
+                              key: 'action/apply-discount-product',
+                              icon: <SiProducthunt className={cx('icon')} />,
+                              label: 'Apply Discount Code Product',
+                           },
+                           {
+                              key: 'action/remove-discount-product',
+                              icon: <CgRemoveR className={cx('icon')} />,
+                              label: 'Remove Discount Code Product',
                            },
                         ],
                      },
@@ -272,7 +304,7 @@ const Admin: React.FC = () => {
                      <Route path="orders" element={<OrderList />} />
                      <Route path="order/:orderId" element={<Order />} />
                      <Route path="product" element={<Product />} />
-                     <Route path="product/:productId" element={<Product />} />
+                     <Route path="product/:slug" element={<Product />} />
                      <Route path="product-list" element={<ProductList />} />
                      <Route path="color" element={<Color />} />
                      <Route path="color/:colorId" element={<Color />} />
@@ -280,6 +312,9 @@ const Admin: React.FC = () => {
                      <Route path="coupon" element={<Coupon />} />
                      <Route path="coupon/:couponId" element={<Coupon />} />
                      <Route path="coupon-list" element={<CouponList />} />
+                     <Route path="discount" element={<Discount />} />
+                     <Route path="discount/:discountId" element={<Discount />} />
+                     <Route path="discount-list" element={<DiscountList />} />
                      <Route path="blog" element={<Blog />} />
                      <Route path="blog/:blogId" element={<Blog />} />
                      <Route path="blog-list" element={<BlogList />} />
@@ -294,6 +329,8 @@ const Admin: React.FC = () => {
                      <Route path="blog-category-list" element={<BlogCateList />} />
                      <Route path="enquiry/:enqId" element={<Enquiry />} />
                      <Route path="enquiries" element={<EnquiresList />} />
+                     <Route path="action/apply-discount-product" element={<ApplyDiscount />} />
+                     <Route path="action/remove-discount-product" element={<RemoveDiscount />} />
                      <Route path="trash/product" element={<ProductsTrash />} />
                      <Route path="trash/blog" element={<BlogsTrash />} />
                      <Route path="trash/customer" element={<CustomerTrash />} />

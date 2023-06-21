@@ -42,7 +42,6 @@ function Color() {
          dispatch(resetColorState())
       }
    }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
-   console.log(itemUpdate)
    useEffect(() => {
       if (colorId !== undefined) {
          dispatch(getColor(colorId))

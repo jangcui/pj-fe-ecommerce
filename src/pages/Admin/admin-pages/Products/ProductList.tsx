@@ -89,6 +89,7 @@ function ProductList() {
       setOpen(false)
    }
    const handleDelete = async (id: string) => {
+      console.log(id)
       hideModal()
       await dispatch(toggleProductToTrashBin(id))
       setTimeout(() => {
@@ -100,18 +101,18 @@ function ProductList() {
    for (let i = 0; i < productData.length; i++) {
       data1.push({
          key: i + 1,
-         title: productData[i].title,
-         slug: productData[i].slug,
-         brand: productData[i].brand,
-         category: productData[i].category,
-         sold: productData[i].sold,
-         price: productData[i].price,
+         title: productData[i]?.title,
+         slug: productData[i]?.slug,
+         brand: productData[i]?.brand,
+         category: productData[i]?.category,
+         sold: productData[i]?.sold,
+         price: productData[i]?.price,
          action: (
             <>
-               <Button text to={`/admin/product/${productData[i]._id}`}>
+               <Button text to={`/admin/product/${productData[i]?.slug}`}>
                   <BiEdit className={cx('icon')} />
                </Button>
-               <Button text onClick={() => showModal(productData[i]._id)}>
+               <Button text onClick={() => showModal(productData[i]?._id)}>
                   <AiFillDelete className={cx('icon')} />
                </Button>
             </>

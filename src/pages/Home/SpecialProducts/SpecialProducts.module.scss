@@ -66,7 +66,6 @@
          }
          .title {
             margin-bottom: 12px;
-            word-break: break-all;
             overflow: hidden;
             text-transform: capitalize;
             display: -webkit-box;
@@ -77,6 +76,7 @@
             color: #f52f32;
             font-size: 18px;
             font-weight: 600;
+
             s {
                font-weight: 400;
                margin-left: 4px;

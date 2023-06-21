@@ -55,7 +55,7 @@ function Product() {
    const [files, setFiles] = useState<File[]>([])
 
    const navigate = useNavigate()
-   const { productId } = useParams()
+   const { slug } = useParams()
 
    ///////////////////////////////////////
    useEffect(() => {
@@ -65,8 +65,8 @@ function Product() {
    }, [dispatch])
 
    useEffect(() => {
-      if (productId !== undefined) {
-         dispatch(getAProduct(productId))
+      if (slug !== undefined) {
+         dispatch(getAProduct(slug))
       } else {
          setFiles([])
          setImgUrl([])
@@ -74,20 +74,20 @@ function Product() {
          dispatch(resetProductState())
          setColor([])
       }
-   }, [productId, dispatch])
+   }, [slug, dispatch])
 
    useEffect(() => {
-      if (product.images) {
-         setImgUrl(product.images.map((item: ImgType) => item))
-         setImgConvert(product.images.map((item: ImgType) => item.url))
+      if (product?.images) {
+         setImgUrl(product?.images.map((item: ImgType) => item))
+         setImgConvert(product?.images.map((item: ImgType) => item.url))
       }
    }, [product])
-
+   console.log(product)
    const colorOpt: SelectProps['options'] = []
    colorState?.forEach((color) => {
       colorOpt.push({
-         label: color.title,
-         value: color._id,
+         label: color?.title,
+         value: color?._id,
       })
    })
 
@@ -112,8 +112,9 @@ function Product() {
          price: product?.price ? product?.price : 0,
          quantity: product?.quantity ? product?.quantity : 0,
          category: product?.category ? product?.category : '',
-         color: product.color && productId !== undefined ? color : [''],
+         color: product.color && slug !== undefined ? color : [''],
          images: product.images ? product?.images : [],
+         price_after_discount: 0,
       },
       validationSchema: productSchema,
       onSubmit: async (values: ProductType) => {
@@ -125,13 +126,13 @@ function Product() {
          } else {
             formik.values.images = imgUrl
          }
-         if (productId !== undefined) {
-            const productUpdate = await dispatch(updateAProduct({ id: productId, body: values }))
+         if (slug !== undefined) {
+            const productUpdate = await dispatch(updateAProduct({ id: product._id || '', body: values }))
             if (productUpdate) {
                navigate('/admin/product-list')
             }
          }
-         if (productId === undefined) {
+         if (slug === undefined) {
             const product = await dispatch(createProduct(values))
             if (product) {
                setColor([])
@@ -145,7 +146,7 @@ function Product() {
    })
    return (
       <div className={cx('wrapper')}>
-         <h1 className={cx('title')}>{productId !== undefined ? 'Edit' : 'Add'} Product</h1>
+         <h1 className={cx('title')}>{slug !== undefined ? 'Edit' : 'Add'} Product</h1>
          <form className={cx('form')} action="" onSubmit={formik.handleSubmit}>
             <div className={cx('field')}>
                <InputCustom
@@ -231,7 +232,7 @@ function Product() {
                   <option value="" disabled>
                      Select Tags
                   </option>
-                  <option value="feature">Feature</option>
+                  <option value="featured ">Featured </option>
                   <option value="popular">Popular</option>
                   <option value="special">Special</option>
                </select>
@@ -286,7 +287,7 @@ function Product() {
                   {imgConvert?.map((url: string, index) => (
                      <div className={cx('wrap-img')} key={index}>
                         <AiOutlineClose
-                           className={cx('icon-remove')}
+                           className={cx('btn-remove')}
                            onClick={() => {
                               setFiles((prev) => {
                                  prev.splice(index, 1)
@@ -309,7 +310,7 @@ function Product() {
             </div>
 
             <Button className={cx('form-btn')} primary type={'submit'} lazyLoad={isLoading || uploadState.isLoading}>
-               {productId !== undefined ? 'Update' : 'Add'} Product
+               {slug !== undefined ? 'Update' : 'Add'} Product
             </Button>
          </form>
       </div>

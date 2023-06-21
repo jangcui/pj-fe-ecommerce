@@ -176,10 +176,10 @@ export const customerSlice = createSlice({
             state.cartList = action.payload
             state.message = 'fulfilled'
             state.totalPrice = action.payload.reduce((accumulator: number, item: CartType) => {
-               const totalPrice = item?.quantity && item?.productId?.price && item.quantity * item?.productId?.price
-               if (totalPrice) {
-                  return accumulator + totalPrice
-               }
+               const totalOrigin = item?.productId.price * item?.quantity
+               const totalAfterDiscount = item?.productId?.price_after_discount * item?.quantity
+
+               return accumulator + (item?.productId?.discountCode ? totalAfterDiscount : totalOrigin)
             }, 0)
          })
          .addCase(getCarts.rejected, (state) => {

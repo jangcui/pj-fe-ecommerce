@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind'
-import { StarRating } from 'star-rating-react-ts'
+
 import styles from './SpecialProducts.module.scss'
 import Image from '~/components/Image/Image'
 import Button from '~/components/Button/Button'
 import { ProductType } from '~/types/productStage'
+import StarRatingCustom from '~/components/StarRatingCustom/StarRatingCustom'
 
 const cx = classNames.bind(styles)
 
@@ -29,7 +30,7 @@ function SpecialProducts({ data }: { data: ProductType }) {
                   <s className={cx('after-price')}>$17.00</s>
                </div>
                <div className={cx('rating-star')}>
-                  <StarRating initialRating={data.totalRating} readOnly theme={{ size: 24 }} />
+                  <StarRatingCustom initStar={data?.totalRating ? data?.totalRating : 0} readOnly size={24} />
                </div>
                <div className={cx('date')}>
                   <strong>875</strong>

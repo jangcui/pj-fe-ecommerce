@@ -12,7 +12,6 @@ import LoginAdmin from '~/pages/LoginAdmin/LoginAdmin'
 import MyOrder from '~/pages/MyOrder'
 import NotFound from '~/pages/NotFound'
 import OurStore from '~/pages/OurStore'
-import Products from '~/pages/Products'
 import Profile from '~/pages/Profile'
 import SingleBlog from '~/pages/SingleBlog'
 import SingleProduct from '~/pages/SingleProduct'
@@ -27,9 +26,8 @@ interface Route {
 const publicRouter: Route[] = [
    { path: config.routes.home, component: Home },
    { path: config.routes.admin, component: Admin, layout: null },
-   { path: config.routes.products, component: Products },
+   { path: config.routes.products, component: OurStore },
    { path: config.routes.product, component: SingleProduct },
-   { path: config.routes.store, component: OurStore },
    { path: config.routes.blogs, component: BlogPage },
    { path: config.routes.blog, component: SingleBlog },
    { path: config.routes.contact, component: Contact },

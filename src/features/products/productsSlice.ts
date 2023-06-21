@@ -3,11 +3,13 @@ import { ProductStageType } from '~/types/productStage'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 import {
+   applyDiscount,
    createProduct,
    deleteProduct,
    getAProduct,
    getProducts,
    rateProduct,
+   removeDiscount,
    toggleProductToTrashBin,
    updateAProduct,
 } from './productsService'
@@ -25,6 +27,7 @@ const initialProduct = {
    color: [],
    rating: [],
    totalRating: 0,
+   price_after_discount: 0,
 }
 
 const initialState: ProductStageType = {
@@ -88,7 +91,7 @@ export const productSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error.message as string
-            toast.error('Something went wrong')
+            toast.error('Product get failed!')
          })
          .addCase(updateAProduct.pending, (state) => {
             state.isLoading = true
@@ -152,6 +155,39 @@ export const productSlice = createSlice({
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error as string
+            toast.error('Something went wrong')
+         })
+         .addCase(applyDiscount.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(applyDiscount.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            toast.success('Added Discount Code for this Product')
+            state.product = action.payload
+         })
+         .addCase(applyDiscount.rejected, (state, action: PayloadAction<any>) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
+            state.message = 'rejected'
+            toast.error(action.payload.error)
+         })
+         .addCase(removeDiscount.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(removeDiscount.fulfilled, (state, action: PayloadAction<any>) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            toast.success('Product removed discount code!')
+            state.product = action.payload
+         })
+         .addCase(removeDiscount.rejected, (state) => {
+            state.isError = true
+            state.isSuccess = false
+            state.isLoading = false
             toast.error('Something went wrong')
          })
 

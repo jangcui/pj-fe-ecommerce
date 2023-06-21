@@ -7,6 +7,14 @@ interface RatingType {
    comment: string
    postedBy: UserType
 }
+
+interface DiscountType {
+   _id: string
+   name: string
+   expiry: Date | string
+   percentage: number
+}
+
 export interface ProductType {
    _id?: string
    isDelete?: boolean
@@ -16,6 +24,8 @@ export interface ProductType {
    __v?: number | string
    slug?: string
    sold?: number
+   discountCode?: DiscountType
+   price_after_discount: number
 
    tags: string
    title: string

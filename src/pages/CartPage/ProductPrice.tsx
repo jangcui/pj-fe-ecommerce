@@ -73,21 +73,24 @@ function ProductPrice({ data }: { data: CartType }) {
                            style={{ backgroundColor: data?.color?.title ? data?.color?.title : ' ' }}
                         ></span>
                      </p>
-                     {data?.productId?.price_after_discount ? (
+                     {data?.productId?.discountCode ? (
                         <div className="d-flex gap-2" style={{ color: '#99a2aa' }}>
-                           <s className="fs-3">${data?.productId.price}</s>{' '}
+                           <s className="fs-3">${data?.productId.price.toFixed(2)}</s>{' '}
                            <span className="fs-3 fw-bolder" style={{ color: '#dd551b' }}>
-                              ${data?.productId?.price_after_discount}
+                              ${data?.productId?.price_after_discount.toFixed(2)}
                            </span>
                         </div>
                      ) : (
-                        <p className="fs-3 ">${data?.productId.price}</p>
+                        <p className="fs-3 ">${data?.productId.price.toFixed(2)}</p>
                      )}
                   </div>
                </div>
             </div>
             <span className={cx('price')}>
-               ${data.productId?.price_after_discount ? data.productId?.price_after_discount : data.productId?.price}
+               $
+               {data.productId?.discountCode
+                  ? data.productId?.price_after_discount.toFixed(2)
+                  : data.productId?.price.toFixed(2)}
             </span>
          </div>
          <div className={cx('block')}>

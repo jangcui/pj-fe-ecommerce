@@ -24,23 +24,7 @@ function Brand() {
    const brandState = useSelector((state: RootState) => state.brands)
    const navigate = useNavigate()
    const { brandId } = useParams()
-   const { isError, isLoading, isSuccess, itemCreate, name, itemUpdate } = brandState
-
-   useEffect(() => {
-      if (isSuccess && Object.keys(itemCreate).length) {
-         toast.success('Brand Added Successfully!')
-         dispatch(resetBrandState())
-      }
-      if (isSuccess && Object.keys(itemUpdate).length) {
-         toast.success('Brand Updated Successfully!')
-         navigate('/admin/brand-list')
-         dispatch(resetBrandState())
-      }
-      if (isError) {
-         toast.error('Something went wrong')
-         dispatch(resetBrandState())
-      }
-   }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
+   const { isLoading, name } = brandState
 
    useEffect(() => {
       if (brandId !== undefined) {
@@ -49,7 +33,6 @@ function Brand() {
          dispatch(resetBrandState())
       }
    }, [brandId, dispatch])
-
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
@@ -58,10 +41,14 @@ function Brand() {
       validationSchema: brandSchema,
       onSubmit: async (values) => {
          if (brandId !== undefined) {
-            dispatch(updateABrand({ id: brandId, title: formik.values.title }))
+            await dispatch(updateABrand({ id: brandId, title: formik.values.title }))
+            formik.resetForm()
+            dispatch(resetBrandState())
          } else {
             await dispatch(createBrand(values))
             formik.resetForm()
+            navigate('/admin/brand-list')
+            dispatch(resetBrandState())
          }
       },
    })

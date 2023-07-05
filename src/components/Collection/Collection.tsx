@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import StarRatingCustom from '../StarRatingCustom'
 import images from '~/assets/images'
+import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
 
 const cx = classNames.bind(styles)
 
@@ -50,15 +51,17 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
             <div className={cx('info')}>
                <div className={cx('slug')}>
                   <p>{data.brand}</p>
-                  {user && (
-                     <Button text className={cx('btn')} onClick={handleAddToWishList}>
-                        {isActive ? (
-                           <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
-                        ) : (
-                           <AiOutlineHeart style={{ color: '#dd551b' }} className={cx('icon')} />
-                        )}
-                     </Button>
-                  )}
+                  <Button
+                     text
+                     className={cx('btn')}
+                     onClick={user ? () => handleAddToWishList() : () => dispatch(openModalLogin())}
+                  >
+                     {isActive ? (
+                        <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
+                     ) : (
+                        <AiOutlineHeart style={{ color: '#dd551b' }} className={cx('icon')} />
+                     )}
+                  </Button>
                </div>
                <h2 className={cx('title')}>{data.title}</h2>
                <div className={cx('sold')}>Sold : {data.sold}</div>
@@ -66,11 +69,11 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
                   {data?.discountCode ? (
                      <>
                         {' '}
-                        <s className="fw-bold "> ${data.price}</s>
-                        <p className={cx('origin-price')}> ${data?.price_after_discount}</p>
+                        <s className="fw-bold "> ${data.price.toFixed(2)}</s>
+                        <p className={cx('origin-price')}> ${data?.price_after_discount.toFixed(2)}</p>
                      </>
                   ) : (
-                     <p className={cx('origin-price')}> ${data.price}</p>
+                     <p className={cx('origin-price')}> ${data.price.toFixed(2)}</p>
                   )}
                </div>
                <div className={cx('rating')}>

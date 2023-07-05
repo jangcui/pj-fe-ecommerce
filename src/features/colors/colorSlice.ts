@@ -2,12 +2,11 @@ import { createSlice, createAction } from '@reduxjs/toolkit'
 
 import { ItemStageType } from '~/types/itemStage'
 import { createColor, deleteColor, getColor, getColors, updateAColor } from './colorService'
+import { toast } from 'react-toastify'
 
 const initialState: ItemStageType = {
    itemList: [],
    item: {},
-   itemCreate: {},
-   itemUpdate: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -44,13 +43,15 @@ export const colorSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemCreate = action.payload
+            state.item = action.payload
+            toast.success('Color Added Successfully')
          })
          .addCase(createColor.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error.message as string
+            toast.success('Something went wrong')
          })
          .addCase(getColor.pending, (state) => {
             state.isLoading = true
@@ -74,12 +75,14 @@ export const colorSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemUpdate = action.payload
+            state.item = action.payload
+            toast.success('Color Updated Successfully')
          })
          .addCase(updateAColor.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
+            toast.error('Something went wrong')
             state.message = action.error as string
          })
          .addCase(deleteColor.pending, (state) => {

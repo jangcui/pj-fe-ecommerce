@@ -1,12 +1,11 @@
 import { createSlice, createAction } from '@reduxjs/toolkit'
 import { ItemStageType } from '~/types/itemStage'
 import { createBlogCate, deleteBlogCate, getBlogCate, getBlogCates, updateABlogCate } from './blogCateService'
+import { toast } from 'react-toastify'
 
 const initialState: ItemStageType = {
    itemList: [],
    item: {},
-   itemCreate: {},
-   itemUpdate: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -43,13 +42,15 @@ export const blogCateSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemCreate = action.payload
+            state.item = action.payload
+            toast.success('Blog Category Added Successfully')
          })
          .addCase(createBlogCate.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error.message as string
+            toast.error('Something went wrong')
          })
          .addCase(getBlogCate.pending, (state) => {
             state.isLoading = true
@@ -73,12 +74,14 @@ export const blogCateSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemUpdate = action.payload.title
+            toast.success('Blog Category Updated Successfully')
+            state.item = action.payload.title
          })
          .addCase(updateABlogCate.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
+            toast.error('Something went wrong')
             state.message = action.error as string
          })
          .addCase(deleteBlogCate.pending, (state) => {

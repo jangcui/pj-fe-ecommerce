@@ -1,12 +1,11 @@
 import { createAction, createSlice } from '@reduxjs/toolkit'
 import { ItemStageType } from '~/types/itemStage'
 import { createBrand, deleteBrand, getBrand, getBrands, updateABrand } from './brandService'
+import { toast } from 'react-toastify'
 
 const initialState: ItemStageType = {
    itemList: [],
    item: {},
-   itemCreate: {},
-   itemUpdate: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -43,13 +42,15 @@ export const brandsSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemCreate = action.payload
+            state.item = action.payload
+            toast.success('Brand created successfully')
          })
          .addCase(createBrand.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
             state.message = action.error.message as string
+            toast.error('Something went wrong')
          })
          .addCase(getBrand.pending, (state) => {
             state.isLoading = true
@@ -73,11 +74,13 @@ export const brandsSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemUpdate = action.payload.title
+            toast.success('Brand updated successfully')
+            state.item = action.payload.title
          })
          .addCase(updateABrand.rejected, (state, action) => {
             state.isError = true
             state.isSuccess = false
+            toast.error('Something went wrong')
             state.isLoading = false
             state.message = action.error as string
          })

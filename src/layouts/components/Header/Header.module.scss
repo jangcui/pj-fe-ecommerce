@@ -1,67 +1,60 @@
+@import '~bootstrap/scss/bootstrap';
+
 .wrapper {
-   display: flex;
-   justify-content: center;
    background-color: var(--bg-header);
    color: var(--white);
-   width: 100%;
-}
 
-.icon {
-   width: 36px;
-   height: 36px;
-}
-.container {
-   width: 100%;
-
+   .icon {
+      width: 36px;
+      color: var(--white);
+      height: 36px;
+   }
    .contact {
       height: 38px;
-      width: 100%;
       border-bottom: 1px solid var(--text-color);
-      display: flex;
-      justify-content: center;
-
-      .contact-container {
-         width: 90%;
-         height: 100%;
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-      }
    }
 
    .content {
-      width: 100%;
-      display: flex;
       position: relative;
       z-index: 9;
-      justify-content: center;
       background-color: var(--bg-header);
       transition: all 0.5s;
       padding: 14px 0;
 
       .content-main {
-         width: 90%;
          display: flex;
-         justify-content: space-between;
          align-items: center;
+         justify-content: space-between;
 
          .trademark {
-            flex: 1;
-            max-width: 18%;
-
-            .logo {
-               color: var(--white);
+            .img {
+               width: 100%;
+               height: 50px;
+               object-fit: cover;
             }
          }
 
          .input-form {
             position: relative;
             display: flex;
-            flex: 1;
             justify-content: center;
             align-items: center;
-            margin-right: 20px;
 
+            .input {
+               width: 100%;
+               border: unset;
+               height: 36px;
+
+               input {
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px 0 0 4px;
+                  font-size: 14px;
+                  height: 100%;
+                  font-weight: 600;
+                  border: unset;
+               }
+            }
             .icon-search {
                border-radius: 0 4px 4px 0;
                background-color: var(--orange-color);
@@ -76,42 +69,41 @@
             }
          }
          .option-wrapper {
-            flex: 1;
             display: flex;
-            justify-content: center;
             align-items: center;
-            width: 100%;
-            gap: 10px;
+            justify-content: flex-end;
+            gap: 20px;
 
-            p {
-               margin-bottom: 0;
-            }
             .option {
                display: flex;
                position: relative;
-               align-items: center;
                color: var(--white);
                cursor: pointer;
-               width: 30%;
-               max-width: 152px;
+               align-items: center;
+               max-width: 33%;
 
                .btn-action {
                   color: var(--white);
-
-                  .fist-name {
+                  position: relative;
+                  .name {
                      display: block;
-                     max-width: 56px;
+                     max-width: 50px;
                      overflow: hidden;
                      text-overflow: ellipsis;
                      white-space: nowrap;
                   }
 
                   .icon-drop {
-                     animation: rotateRight 0.5s forwards;
+                     position: absolute;
+                     right: -12px;
+                     top: 26%;
+                     width: 28px;
+                     height: 28px;
 
+                     animation: rotateRight 0.5s forwards;
                      @keyframes rotateRight {
                         from {
-                           transform: rotate(180deg);
+                           transform: rotate(-180deg);
                         }
                         to {
                            transform: rotate(0);
@@ -119,15 +111,14 @@
                      }
                   }
 
-                  .active {
+                  .rotate {
                      animation: rotateLeft 0.3s forwards;
-
                      @keyframes rotateLeft {
                         from {
                            transform: rotate(0);
                         }
                         to {
-                           transform: rotate(180deg);
+                           transform: rotate(-180deg);
                         }
                      }
                   }
@@ -136,44 +127,56 @@
                .drop-down {
                   position: absolute;
                   left: 6%;
-                  background-color: #fff;
+                  background-color: var(--white);
+                  color: var(--text-color);
                   top: 50px;
-                  width: 162px;
-                  z-index: 999;
+                  width: 164px;
+                  z-index: 1;
                   border-radius: 4px;
-                  list-style-type: none;
                   transition: all 0.3s;
-                  padding: 10px 0;
+                  padding: 4px 0;
                   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+                  max-height: 0px;
+                  visibility: hidden;
+                  transition: all 0.3s;
+                  opacity: 0;
 
-                  li {
-                     padding: 12px;
+                  .drop-element {
                      width: 100%;
                      display: flex;
-                     justify-content: space-between;
-                     color: var(--text-color);
+                     justify-content: flex-start;
 
-                     .btn-tooltip {
+                     span {
                         font-size: 16px;
-                        color: var(--text-color);
+                        padding: 12px;
                         font-weight: 600;
-                     }
-                     .icon {
-                        width: 20px;
-                        height: 20px;
-
-                        &:hover {
-                           color: var(--text-color);
-                        }
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
                      }
 
                      &:hover {
-                        background-color: var(--border-color-gray);
+                        background-color: var(--text-gray);
                      }
+
+                     &:hover .icon {
+                        color: var(--text-color);
+                     }
+                  }
+                  .icon {
+                     width: 20px;
+                     height: 20px;
                   }
                }
             }
-
+            .active {
+               .drop-down {
+                  opacity: 1;
+                  z-index: 0;
+                  visibility: unset;
+                  max-height: 200px;
+               }
+            }
             .option-content {
                display: flex;
                flex-direction: column;
@@ -189,7 +192,6 @@
                   border-radius: 6px;
                   font-size: 14px;
                   font-weight: 700;
-                  margin-bottom: 6px;
 
                   &::before {
                      content: '';
@@ -203,74 +205,62 @@
                   }
                }
             }
-            .img {
-               width: 52px;
-               height: 52px;
+            .icon-cart {
+               width: 44px;
+               height: 44px;
                border: 1px solid;
                border-radius: 4px;
-               padding: 4px;
+               color: var(--white);
                margin-right: 6px;
+
+               &:hover {
+                  border-color: var(--orange-color);
+               }
             }
          }
       }
    }
-}
-.fixed {
-   position: fixed !important;
-   z-index: 99;
-   top: 0;
-   padding: 10px 0;
-   transition: all 0.5s;
-}
-.menu {
-   width: 100%;
-   display: flex;
-   justify-content: center;
-   border-bottom: 1px solid var(--border-color-gray);
-   background-color: #232f3e;
-
-   .menu-container {
-      width: 90%;
-      display: flex;
-      align-items: center;
+   .fixed {
+      position: fixed !important;
+      z-index: 99;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 0;
+      transition: all 0.5s;
    }
-   .icon {
-      width: 24px;
-      height: 24px;
-   }
-   .menu-drop {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      font-size: 16px;
-      gap: 12px;
-      min-width: 300px;
-      cursor: pointer;
-      background-color: transparent;
+}
 
-      p {
-         margin-left: 6px;
+@include media-breakpoint-down(lg) {
+   .option-wrapper {
+      .option {
+         p,
+         .icon-drop,
+         .rotate {
+            display: none;
+         }
       }
    }
-   .menu-option {
-      display: flex;
-      width: 100%;
-      justify-content: flex-start;
-      align-items: center;
-      font-size: 20px;
+}
 
-      .btn {
-         padding: 4px 0;
-         color: var(--white);
-         border-radius: unset;
-         width: 100px;
-         font-size: 18px;
-         text-transform: capitalize;
-         padding: 10px 0;
+@include media-breakpoint-down(md) {
+   .content {
+      padding: 4px 0 !important;
+   }
+   .option-wrapper {
+      gap: 10px !important;
 
-         &:hover {
-            background-color: #6481a5;
-         }
+      .drop-down {
+         left: -54px !important;
+         width: 142px;
+         top: 46px;
+      }
+
+      .icon,
+      .icon-cart {
+         width: 32px !important;
+         border: unset !important;
+         height: 32px !important;
       }
    }
 }

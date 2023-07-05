@@ -1,6 +1,8 @@
 import classNames from 'classnames/bind'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { BiReset } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
+import debounce from 'lodash.debounce'
 
 import { useDispatch, useSelector } from 'react-redux'
 import BreadCrumb from '~/components/BreadCrumb'
@@ -11,15 +13,16 @@ import Loading from '~/components/Loading/Loading'
 import { getProducts } from '~/features/products/productsService'
 import { AppDispatch, RootState } from '~/store/store'
 import { ProductType } from '~/types/productStage'
-import Collection from '../../components/Collection/Collection'
 import styles from './OurStore.module.scss'
-import { useParams } from 'react-router-dom'
-import debounce from 'lodash.debounce'
+import Collection from '~/components/Collection'
+import { getBrands } from '~/features/brands/brandService'
 const cx = classNames.bind(styles)
 
 function OurStore() {
    const dispatch = useDispatch<AppDispatch>()
    const { productList, isLoading } = useSelector((state: RootState) => state.products)
+   const categoryList = useSelector((state: RootState) => state.prodCates.itemList)
+   const brandList = useSelector((state: RootState) => state.brands.itemList)
    const [sortClass, setSortClass] = useState<string>('')
    const [sortBtn, setSortBtn] = useState([
       {
@@ -44,7 +47,7 @@ function OurStore() {
    ])
    const [brands, setBrands] = useState<string[]>([])
    const [categories, setCategories] = useState<string[]>([])
-   const [tags, setTags] = useState<string[]>([])
+   const [tags, setTags] = useState<string[]>(['featured ', 'popular', 'special'])
 
    ////filter
    const [brand, setBrand] = useState<string>('')
@@ -53,23 +56,31 @@ function OurStore() {
    const [minPrice, setMinPrice] = useState<number | undefined>(undefined)
    const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined)
    const [sort, setSort] = useState<string>('')
+   const navigate = useNavigate()
 
    useEffect(() => {
       const queryParams = [
          brand && `brand=${brand}`,
          tag && `tag=${tag}`,
-         category && `category=${category}`,
+         category && `category=${encodeURIComponent(category)}`,
          minPrice && `price[gte]=${minPrice}`,
          maxPrice && `price[lte]=${maxPrice}`,
          sort && `sort=${sort}`,
       ].filter(Boolean)
 
-      const queryString = queryParams.join('&&')
-      const url = `product${queryString ? `?${queryString}` : ''}`
+      const searchParams = new URLSearchParams(window.location.search)
+      const replacedQuery = Array.from(searchParams)
+         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+         .join('&')
 
-      window.history.pushState({}, '', url)
-      dispatch(getProducts({ brand, category, tag, sort, minPrice, maxPrice }))
-   }, [dispatch, brand, category, sort, minPrice, maxPrice, tag])
+      const queryString = queryParams.join('&&')
+      const url = `/product${queryString ? `?${queryString}` : `?${replacedQuery}`}`
+      navigate(url)
+
+      if (queryParams.length > 0) {
+         dispatch(getProducts({ brand, category, tag, sort, minPrice, maxPrice }))
+      }
+   }, [dispatch, brand, category, sort, minPrice, maxPrice, tag, navigate])
 
    useEffect(() => {
       const activeSortBtn = sortBtn.find((btn) => btn.isActive)
@@ -78,20 +89,33 @@ function OurStore() {
    }, [sortBtn])
 
    useEffect(() => {
-      const uniqueBrands = new Set<string>()
-      const uniqueCategories = new Set<string>()
-      const uniqueTags = new Set<string>()
+      dispatch(getBrands())
+   }, [dispatch])
 
-      productList?.forEach((product: ProductType) => {
-         uniqueBrands.add(product.brand)
-         uniqueCategories.add(product.category)
-         uniqueTags.add(product.tags)
-      })
-      setTags(Array.from(uniqueTags))
-      setBrands(Array.from(uniqueBrands))
-      setCategories(Array.from(uniqueCategories))
-   }, [productList])
-
+   // useEffect(() => {
+   //    const uniqueBrands = new Set<string>()
+   //    const uniqueTags = new Set<string>()
+   //    productList?.forEach((product: ProductType) => {
+   //       uniqueBrands.add(product.brand)
+   //       uniqueTags.add(product.tags)
+   //    })
+   //    setTags(Array.from(uniqueTags))
+   //    setBrands(Array.from(uniqueBrands))
+   //    if (categoryList) {
+   //       const data = categoryList.map((item) => item.title || '')
+   //       setCategories(data)
+   //    }
+   // }, [productList, categoryList])
+   useEffect(() => {
+      if (brandList) {
+         const data = brandList.map((item) => item.title || '')
+         setBrands(data)
+      }
+      if (categoryList) {
+         const data = categoryList.map((item) => item.title || '')
+         setCategories(data)
+      }
+   }, [brandList, categoryList])
    const handleSortClick = (id: number) => {
       const newSort = sortBtn.map((el) => {
          if (el.id === id) {
@@ -109,6 +133,8 @@ function OurStore() {
       setMinPrice(undefined)
       setMaxPrice(undefined)
       setSort('')
+      navigate('')
+      dispatch(getProducts({}))
    }
 
    const handleMinPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +158,13 @@ function OurStore() {
                      <div className={cx('option')}>
                         {categories?.map((category, index) => (
                            <span key={index}>
-                              <Button text className="btn btn-light" onClick={() => setCategory(category)}>
+                              <Button
+                                 text
+                                 className="btn btn-light"
+                                 onClick={() => {
+                                    setCategory(category.trim())
+                                 }}
+                              >
                                  {category}
                               </Button>
                            </span>
@@ -241,11 +273,15 @@ function OurStore() {
                      <Loading />
                   ) : (
                      <>
-                        {productList?.map((product, index) => (
-                           <div className={cx('collection')} key={index}>
-                              <Collection data={product} isSort={sortClass === 'sort-1'} />
-                           </div>
-                        ))}
+                        {productList.length > 0 ? (
+                           productList?.map((product, index) => (
+                              <div className={cx('collection')} key={index}>
+                                 <Collection data={product} isSort={sortClass === 'sort-1'} />
+                              </div>
+                           ))
+                        ) : (
+                           <h1 className="text-center mt-5 w-100">No data.</h1>
+                        )}
                      </>
                   )}
                </div>

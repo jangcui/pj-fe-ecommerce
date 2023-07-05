@@ -25,8 +25,8 @@ export interface ProductType {
    slug?: string
    sold?: number
    discountCode?: DiscountType
+   updatedAt?: Date
    price_after_discount: number
-
    tags: string
    title: string
    images: ImgType[]

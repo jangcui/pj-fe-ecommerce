@@ -6,8 +6,6 @@ import { createProdCate, deleteProdCate, getProdCate, getProdCates, updateAProdC
 const initialState: ItemStageType = {
    itemList: [],
    item: {},
-   itemCreate: {},
-   itemUpdate: {},
    name: '',
    isError: false,
    isLoading: false,
@@ -44,7 +42,7 @@ export const prodCateSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemCreate = action.payload
+            state.item = action.payload
          })
          .addCase(createProdCate.rejected, (state, action) => {
             state.isError = true
@@ -74,7 +72,7 @@ export const prodCateSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.itemUpdate = action.payload.title
+            state.item = action.payload.title
          })
          .addCase(updateAProdCate.rejected, (state, action) => {
             state.isError = true

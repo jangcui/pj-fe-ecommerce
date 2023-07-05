@@ -9,6 +9,9 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import { AppDispatch, RootState } from '~/store/store'
 import { getMyOrder } from '~/features/customers/customerService'
+import { TbMoodCry } from 'react-icons/tb'
+import Button from '~/components/Button/Button'
+import { getProducts } from '~/features/products/productsService'
 
 const cx = classNames.bind(styles)
 
@@ -31,49 +34,66 @@ function MyOrder() {
       <>
          <ChangeTitle title={'Our Store'} />
          <BreadCrumb title={'Our Store'} />
-         <div className={cx('wrapper')}>
-            <div className={cx('row')}>
-               <div className={cx('column')}>
-                  <h4>Products</h4>
-               </div>
-               <div className={cx('column')}>
-                  <h4>Order Date </h4>
-               </div>
-               <div className={cx('column')}>
-                  <h4>Total Price</h4>
-               </div>
-               <div className={cx('column')}>
-                  <h4>Status</h4>
-               </div>
-            </div>
-            {orderList &&
-               orderList?.map((item, index) => (
-                  <div className={cx('row')} key={index}>
-                     <div className={cx('column')}>
-                        <ul className={cx('product-wrapper')}>
-                           {item?.orderItems?.map((product, index) => (
-                              <li className={cx('product')} key={index}>
-                                 {product.productId.title}
-                                 <i className={cx('quantity')}>(X{product.quantity}) </i>
-                              </li>
-                           ))}
-                        </ul>
-                     </div>
-                     <div className={cx('column')}>
-                        <span>
-                           <i className={cx('date')}>{moment(item.createdAt).format('HH:mm, DD/MM/YYYY')}</i>
-                        </span>
-                     </div>
-                     <div className={cx('column')}>
-                        <span>
-                           <b>{item.total_price}</b>( $ )
-                        </span>
-                     </div>
-                     <div className={cx('column')}>
-                        <span>{item.order_status}</span>
-                     </div>
+
+         <div className={cx('wrapper', 'row w-100 d-flex justify-content-center mt-4')}>
+            <div className="col-11">
+               {orderList.length > 0 ? (
+                  <table className="table table-bordered table-secondary">
+                     <thead>
+                        <tr>
+                           <th scope="col">#</th>
+                           <th scope="col">Products</th>
+                           <th scope="col"> Order Date</th>
+                           <th scope="col"> Total Price</th>
+                           <th scope="col">Status</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {orderList?.map((item, index) => (
+                           <tr key={index}>
+                              <th>{index + 1}</th>
+                              <th scope="row" className="col-5 p-2">
+                                 {item?.orderItems?.map((product, index) => (
+                                    <p key={index} className={cx('product')}>
+                                       <Button
+                                          text
+                                          className={cx('action')}
+                                          onClick={() => navigate(`/product/${product?.productId?.slug}`)}
+                                       >
+                                          {product?.productId?.title}
+                                          <i className={cx('quantity')}>( x{product.quantity} ) </i>
+                                       </Button>
+                                    </p>
+                                 ))}
+                              </th>
+                              <th>
+                                 <i className={cx('date')}>{moment(item.createdAt).format('HH:mm, DD/MM/YYYY')}</i>
+                              </th>
+                              <th>{item.total_price.toFixed(2)} ( $ )</th>
+
+                              <th>{item.order_status}</th>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               ) : (
+                  <div className={cx('no-data')}>
+                     <h1 className="d-flex justify-content-center ">
+                        You have no order. <TbMoodCry className={cx('icon')} />
+                     </h1>
+                     <Button
+                        primary
+                        className={cx('btn-back')}
+                        onClick={() => {
+                           navigate('/product')
+                           dispatch(getProducts({}))
+                        }}
+                     >
+                        Go to shopping{' '}
+                     </Button>
                   </div>
-               ))}
+               )}
+            </div>
          </div>
       </>
    )

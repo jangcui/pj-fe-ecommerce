@@ -1,61 +1,82 @@
 import classNames from 'classnames/bind'
+import { BsSmartwatch, BsSpeakerFill } from 'react-icons/bs'
+import { FaLaptopCode } from 'react-icons/fa'
+import { FcCamera, FcHeadset, FcSlrBackSide, FcSmartphoneTablet } from 'react-icons/fc'
+import { SiYoutubegaming } from 'react-icons/si'
 import styles from './Category.module.scss'
-import Image from '~/components/Image/Image'
+import Button from '~/components/Button/Button'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '~/store/store'
+import { getProducts } from '~/features/products/productsService'
+import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
-type Item = {
-   src?: string
-   title?: string
-}
-
-const CATEGORY_ITEMS: Item[] = [
+const CATEGORY_ITEMS = [
    {
+      id: 1,
+      title: 'Mobiles & Tablets',
+      icon: <FcSmartphoneTablet className={cx('icon')} />,
+   },
+   {
+      id: 2,
+      title: 'Headphones',
+      icon: <FcHeadset className={cx('icon')} />,
+   },
+   {
+      id: 3,
+      title: 'Smart Television',
+      icon: <FcSlrBackSide className={cx('icon')} />,
+   },
+   {
+      id: 4,
+      title: 'Cameras & Videos',
+      icon: <FcCamera className={cx('icon')} />,
+   },
+   {
+      id: 5,
       title: 'Music & gaming',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
+      icon: <SiYoutubegaming className={cx('icon')} />,
    },
    {
-      title: 'Cameras',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
+      id: 6,
+      title: 'Portable Speakers',
+      icon: <BsSpeakerFill className={cx('icon')} />,
    },
    {
-      title: 'Smart TVs',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
+      id: 7,
+      title: 'Computers & Laptop',
+      icon: <FaLaptopCode className={cx('icon')} />,
    },
    {
-      title: 'Smart Watches',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
-   },
-   {
-      title: 'Music & gaming',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
-   },
-   {
-      title: 'Cameras',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
-   },
-   {
-      title: 'Smart TVs',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
-   },
-   {
-      title: 'Smart Watches',
-      src: 'https://scontent.fsgn2-7.fna.fbcdn.net/v/t1.6435-9/108634973_1169230400096019_7100257337843355309_n.jpg?stp=c0.157.1443.1443a_dst-jpg_s851x315&_nc_cat=108&ccb=1-7&_nc_sid=da31f3&_nc_ohc=Mgn5zvov_3EAX-Ij5R1&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfCFjliyQ6678vqX3axM6B5Nh_QQXQ7x8NZ_GMGQfw9cJA&oe=644B9EBE',
+      id: 8,
+      title: 'Smartwatches',
+      icon: <BsSmartwatch className={cx('icon')} />,
    },
 ]
 
 function Category() {
+   const dispatch = useDispatch<AppDispatch>()
+   const navigate = useNavigate()
+
+   const handleRedirection = async (value: string) => {
+      navigate(`/product?${`category=${encodeURIComponent(value.trim())}`}`)
+      await dispatch(getProducts({ category: value }))
+   }
    return (
-      <div className={cx('wrapper')}>
-         {CATEGORY_ITEMS.map((item: Item, index: number) => (
-            <div className={cx('container')} key={index}>
-               <div className={cx('wrap-img')}>
-                  <div className={cx('title')}>{item.title}</div>
-                  <Image className={cx('img')} src={item.src} key={index} />
+      <>
+         {/* <h1 className="text-center text-uppercase fs-1 fw-bold">Categories </h1> */}
+         <div className={cx('wrapper')}>
+            {CATEGORY_ITEMS.map((item, index) => (
+               <div className={cx('container')} key={index}>
+                  <Button text className={cx('content')} onClick={() => handleRedirection(item.title)}>
+                     <div className={cx('title')}>{item.title}</div>
+                     <span>{item.icon}</span>
+                  </Button>
                </div>
-            </div>
-         ))}
-      </div>
+            ))}
+         </div>
+      </>
    )
 }
 

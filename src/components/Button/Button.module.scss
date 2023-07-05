@@ -15,10 +15,17 @@
    }
 }
 .primary {
-   background-color: #232f3e;
+   background-color: var(--bg-header);
    cursor: pointer;
    color: var(--white);
    border-radius: 16px;
+   transition: all 0.3s;
+
+   &:hover {
+      transition: all 0.3s;
+      background-color: var(--orange-color);
+      color: var(--text-color);
+   }
 }
 .secondary {
    cursor: pointer;
@@ -59,7 +66,7 @@
 }
 .disable {
    pointer-events: none;
-   opacity: 0.5;
+   opacity: 0.5 !important;
    cursor: not-allowed;
    min-width: 100px;
 }

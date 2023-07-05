@@ -1,0 +1,95 @@
+@import '~bootstrap/scss/bootstrap';
+
+.wrapper {
+   border-bottom: 1px solid var(--border-color-gray);
+   background-color: var(--bgc-menu);
+
+   .icon {
+      width: 24px;
+      height: 24px;
+   }
+
+   .wrap-btn {
+      position: relative;
+
+      .btn-drop {
+         display: flex;
+         align-items: center;
+         justify-content: flex-start;
+         font-size: 16px;
+         gap: 10px;
+         min-width: 228px;
+         background-color: transparent;
+         transition: all 0.3s;
+         padding: 10px 0px;
+
+         .right-icon {
+            transition: all 0.3s;
+            transform: rotate(-180deg);
+         }
+      }
+
+      .select {
+         position: absolute;
+         z-index: 2;
+         display: flex;
+         flex-direction: column;
+         top: 44px;
+         width: 100%;
+         background-color: var(--bg-header);
+         overflow: hidden;
+         left: 0;
+         border-radius: 0 0 10px 10px;
+         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+         max-height: 0px;
+         transition: max-height 0.3s;
+
+         .option {
+            padding: 10px 20px;
+            color: var(--white);
+            justify-content: flex-start;
+            border: 0.5px solid transparent;
+
+            &:hover {
+               color: var(--orange-color);
+               border-bottom-color: var(--orange-color);
+               border-top-color: var(--orange-color);
+            }
+         }
+      }
+   }
+
+   .active {
+      .select {
+         max-height: 370px;
+      }
+      .btn-drop {
+         .right-icon {
+            transition: all 0.3s;
+            transform: rotate(0);
+         }
+      }
+   }
+   .list {
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 20px;
+
+      .btn {
+         padding: 4px 0;
+         color: var(--white);
+         border-radius: unset;
+         width: 100px;
+         display: flex;
+         font-size: 18px;
+         text-transform: capitalize;
+         padding: 10px 0;
+
+         &:hover {
+            background-color: #6481a5;
+         }
+      }
+   }
+}

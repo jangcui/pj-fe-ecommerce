@@ -16,6 +16,7 @@
          margin-top: 12px;
          width: 200px;
          overflow: hidden;
+         transition: all 0.3s;
 
          .wrap-icon {
             display: flex;
@@ -25,7 +26,7 @@
          .wrap-logo {
             display: flex;
             align-items: flex-end;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid var(--border-color-gray);
             width: 400px;
 
             .marquee {

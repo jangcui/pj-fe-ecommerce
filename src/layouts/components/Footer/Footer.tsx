@@ -5,6 +5,7 @@ import images from '~/assets/images'
 import Marquee from 'react-fast-marquee'
 import { FaceBookIcon, GitHubIcon, GmailIcon } from '~/components/Icon'
 import { Link } from 'react-router-dom'
+import Button from '~/components/Button/Button'
 const cx = classNames.bind(styles)
 
 function Footer() {
@@ -14,22 +15,22 @@ function Footer() {
             <div className={cx('logo')}>
                <div className={cx('wrap-logo')}>
                   <Marquee gradientWidth={0} className={cx('marquee')} direction="right">
-                     <Image src={images.logo} className={cx('img')} />
+                     <Image src={images.logo2} className={cx('img')} />
                      <h1>Digitic.</h1>
                   </Marquee>
                </div>
                <div className={cx('wrap-icon')}>
-                  <Link to="https://github.com/jangcui?tab=repositories">
+                  <Button text to="https://github.com/jangcui?tab=repositories" style={{ color: '#fff' }}>
                      {' '}
                      <GitHubIcon />
-                  </Link>
-                  <Link to="https://www.facebook.com/profile.php?id=100004998315019">
+                  </Button>
+                  <Button text to="https://www.facebook.com/profile.php?id=100004998315019">
                      <FaceBookIcon />
-                  </Link>
-                  <Link to="https://mail.google.com/mail/u/0/?tab=km#inbox">
+                  </Button>
+                  <Button text to="https://mail.google.com/mail/u/0/?tab=km#inbox">
                      {' '}
                      <GmailIcon />
-                  </Link>
+                  </Button>
                </div>
             </div>
             <div className={cx('information')}>

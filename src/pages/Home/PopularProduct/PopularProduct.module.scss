@@ -1,0 +1,26 @@
+.wrap-btn {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+   padding: 10px 0;
+   background-color: var(--white);
+   border-radius: 4px;
+
+   .btn {
+      padding: 10px 20px;
+      color: var(--bg-header);
+      // border: 1px solid transparent;
+      opacity: 0.75;
+      font-size: 20px;
+
+      &:hover {
+         background-color: var(--border-color-gray);
+         border: unset;
+      }
+   }
+   .active {
+      opacity: 1;
+      color: var(--slug-color);
+   }
+}

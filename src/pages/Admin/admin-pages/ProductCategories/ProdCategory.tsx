@@ -24,23 +24,7 @@ function Categories() {
    const productState = useSelector((state: RootState) => state.prodCates)
    const navigate = useNavigate()
    const { categoryId } = useParams()
-   const { isError, isLoading, isSuccess, itemCreate, name, itemUpdate } = productState
-
-   useEffect(() => {
-      if (isSuccess && Object.keys(itemCreate).length) {
-         toast.success('Product Category Added Successfully!')
-         dispatch(resetProdCateState())
-      }
-      if (isSuccess && Object.keys(itemUpdate).length) {
-         toast.success('Product Category Updated Successfully!')
-         navigate('/admin/category-list')
-         dispatch(resetProdCateState())
-      }
-      if (isError) {
-         toast.error('Something went wrong')
-         dispatch(resetProdCateState())
-      }
-   }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
+   const { isLoading, name } = productState
 
    useEffect(() => {
       if (categoryId !== undefined) {
@@ -64,6 +48,8 @@ function Categories() {
             }
          } else {
             await dispatch(createProdCate(values))
+            dispatch(resetProdCateState())
+            navigate('/admin/category-list')
             formik.resetForm()
          }
       },

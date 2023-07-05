@@ -9,8 +9,6 @@ export interface ItemType {
 export interface ItemStageType {
    itemList: ItemType[]
    item: ItemType
-   itemCreate: ItemType
-   itemUpdate: ItemType
    name: string
    isError: boolean
    isLoading: boolean

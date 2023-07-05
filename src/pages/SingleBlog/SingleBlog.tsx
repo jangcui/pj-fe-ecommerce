@@ -63,10 +63,21 @@ function SingleBlog() {
                      >
                         Back to blogs
                      </Button>
-                     <div className={cx('wrap-icon')}>
-                        <FaceBookIcon />
-                        <GitHubIcon />
-                        <GmailIcon />
+                     <div className={cx('wrap-icon')} style={{ color: '#fff' }}>
+                        <Button
+                           text
+                           style={{ color: '#fff' }}
+                           className="col-4"
+                           to="https://github.com/jangcui?tab=repositories"
+                        >
+                           <GitHubIcon />
+                        </Button>
+                        <Button text className="col-4" to="https://www.facebook.com/profile.php?id=100004998315019">
+                           <FaceBookIcon />
+                        </Button>
+                        <Button text className="col-4" to="https://mail.google.com/mail/u/0/?tab=km#inbox">
+                           <GmailIcon />
+                        </Button>
                      </div>
                   </div>
 

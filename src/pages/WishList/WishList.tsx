@@ -87,17 +87,26 @@ function WishList() {
                                     setOpen(true)
                                  }}
                               >
-                                 <AiOutlineClose
-                                    style={{ width: '24px', height: '24px', color: '#fff' }}
-                                    className={cx('icon')}
-                                 />
+                                 <AiOutlineClose className={cx('icon')} />
                               </Button>
+
+                              <Button
+                                 text
+                                 className={cx('btn')}
+                                 onClick={() => {
+                                    navigate(`/product/${product?.slug}`)
+                                 }}
+                              ></Button>
                               <div className={cx('wrap-img')}>
                                  <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
                               </div>
                               <div className={cx('content')}>
                                  <h3 className={cx('title')}>{product.title}</h3>
-                                 <span className={cx('price')}>${product.price}</span>
+                                 {product?.discountCode ? (
+                                    <p className={cx('price')}>${product?.price_after_discount.toFixed(2)}</p>
+                                 ) : (
+                                    <p className={cx('price')}> ${product.price.toFixed(2)}</p>
+                                 )}
                               </div>
                            </>{' '}
                         </div>

@@ -21,6 +21,7 @@ import { ProductType } from '~/types/productStage'
 import Collection from '~/components/Collection'
 import Loading from '~/components/Loading/Loading'
 import StarRatingCustom from '~/components/StarRatingCustom'
+import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
 
 const cx = classNames.bind(styles)
 
@@ -54,9 +55,13 @@ function SingleProduct() {
       }
    }, [user, navigate, dispatch, slug])
    const handleWishlist = async () => {
-      setIsWishlist(!isWishlist)
-      await dispatch(addToWishList({ prodId: product._id || '' }))
-      await dispatch(getUserWishList())
+      if (!user) {
+         dispatch(openModalLogin())
+      } else {
+         setIsWishlist(!isWishlist)
+         await dispatch(addToWishList({ prodId: product._id || '' }))
+         await dispatch(getUserWishList())
+      }
    }
 
    useEffect(() => {
@@ -95,7 +100,9 @@ function SingleProduct() {
    }
 
    const handleRating = async () => {
-      if (star === 0) {
+      if (!user) {
+         dispatch(openModalLogin())
+      } else if (star === 0) {
          toast.error('Please add star rating')
          return
       } else if (comment === '') {
@@ -182,13 +189,16 @@ function SingleProduct() {
                         <h3 className={cx('title')}>{product?.title} </h3>
                         <div className={cx('price')}>
                            {product?.discountCode ? (
-                              <>
+                              <div className={cx('discount')}>
                                  {' '}
-                                 <s className="fw-bold "> ${product.price}</s>
-                                 <p className={cx('origin-price')}> ${product?.price_after_discount}</p>
-                              </>
+                                 <>
+                                    <s className="fw-bold"> ${product.price.toFixed(2)}</s>
+                                    <p className={cx('origin-price')}> ${product?.price_after_discount.toFixed(2)}</p>
+                                 </>
+                                 <span className={cx('badge')}>-{product?.discountCode.percentage}%</span>
+                              </div>
                            ) : (
-                              <p className={cx('origin-price')}> ${product.price}</p>
+                              <p className={cx('origin-price')}> ${product.price.toFixed(2)}</p>
                            )}
                         </div>
                         <div className={cx('d-flex')}>
@@ -202,7 +212,8 @@ function SingleProduct() {
                                  text
                                  className={cx('value')}
                                  onClick={() => {
-                                    navigate('/product')
+                                    navigate(`/product?${`brand=${encodeURIComponent(product?.brand)}`}`)
+                                    dispatch(getProducts({ brand: product?.brand }))
                                  }}
                               >
                                  {product?.brand}
@@ -213,7 +224,8 @@ function SingleProduct() {
                               <Button
                                  className={cx('value')}
                                  onClick={() => {
-                                    navigate('/product')
+                                    navigate(`/product?${`category=${encodeURIComponent(product?.category.trim())}`}`)
+                                    dispatch(getProducts({ category: product?.category }))
                                  }}
                               >
                                  {product?.category}
@@ -224,17 +236,13 @@ function SingleProduct() {
                               <Button
                                  className={cx('value')}
                                  onClick={() => {
-                                    navigate('/product')
+                                    navigate(`/product?${`tags=${encodeURIComponent(product?.tags)}`}`)
+                                    dispatch(getProducts({ tag: product?.tags }))
                                  }}
                               >
                                  {product?.tags}
                               </Button>
                            </div>
-                           {/* 
-                           <div className={cx('field')}>
-                              <span className={cx('name')}>Availability:</span>
-                              <span className={cx('value')}>541 in stock</span>
-                           </div> */}
 
                            {!allReadyAdded && (
                               <div className={cx('field')}>
@@ -293,15 +301,8 @@ function SingleProduct() {
                                        <Button
                                           className={cx('btn')}
                                           primary
-                                          onClick={
-                                             !user
-                                                ? () => {
-                                                     return
-                                                  }
-                                                : handleAddToCart
-                                          }
+                                          onClick={!user ? () => dispatch(openModalLogin()) : handleAddToCart}
                                           lazyLoad={isLoading}
-                                          to={!user ? '/login' : ''}
                                        >
                                           ADD TO CART
                                        </Button>
@@ -357,7 +358,7 @@ function SingleProduct() {
                            value={comment}
                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setComment(e.target.value)}
                            className={cx('textarea')}
-                           placeholder="Give your review a title"
+                           placeholder="Enter review"
                         />
                         <div className={cx('btn-submit')}>
                            <Button primary className={cx('btn')} lazyLoad={isLoading} onClick={handleRating}>

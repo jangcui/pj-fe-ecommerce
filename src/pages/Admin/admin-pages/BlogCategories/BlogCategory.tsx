@@ -24,23 +24,7 @@ function BlogCategory() {
    const blogCateState = useSelector((state: RootState) => state.blogCates)
    const navigate = useNavigate()
    const { blogCateId } = useParams()
-   const { isError, isLoading, isSuccess, itemCreate, name, itemUpdate } = blogCateState
-
-   useEffect(() => {
-      if (isSuccess && Object.keys(itemCreate).length) {
-         toast.success('Color Added Successfully!')
-         dispatch(resetBlogCateState())
-      }
-      if (isSuccess && Object.keys(itemUpdate).length) {
-         toast.success('BlogCategory Updated Successfully!')
-         navigate('/admin/blog-category-list')
-         dispatch(resetBlogCateState())
-      }
-      if (isError) {
-         toast.error('Something went wrong')
-         dispatch(resetBlogCateState())
-      }
-   }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
+   const { isLoading, name } = blogCateState
 
    useEffect(() => {
       if (blogCateId !== undefined) {

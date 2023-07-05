@@ -313,11 +313,11 @@ function CheckOut() {
                                  <span className={cx('wrap-name')}>
                                     <p className={cx('name-prod')}>{item.productId?.title}</p>
                                     <p className={cx('color')} style={{ backgroundColor: item.color?.title }}></p>
-                                    {item?.productId?.price_after_discount ? (
+                                    {item?.productId?.discountCode ? (
                                        <>
                                           <s className="fs-4">${item?.productId.price}</s>{' '}
                                           <span className="fs-4 fw-bold" style={{ color: '#dd551b' }}>
-                                             ${item?.productId?.price_after_discount}
+                                             ${item?.productId?.price_after_discount.toFixed(2)}
                                           </span>
                                        </>
                                     ) : (
@@ -327,7 +327,7 @@ function CheckOut() {
                               </div>
                               <span className={cx('price')}>
                                  $
-                                 {item?.productId?.price_after_discount
+                                 {item?.productId?.discountCode
                                     ? item?.productId?.price_after_discount * item.quantity
                                     : item?.productId?.price * item.quantity}
                               </span>

@@ -39,7 +39,7 @@ export const toggleProductToTrashBin = createAsyncThunk('product/add-to-trash-bi
 export const getProducts = createAsyncThunk('product/get-all', async (data: ParamsType, thunkAPI) => {
    try {
       const queryString = `?${data?.brand ? `brand=${data?.brand}&&` : ''}${data?.tag ? `tags=${data?.tag}&&` : ''}${
-         data?.category ? `category=${data?.category}&&` : ''
+         data?.category ? `category=${encodeURIComponent(data?.category)}&&` : ''
       }${data?.minPrice ? `price[gte]=${data?.minPrice}&&` : ''}${
          data?.maxPrice ? `price[lte]=${data?.maxPrice}&&` : ''
       }${data?.sort ? `sort=${data?.sort}&&` : ''}`

@@ -13,6 +13,7 @@ import couponReducer from '~/features/coupon/couponSlice'
 import discountReducer from '~/features/discount/discountSlice'
 import uploadReducer from '~/features/upload/uploadSlice'
 import trashReducer from '~/features/trashBin/trashBinSlice'
+import modalLoginReducer from '~/features/modalLogin/modalLoginSlice'
 
 export const store = configureStore({
    reducer: {
@@ -29,6 +30,7 @@ export const store = configureStore({
       coupons: couponReducer,
       discount: discountReducer,
       trashBin: trashReducer,
+      modalLogin: modalLoginReducer,
    },
 })
 export type RootState = ReturnType<typeof store.getState>

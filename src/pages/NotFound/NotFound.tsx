@@ -1,14 +1,13 @@
-import classNames from 'classnames/bind'
-import styles from './NotFound.module.scss'
 import Loading from '~/components/Loading/Loading'
-const cx = classNames.bind(styles)
 
 function NotFound() {
    return (
-      <div>
-         <Loading />
-         <h1>Page NotFound</h1>
-      </div>
+      <>
+         <div className="d-flex justify-content-center flex-column w-100">
+            <Loading />
+         </div>
+         <h1 className="text-center w-100">Page Not Found </h1>
+      </>
    )
 }
 

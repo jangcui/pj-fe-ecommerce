@@ -24,24 +24,8 @@ function Color() {
    const colorState = useSelector((state: RootState) => state.colors)
    const navigate = useNavigate()
    const { colorId } = useParams()
-   const { isError, isLoading, isSuccess, itemCreate, item, itemUpdate } = colorState
+   const { isLoading, item } = colorState
 
-   useEffect(() => {
-      if (isSuccess && Object.keys(itemUpdate).length) {
-         toast.success('Color Updated Successfully!')
-         navigate('/admin/color-list')
-         dispatch(resetColorState())
-      }
-      if (isSuccess && Object.keys(itemCreate).length) {
-         toast.success('Color Added Successfully!')
-         dispatch(resetColorState())
-      }
-
-      if (isError) {
-         toast.error('Something went wrong')
-         dispatch(resetColorState())
-      }
-   }, [isError, isLoading, isSuccess, itemCreate, dispatch, itemUpdate, navigate])
    useEffect(() => {
       if (colorId !== undefined) {
          dispatch(getColor(colorId))
@@ -59,9 +43,12 @@ function Color() {
       onSubmit: (values) => {
          if (colorId !== undefined) {
             dispatch(updateAColor({ id: colorId, title: formik.values.title }))
+            dispatch(resetColorState())
+            formik.resetForm()
          } else {
             formik.resetForm()
             dispatch(createColor(values))
+            navigate('/admin/color-list')
          }
       },
    })

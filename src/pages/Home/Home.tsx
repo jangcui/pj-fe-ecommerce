@@ -1,104 +1,109 @@
 import classNames from 'classnames/bind'
 import Marquee from 'react-fast-marquee'
-import 'swiper/css'
 import styles from './Home.module.scss'
-import Image from '~/components/Image'
+import 'swiper/css/pagination'
+import 'swiper/css'
+
 import Category from './Category'
 import Banner from './Banner/Banner'
-import SpecialProducts from './SpecialProducts/SpecialProducts'
 import ChangeTitle from '~/components/ChangeTitle'
-import Collection from '~/components/Collection'
-import BlogComp from '~/components/BlogComp'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '~/store/store'
 import { useEffect } from 'react'
 import { getProducts } from '~/features/products/productsService'
+import { HiGift } from 'react-icons/hi'
+import { FaShippingFast } from 'react-icons/fa'
+import { ImHeadphones } from 'react-icons/im'
+import { TbDiscountCheckFilled } from 'react-icons/tb'
+import { BsFillCreditCard2BackFill } from 'react-icons/bs'
+import PopularProduct from './PopularProduct/PopularProduct'
+import OnSale from './BestSeller/OnSale'
+import BlogSlider from './BlogSlider/BlogSlider'
+import { getBlogs } from '~/features/blogs/blogService'
+import * as imagesHotDeal from '~/assets/imagesHotDeal'
+import HotDeal from './HotDeal/HotDeal'
 const cx = classNames.bind(styles)
 
-type Item = {
-   src?: string
-}
-
-const ITEM_MARQUEE: Item[] = [
+const serviceArr = [
    {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img6.png?v=1',
+      id: 1,
+      icon: <FaShippingFast className={cx('service-icon')} />,
+      title: 'Free Shipping',
+      subTitle: 'From all orders over $100',
    },
    {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img7.png?v=1',
+      id: 2,
+      icon: <HiGift className={cx('service-icon')} />,
+      title: 'Daily Surprise Offers',
+      subTitle: 'Save up to 25% off',
    },
    {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img8.png?v=1',
+      id: 3,
+      icon: <ImHeadphones className={cx('service-icon')} />,
+      title: 'Support 24/7',
+      subTitle: 'Shop with an expert',
    },
    {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img9.png?v=1',
+      id: 4,
+      icon: <TbDiscountCheckFilled className={cx('service-icon')} />,
+      title: 'Affordable Prices',
+      subTitle: 'Get Factory direct price',
    },
    {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img10.png?v=1',
-   },
-   {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img11.png?v=1',
-   },
-   {
-      src: 'https://fptshop.com.vn/Content/v4/images/ft-img12.png?v=1',
+      id: 5,
+      icon: <BsFillCreditCard2BackFill className={cx('service-icon')} />,
+      title: 'Secure Payments',
+      subTitle: '100% Protected Payments',
    },
 ]
 
 function Home() {
-   const dispatch = useDispatch<AppDispatch>()
    const { productList } = useSelector((state: RootState) => state.products)
+   const { blogs } = useSelector((state: RootState) => state.blogs)
 
-   useEffect(() => {
-      dispatch(getProducts({}))
-   }, [dispatch])
-   console.log(productList)
    return (
       <div className={cx('wrapper')}>
          <ChangeTitle title={'E-commerce'} />
-         <section className={cx('banner')}>
+         <section className={cx('popular')}>
             <Banner />
          </section>
-         <h1>Category</h1>
-         <section className={cx('category')}>
-            <Category />
-         </section>
-         <section className={cx('marquee')}>
-            <Marquee gradientWidth={10} gradientColor={[255, 255, 255]}>
-               {ITEM_MARQUEE.map((item: Item, index: number) => (
-                  <Image src={item.src} key={index} />
+         <section className={cx('service-block')}>
+            <Marquee gradientWidth={10} gradientColor={[255, 255, 255]} speed={10}>
+               {serviceArr?.map((item, index) => (
+                  <div className={cx('service-content')} key={index}>
+                     {item?.icon}
+                     <div className={cx('service-title')}>
+                        <p className="fs-3 fw-bolder">{item?.title}</p>
+                        <p className="fs-4  mb-0">{item?.subTitle}</p>
+                     </div>
+                  </div>
                ))}
             </Marquee>
          </section>
-         <h1>Featured Collection</h1>
-         <section className={cx('special')}>
-            {productList?.map((product, index) => {
-               if (product.tags === 'featured') {
-                  return <SpecialProducts data={product} key={index} />
-               }
-            })}
-         </section>
-         <h1>Special Products</h1>
-         <section className={cx('special')}>
-            {productList?.map((product, index) => {
-               if (product.tags === 'special') {
-                  return <SpecialProducts data={product} key={index} />
-               }
-            })}
-         </section>
-         <h1>Popular Products</h1>
+
          <section className={cx('popular')}>
-            {productList?.map((product, index) => {
-               if (product.tags === 'popular') {
-                  return <Collection data={product} key={index} />
-               }
-            })}
+            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">flash deal</h1>
+            <OnSale data={productList} />
          </section>
 
-         <h1>Blogs</h1>
-         {/* <section className={cx('blogs')}>
-               <BlogComp />
-               <BlogComp />
-            
-            </section> */}
+         <section className={cx('popular')}>
+            <HotDeal percent1={75} percent2={30} linkImg1={imagesHotDeal.imgHd3} linkImg2={imagesHotDeal.imgHd4} />
+         </section>
+         <section className={cx('popular', 'mb-1')}>
+            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold"> Popular Categories</h1>
+            <Category />
+         </section>
+         <div className={cx('popular')}>
+            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">products by tags</h1>
+            <PopularProduct data={productList} />
+         </div>
+         <section className={cx('popular')}>
+            <HotDeal percent1={50} percent2={29} linkImg1={imagesHotDeal.imgHd1} linkImg2={imagesHotDeal.imgHd2} />
+         </section>
+         <section className={cx('popular')}>
+            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">Recent Blogs</h1>
+            <BlogSlider data={blogs} />
+         </section>
       </div>
    )
 }

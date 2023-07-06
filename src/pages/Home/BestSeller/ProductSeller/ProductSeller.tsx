@@ -14,32 +14,30 @@ function ProductSeller({ data }: { data: ProductType }) {
 
    return (
       <div className={cx('wrapper')}>
-         <div className={cx('container')}>
-            <div className={cx('block-img')}>
+         <div className={cx('container', 'row')}>
+            <div className={cx('block-img', 'col-6')}>
                <div className={cx('badge')}>-{data.discountCode && data.discountCode.percentage}%</div>
                <div className={cx('main-img')}>
                   <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
                </div>
                <div className="d-flex gap-2">
                   <div className={cx('sub-img')}>
-                     {' '}
                      <Image className={cx('img')} src={imgList ? imgList[1] : ''} />
                   </div>
                   <div className={cx('sub-img')}>
-                     {' '}
                      <Image className={cx('img')} src={imgList ? imgList[2] : ''} />
                   </div>
                </div>
             </div>
-            <div className={cx('info')}>
+            <div className={cx('info', 'col-6')}>
                <span className={cx('brand')}>{data.brand}</span>
                <h3 className={cx('title')}>{data.title}</h3>
 
-               <div className={cx('price', 'mb-2')}>
+               <div className={cx('price', 'mb-3 d-flex gap-2')}>
                   {data?.discountCode ? (
                      <>
-                        <p className={cx('fs-3 mb-0')}> ${data?.price_after_discount.toFixed(2)}</p>
                         <s> ${data.price.toFixed(2)}</s>
+                        <p className={cx('fs-3 mb-0')}> ${data?.price_after_discount.toFixed(2)}</p>
                      </>
                   ) : (
                      <p className={cx('fs-3 mb-0')}> ${data.price.toFixed(2)}</p>

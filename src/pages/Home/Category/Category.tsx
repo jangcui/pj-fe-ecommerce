@@ -66,12 +66,12 @@ function Category() {
    return (
       <>
          {/* <h1 className="text-center text-uppercase fs-1 fw-bold">Categories </h1> */}
-         <div className={cx('wrapper')}>
+         <div className={cx('wrapper', 'row  row-cols-2 row-cols-sm-3  row-cols-lg-4')}>
             {CATEGORY_ITEMS.map((item, index) => (
-               <div className={cx('container')} key={index}>
+               <div className={cx('container', 'col')} key={index}>
                   <Button text className={cx('content')} onClick={() => handleRedirection(item.title)}>
                      <div className={cx('title')}>{item.title}</div>
-                     <span>{item.icon}</span>
+                     <div>{item.icon}</div>
                   </Button>
                </div>
             ))}

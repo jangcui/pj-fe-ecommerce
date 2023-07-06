@@ -16,7 +16,7 @@ function Footer() {
                <div className={cx('wrap-logo')}>
                   <Marquee gradientWidth={0} className={cx('marquee')} direction="right">
                      <Image src={images.logo2} className={cx('img')} />
-                     <h1>Digitic.</h1>
+                     <Image src={images.logo} className={cx('img')} />
                   </Marquee>
                </div>
                <div className={cx('wrap-icon')}>

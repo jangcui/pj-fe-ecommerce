@@ -64,7 +64,7 @@ function Home() {
    return (
       <div className={cx('wrapper')}>
          <ChangeTitle title={'E-commerce'} />
-         <section className={cx('popular')}>
+         <section className={cx('popular', 'mb-1')}>
             <Banner />
          </section>
          <section className={cx('service-block')}>
@@ -82,7 +82,7 @@ function Home() {
          </section>
 
          <section className={cx('popular')}>
-            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">flash deal</h1>
+            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">flash Sales</h1>
             <OnSale data={productList} />
          </section>
 

@@ -111,13 +111,13 @@ function Header() {
             </div>
             <div className={cx('content', 'row d-flex justify-content-center', isScroll && 'fixed')}>
                <div className={cx('content-main', 'row col-11 ')}>
-                  <div className="col-2 d-sm-flex d-md-none justify-content-start">
+                  <div className="col-4 d-sm-flex d-md-none justify-content-start d-flex align-items-center">
                      <Button text onClick={() => setOpenNavBar(true)}>
                         <AiOutlineBars className={cx('icon')} />
                      </Button>
                   </div>
 
-                  <div className={cx('trademark', 'row col-4 col-md-2 ')}>
+                  <div className={cx('trademark', 'row col-4 col-md-3 col-lg-1 col-xl-2')}>
                      <Button
                         text
                         to={config.routes.home}
@@ -127,7 +127,7 @@ function Header() {
                      </Button>
                   </div>
 
-                  <div className={cx('input-form', 'd-none d-md-flex col-7 col-sm-8 col-md-6 ')}>
+                  <div className={cx('input-form', 'd-none d-md-flex col-md-6 ')}>
                      <Typeahead
                         id="pagination-example"
                         options={productOpt}
@@ -148,7 +148,7 @@ function Header() {
                      <RxMagnifyingGlass className={cx('icon-search')} />
                   </div>
 
-                  <div className="col-3 col-lg-4">
+                  <div className="col-4 col-md-3  col-lg-4">
                      <div className={cx('option-wrapper', 'w-100')}>
                         <>
                            {user && (
@@ -185,7 +185,7 @@ function Header() {
                                        </p>
                                        <IoMdArrowDropdown className={cx('icon-drop', !isDropDown && 'rotate')} />
                                     </Button>
-                                    <div className={cx('drop-down', 'd-none d-md-block')}>
+                                    <div className={cx('drop-down')}>
                                        <Button className={cx('drop-element')} text onClick={() => setOpenModal(true)}>
                                           Log Out
                                           <BiLogOut className={cx('icon')} />

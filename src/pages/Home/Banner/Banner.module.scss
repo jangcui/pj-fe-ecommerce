@@ -16,7 +16,7 @@
       .wrap-img {
          position: relative;
          width: 100%;
-         height: 420px;
+         // height: 420px;
 
          .img {
             height: 100%;
@@ -160,7 +160,7 @@
    }
 
    @include media-breakpoint-down(md) {
-      gap: 20px;
+      gap: 10px;
       .banner {
          padding-inline: 0;
          overflow-y: unset;
@@ -173,6 +173,64 @@
 
             .img-banner {
                position: unset;
+            }
+         }
+      }
+   }
+
+   @include media-breakpoint-down(sm) {
+      .slider {
+         .slide-show {
+            top: 12%;
+            max-width: 200px;
+            left: 5%;
+
+            .slide-text {
+               margin-bottom: 0;
+               font-size: 13px;
+               margin-bottom: 6px;
+               letter-spacing: 0;
+            }
+            .slide-title {
+               margin-bottom: 10px;
+               font-size: 28px;
+            }
+            .slide-desc {
+               font-size: 13px;
+               margin-bottom: 14px;
+            }
+            .slide-btn {
+               padding: 8px 12px;
+               span {
+                  font-size: 14px;
+                  opacity: 0.85;
+               }
+               &:hover {
+                  opacity: 1;
+               }
+            }
+         }
+      }
+      .banner {
+         .element {
+            .banner-show {
+               left: 5%;
+               top: 30%;
+
+               .banner-text {
+                  font-size: 11px;
+                  letter-spacing: 0;
+                  margin-bottom: 4px;
+               }
+               .banner-title {
+                  margin-bottom: 10px;
+                  font-size: 16px;
+                  letter-spacing: 0.4;
+                  line-height: 1;
+               }
+            }
+            .banner-desc {
+               display: none;
             }
          }
       }

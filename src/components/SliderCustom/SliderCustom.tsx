@@ -55,6 +55,17 @@ function SliderCustom(props: SliderCustomProps) {
          })
       }
    }, [])
+   const breakpoints = {
+      576: {
+         slidesPerView: numberElInView - 1 - 1,
+      },
+      768: {
+         slidesPerView: numberElInView - 1,
+      },
+      1200: {
+         slidesPerView: numberElInView,
+      },
+   }
    const styles: SwiperStyles = {
       '--swiper-pagination-color': '#131921',
       '--swiper-pagination-bullet-inactive-color': '#d6d6d6',
@@ -65,7 +76,6 @@ function SliderCustom(props: SliderCustomProps) {
    return (
       <>
          <Swiper
-            slidesPerView={numberElInView}
             ref={swiperRef}
             centeredSlides={false}
             slidesPerGroupSkip={1}
@@ -78,6 +88,7 @@ function SliderCustom(props: SliderCustomProps) {
             navigation={true}
             modules={[Keyboard, Scrollbar, Navigation, Pagination]}
             className={cx('container')}
+            breakpoints={breakpoints}
          >
             <Button text className={cx('btn-prev', 'btn', isBegin && 'disable')} onClick={goPrev}>
                <GrPrevious className={cx('icon')} />

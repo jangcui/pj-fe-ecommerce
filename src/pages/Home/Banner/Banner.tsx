@@ -99,7 +99,7 @@ function Banner() {
          <div className={cx('slider', 'col-12 col-md-8 col-xl-7 ')}>
             <Swiper
                modules={[Autoplay, Navigation, Pagination, Scrollbar, A11y]}
-               autoplay={{ delay: 3000, pauseOnMouseEnter: true, disableOnInteraction: false }}
+               autoplay={{ delay: 30000, pauseOnMouseEnter: true, disableOnInteraction: false }}
                loop
                slidesPerView={1}
                navigation

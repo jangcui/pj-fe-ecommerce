@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import classNames from 'classnames/bind'
 import React, { useEffect, useState } from 'react'
 import {
-   AiOutlineBell,
    AiOutlineBgColors,
    AiOutlineDashboard,
    AiOutlineInteraction,
@@ -13,7 +12,6 @@ import {
 } from 'react-icons/ai'
 import { BiCategory, BiCategoryAlt, BiColorFill, BiLogOutCircle } from 'react-icons/bi'
 import { FaBlog, FaBlogger, FaClipboardList, FaListAlt, FaTrashAlt } from 'react-icons/fa'
-import { GrActions } from 'react-icons/gr'
 import { toast } from 'react-toastify'
 import { FiUsers } from 'react-icons/fi'
 import { RiCoupon2Line, RiCoupon3Line, RiCoupon4Fill, RiProductHuntLine } from 'react-icons/ri'
@@ -23,7 +21,6 @@ import { TbBrandShopee } from 'react-icons/tb'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 const { Header, Sider, Content } = Layout
 
-import Image from '~/components/Image/Image'
 import Button from '~/components/Button'
 import styles from './Admin.module.scss'
 import { Blog, BlogList } from './admin-pages/Blogs'
@@ -69,14 +66,14 @@ const Admin: React.FC = () => {
       dispatch(logOutAdmin())
       window.location.reload()
    }
-
+   console.log(admin)
    return (
       <>
          <ChangeTitle title={'Admin'} />
          <Layout className={cx('wrapper')}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                <div className={cx('logo')}>
-                  <h2>Dev Conner</h2>{' '}
+                  <h2>NO CAP</h2>{' '}
                   <ModalCustom
                      title={'Log Out'}
                      open={openModal}
@@ -160,7 +157,7 @@ const Admin: React.FC = () => {
                         label: 'Orders',
                      },
                      {
-                        key: 'blog',
+                        key: 'blogs',
                         icon: <FaBlogger className={cx('icon')} />,
                         label: 'Blogs',
                         children: [
@@ -275,30 +272,18 @@ const Admin: React.FC = () => {
                         <AiOutlineMenuFold className={cx('icon')} />
                      )}
                   </Button>
-                  <div className={cx('admin')}>
-                     <span className={cx('count')}>4</span>
-                     <AiOutlineBell className={cx('icon')} />
-                     <Button text className={cx('btn-dop')}>
-                        <Image
-                           className={cx('img')}
-                           src={
-                              'https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/336386449_1196902617672774_7617690085192071281_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=PQy6UljUSWwAX92zLP0&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfAteS8YPjUvwMC4hOGOrR9E2-5kR8eECftuKc3XB5MRiA&oe=6443BD5E'
-                           }
-                        />
-                        <div className={cx('option')}>
-                           <span></span>
-                           <span></span>
-                           <span></span>
-                        </div>
-                     </Button>
-                     <div className={cx('wrap-name')}>
-                        <span className={cx('name')}>Phan Huy Tung</span>
-                        <span className={cx('email')}>majdjtu@gmail.com</span>
-                     </div>
+                  <h2 className="text-center w-100 fs-1  mb-0">Well Come Back!!</h2>
+                  <div className="row col-3">
+                     <h3 className="col-12 fs-3 fw-bold mb-0 lh-sm">
+                        {admin && `${admin.fist_name} ${admin.last_name}`}
+                     </h3>
+                     <a className="fs-3 lh-sm" href="mailto:tungphan12h@gmail.com">
+                        {admin && admin.email}
+                     </a>
                   </div>
                </Header>
                <Content className={cx('content')}>
-                  <Routes>
+                  <Routes></Routes>
                      <Route path="" element={<Dashboard />} />
                      <Route path="customer" element={<Customers />} />
                      <Route path="orders" element={<OrderList />} />

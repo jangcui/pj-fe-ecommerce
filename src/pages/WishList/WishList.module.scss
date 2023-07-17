@@ -1,8 +1,4 @@
 .wrapper {
-   width: 100%;
-   display: flex;
-   flex-wrap: wrap;
-   gap: 4px;
    min-height: 1000px;
    padding: 40px;
 
@@ -15,14 +11,12 @@
    .container {
       position: relative;
       max-height: 450px;
-      width: calc(20% - 20px);
       padding: 4px;
       display: flex;
       background-color: var(--white);
       overflow: hidden;
       z-index: 2;
       flex-direction: column;
-      margin: 10px 4px;
       border-radius: 6px;
 
       .btn {
@@ -49,7 +43,7 @@
          }
       }
       .wrap-img {
-         height: 400px;
+         height: 300px;
          width: 100%;
          .img {
             height: 100%;

@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind'
-import styles from './Collection.module.scss'
+import styles from './CardProduct.module.scss'
 import Image from '~/components/Image/Image'
 import Button from '~/components/Button/Button'
 
@@ -16,7 +16,7 @@ import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
 
 const cx = classNames.bind(styles)
 
-function Collection({ data, isSort = false }: { data: ProductType; isSort?: boolean }) {
+function CardProduct({ data, isSort = false }: { data: ProductType; isSort?: boolean }) {
    const dispatch = useDispatch<AppDispatch>()
    const [isActive, setIsActive] = useState<boolean>(false)
    const { wishlist, user } = useSelector((state: RootState) => state.customer)
@@ -64,6 +64,10 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
                   </Button>
                </div>
                <h2 className={cx('title')}>{data.title}</h2>
+               {isSort && (
+                  <p className={cx('description')} dangerouslySetInnerHTML={{ __html: data?.description || '' }}></p>
+               )}
+
                <div className={cx('sold')}>Sold : {data.sold}</div>
                <div className={cx('price')}>
                   {data?.discountCode ? (
@@ -85,4 +89,4 @@ function Collection({ data, isSort = false }: { data: ProductType; isSort?: bool
    )
 }
 
-export default Collection
+export default CardProduct

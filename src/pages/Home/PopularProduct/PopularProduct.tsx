@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import classNames from 'classnames/bind'
 
-import Collection from '~/components/Collection'
 import { ProductType } from '~/types/productStage'
 import SliderCustom from '~/components/SliderCustom'
 import styles from './PopularProduct.module.scss'
+import CardProduct from '~/components/CardProduct'
 import Button from '~/components/Button'
 
 const cx = classNames.bind(styles)
@@ -51,7 +51,7 @@ function PopularProduct({ data }: { data: ProductType[] }) {
    return (
       <>
          <div className={cx('row mt-4')}>
-            <div className="col-2">
+            <div className="col-8 col-lg-2">
                <div className={cx('wrap-btn')}>
                   {activeBtn.map((act, index) => (
                      <Button
@@ -60,17 +60,17 @@ function PopularProduct({ data }: { data: ProductType[] }) {
                         className={cx('btn', act.isActive && 'active')}
                         onClick={() => handleButtonClick(act.id)}
                      >
-                        <p className="fs-3 fw-bold">{act.title}</p>
+                        <p className="fs-4 fs-md-3 fw-bold mb-0">{act.title}</p>
                      </Button>
                   ))}
                </div>
             </div>
-            <div className={cx('col-10')}>
+            <div className={cx('col-12 col-lg-10')}>
                <SliderCustom isBullet={true}>
                   {dataProduct?.map((product, index) => {
                      return (
                         <div className="pb-5 me-2" key={index}>
-                           <Collection data={product} />
+                           <CardProduct data={product} />
                         </div>
                      )
                   })}

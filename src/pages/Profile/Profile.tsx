@@ -13,6 +13,7 @@ import InputCustom from '~/components/InputCustom'
 import Button from '~/components/Button'
 import { updateProfile } from '~/features/customers/customerService'
 import { useNavigate } from 'react-router-dom'
+import { BsArrowRight } from 'react-icons/bs'
 const cx = classNames.bind(styles)
 
 const profileSchema = Yup.object().shape({
@@ -125,6 +126,15 @@ function Profile() {
                   </Button>
                )}
             </form>
+
+            <div className="row mt-5 justify-content-end">
+               <div className="col-8 col-md-4 text-end">
+                  <Button text className="btn btn-primary text-end" onClick={() => navigate('/admin')}>
+                     <span className="me-2 fs-4"> Go to Admin Panel </span>
+                     <BsArrowRight />
+                  </Button>{' '}
+               </div>
+            </div>
          </div>
       </>
    )

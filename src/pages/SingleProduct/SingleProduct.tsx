@@ -5,23 +5,23 @@ import classNames from 'classnames/bind'
 import ReactImageMagnify from 'react-image-magnify'
 import Marquee from 'react-fast-marquee'
 import { useNavigate, useParams } from 'react-router-dom'
-
 import { useDispatch, useSelector } from 'react-redux'
 
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
-import Button from '~/components/Button/Button'
+import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import { getAProduct, getProducts, rateProduct } from '~/features/products/productsService'
 import images from '~/assets/images'
 import { addToCart, addToWishList, getCarts, getUserWishList } from '~/features/customers/customerService'
 import { ItemType } from '~/types/itemStage'
 import { ProductType } from '~/types/productStage'
-import Collection from '~/components/Collection'
-import Loading from '~/components/Loading/Loading'
+import Loading from '~/components/Loading'
 import StarRatingCustom from '~/components/StarRatingCustom'
 import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
+import CardProduct from '~/components/CardProduct'
+import PopularProduct from '../Home/PopularProduct'
 
 const cx = classNames.bind(styles)
 
@@ -122,19 +122,20 @@ function SingleProduct() {
       <>
          <ChangeTitle title={`${product?.title}`} />
          <BreadCrumb title={`${product?.title}`} />
-         <div className={cx('wrapper')}>
-            <div className={cx('detail-container')}>
+         <div className={cx('wrapper', 'row mt-4')}>
+            <div className={cx('container', 'row col-12 col-lg-11')}>
                {isLoading ? (
                   <div className={cx('loading')}>
                      <Loading />
                   </div>
                ) : (
-                  <div className={cx('detail')}>
-                     <div className={cx('wrap-img')}>
-                        <div className={cx('img-zoom')}>
+                  <div className={cx('detail', 'row col-12 justify-content-center')}>
+                     <div className={cx('wrap-img', 'row col-12 col-lg-6')}>
+                        <div className={cx('img-zoom', 'w-100')}>
                            <div className={cx('img')}>
                               <ReactImageMagnify
                                  enlargedImagePosition="over"
+                                 style={{ cursor: 'zoom-in' }}
                                  {...{
                                     smallImage: {
                                        isFluidWidth: true,
@@ -149,9 +150,10 @@ function SingleProduct() {
                               />
                            </div>
                         </div>
-                        <div className={cx('grid')}>
-                           <div className={cx('img')}>
+                        <div className="d-flex justify-content-evenly row-100 gap-4">
+                           <div className={cx('img', 'col-6')}>
                               <ReactImageMagnify
+                                 style={{ cursor: 'zoom-in' }}
                                  enlargedImagePosition="over"
                                  {...{
                                     smallImage: {
@@ -167,8 +169,9 @@ function SingleProduct() {
                                  }}
                               />
                            </div>
-                           <div className={cx('img')}>
+                           <div className={cx('img', 'col-6')}>
                               <ReactImageMagnify
+                                 style={{ cursor: 'zoom-in' }}
                                  enlargedImagePosition="over"
                                  {...{
                                     smallImage: {
@@ -185,169 +188,173 @@ function SingleProduct() {
                            </div>
                         </div>
                      </div>
-                     <div className={cx('content')}>
-                        <h3 className={cx('title')}>{product?.title} </h3>
-                        <div className={cx('price')}>
-                           {product?.discountCode ? (
-                              <div className={cx('discount')}>
-                                 {' '}
-                                 <>
-                                    <s className="fw-bold"> ${product.price.toFixed(2)}</s>
-                                    <p className={cx('origin-price')}> ${product?.price_after_discount.toFixed(2)}</p>
-                                 </>
-                                 <span className={cx('badge')}>-{product?.discountCode.percentage}%</span>
-                              </div>
-                           ) : (
-                              <p className={cx('origin-price')}> ${product.price.toFixed(2)}</p>
-                           )}
-                        </div>
-                        <div className={cx('d-flex')}>
-                           <span className="me-3">({product?.ratings?.length}) reviews</span>
-                           <StarRatingCustom initStar={product.totalRating as number} readOnly={true} />{' '}
-                        </div>
-                        <>
-                           <div className={cx('field')}>
-                              <span className={cx('name')}>Brand:</span>
-                              <Button
-                                 text
-                                 className={cx('value')}
-                                 onClick={() => {
-                                    navigate(`/product?${`brand=${encodeURIComponent(product?.brand)}`}`)
-                                    dispatch(getProducts({ brand: product?.brand }))
-                                 }}
-                              >
-                                 {product?.brand}
-                              </Button>
-                           </div>
-                           <div className={cx('field')}>
-                              <span className={cx('name')}>Type:</span>
-                              <Button
-                                 className={cx('value')}
-                                 onClick={() => {
-                                    navigate(`/product?${`category=${encodeURIComponent(product?.category.trim())}`}`)
-                                    dispatch(getProducts({ category: product?.category }))
-                                 }}
-                              >
-                                 {product?.category}
-                              </Button>
-                           </div>
-                           <div className={cx('field')}>
-                              <span className={cx('name')}>Tags:</span>
-                              <Button
-                                 className={cx('value')}
-                                 onClick={() => {
-                                    navigate(`/product?${`tags=${encodeURIComponent(product?.tags)}`}`)
-                                    dispatch(getProducts({ tag: product?.tags }))
-                                 }}
-                              >
-                                 {product?.tags}
-                              </Button>
-                           </div>
-
-                           {!allReadyAdded && (
-                              <div className={cx('field')}>
-                                 <span className={cx('name')}>Color:</span>
-                                 <div className={cx('color')}>
-                                    {product?.color.map((color: ItemType | any, index) => (
-                                       <div
-                                          key={index}
-                                          className={cx('color-select', colorId === color?._id ? 'active' : '')}
-                                       >
-                                          <Button
-                                             text
-                                             className={cx('btn-color')}
-                                             onClick={() => setColorId(color?._id)}
-                                             style={{ backgroundColor: color?.title }}
-                                          />
-                                       </div>
-                                    ))}
+                     <div className="row col-12 col-lg-6">
+                        <div className={cx('content')}>
+                           <h3 className={cx('title')}>{product?.title} </h3>
+                           <div className={cx('price')}>
+                              {product?.discountCode ? (
+                                 <div className={cx('discount')}>
+                                    {' '}
+                                    <>
+                                       <s className="fw-bold"> ${product.price.toFixed(2)}</s>
+                                       <p className={cx('origin-price')}>
+                                          {' '}
+                                          ${product?.price_after_discount.toFixed(2)}
+                                       </p>
+                                    </>
+                                    <span className={cx('badge')}>-{product?.discountCode.percentage}%</span>
                                  </div>
+                              ) : (
+                                 <p className={cx('origin-price')}> ${product.price.toFixed(2)}</p>
+                              )}
+                           </div>
+                           <div className="d-flex">
+                              <span className="me-3">({product?.ratings?.length}) reviews</span>
+                              <StarRatingCustom initStar={product.totalRating as number} readOnly={true} />{' '}
+                           </div>
+                           <>
+                              <div className="d-flex align-items-center mb-4">
+                                 <span className="fs-2 fw-bold me-3">Brand:</span>
+                                 <Button
+                                    text
+                                    className={cx('btn-nav')}
+                                    onClick={() => {
+                                       navigate(`/product?${`brand=${encodeURIComponent(product?.brand)}`}`)
+                                       dispatch(getProducts({ brand: product?.brand }))
+                                    }}
+                                 >
+                                    {product?.brand}
+                                 </Button>
                               </div>
-                           )}
-                           <div className={cx('field')}>
-                              <div className={cx('option')}>
-                                 {!allReadyAdded && (
-                                    <div className={cx('wrap-input')}>
-                                       <span className={cx('name')}>Quantity:</span>
-                                       <Button
-                                          className={cx('input-btn')}
-                                          text
-                                          onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
-                                       >
-                                          <AiOutlineMinus className={cx('icon')} />
-                                       </Button>
-                                       <input
-                                          type="number"
-                                          value={quantity}
-                                          onChange={() => setQuantity}
-                                          min={0}
-                                          step={1}
-                                          max={1000}
-                                       />
-                                       <Button className={cx('input-btn')} text>
-                                          <AiOutlinePlus
-                                             className={cx('icon')}
-                                             onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
-                                          />
-                                       </Button>
+                              <div className="d-flex align-items-center mb-4">
+                                 <span className="fs-2 fw-bold me-3">Type:</span>
+                                 <Button
+                                    className={cx('btn-nav')}
+                                    onClick={() => {
+                                       navigate(
+                                          `/product?${`category=${encodeURIComponent(product?.category.trim())}`}`,
+                                       )
+                                       dispatch(getProducts({ category: product?.category }))
+                                    }}
+                                 >
+                                    {product?.category}
+                                 </Button>
+                              </div>
+                              <div className="d-flex align-items-center mb-4">
+                                 <span className="fs-2 fw-bold me-3">Tags:</span>
+                                 <Button
+                                    className={cx('btn-nav')}
+                                    onClick={() => {
+                                       navigate(`/product?${`tags=${encodeURIComponent(product?.tags)}`}`)
+                                       dispatch(getProducts({ tag: product?.tags }))
+                                    }}
+                                 >
+                                    {product?.tags}
+                                 </Button>
+                              </div>
+
+                              {!allReadyAdded && (
+                                 <div className="d-flex align-items-center flex-wrap mb-4">
+                                    <span className="fs-2 fw-bold me-3">Color:</span>
+                                    <div className="d-flex gap-1">
+                                       {product?.color.map((color: ItemType | any, index) => (
+                                          <div
+                                             key={index}
+                                             className={cx('color-select', colorId === color?._id ? 'active' : '')}
+                                          >
+                                             <Button
+                                                text
+                                                className={cx('btn-color')}
+                                                onClick={() => setColorId(color?._id)}
+                                                style={{ backgroundColor: color?.title }}
+                                             />
+                                          </div>
+                                       ))}
                                     </div>
-                                 )}
-                                 <div className={cx('wrap-btn')}>
-                                    {allReadyAdded ? (
-                                       <Button className={cx('btn')} primary to={'/cart'}>
-                                          Go To Cart
-                                       </Button>
-                                    ) : (
-                                       <Button
-                                          className={cx('btn')}
-                                          primary
-                                          onClick={!user ? () => dispatch(openModalLogin()) : handleAddToCart}
-                                          lazyLoad={isLoading}
-                                       >
-                                          ADD TO CART
-                                       </Button>
+                                 </div>
+                              )}
+                              <div className="d-flex align-items-center mb-4">
+                                 <div className={cx('option')}>
+                                    {!allReadyAdded && (
+                                       <div className={cx('wrap-input')}>
+                                          <span className="fs-2 fw-bold me-3">Quantity:</span>
+                                          <Button
+                                             className={cx('input-btn')}
+                                             text
+                                             onClick={() => quantity > 0 && setQuantity((prev) => prev - 1)}
+                                          >
+                                             <AiOutlineMinus className={cx('icon')} />
+                                          </Button>
+                                          <input
+                                             type="number"
+                                             value={quantity}
+                                             onChange={() => setQuantity}
+                                             min={0}
+                                             step={1}
+                                             max={1000}
+                                          />
+                                          <Button className={cx('input-btn')} text>
+                                             <AiOutlinePlus
+                                                className={cx('icon')}
+                                                onClick={() => quantity < 1000 && setQuantity((prev) => prev + 1)}
+                                             />
+                                          </Button>
+                                       </div>
                                     )}
-                                    <Button className={cx('btn')} secondary to={!user ? '/checkout' : ''}>
-                                       Buy it now{' '}
-                                    </Button>
+                                    <div className={cx('wrap-btn')}>
+                                       {allReadyAdded ? (
+                                          <Button className={cx('btn')} primary onClick={() => navigate('/cart')}>
+                                             Go To Cart
+                                          </Button>
+                                       ) : (
+                                          <Button
+                                             className={cx('btn')}
+                                             primary
+                                             onClick={!user ? () => dispatch(openModalLogin()) : handleAddToCart}
+                                             lazyLoad={isLoading}
+                                          >
+                                             ADD TO CART
+                                          </Button>
+                                       )}
+                                    </div>
                                  </div>
                               </div>
+                           </>
+                           <div className={cx('btn-wishlist')}>
+                              {!isLoading && (
+                                 <Button
+                                    onClick={handleWishlist}
+                                    className={cx('btn')}
+                                    text
+                                    leftIcon={
+                                       isWishlist ? (
+                                          <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
+                                       ) : (
+                                          <AiOutlineHeart
+                                             style={{ color: '#dd551b' }}
+                                             className={cx('icon', 'icon-active')}
+                                          />
+                                       )
+                                    }
+                                 >
+                                    Add to wishlist
+                                 </Button>
+                              )}
                            </div>
-                        </>
-                        <div className={cx('btn-wishlist')}>
-                           {!isLoading && (
-                              <Button
-                                 onClick={handleWishlist}
-                                 className={cx('btn')}
-                                 text
-                                 leftIcon={
-                                    isWishlist ? (
-                                       <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />
-                                    ) : (
-                                       <AiOutlineHeart
-                                          style={{ color: '#dd551b' }}
-                                          className={cx('icon', 'icon-active')}
-                                       />
-                                    )
-                                 }
-                              >
-                                 Add to wishlist
-                              </Button>
-                           )}
-                        </div>
 
-                        <div className={cx('field')}>
-                           <h2 className={cx('name')}>Shipping and returns:</h2>
-                           <i> Free shipping and returns available all orders </i>
+                           <div className="d-flex align-items-center mb-4">
+                              <h2 className="fs-2 fw-bold me-3">Shipping and returns:</h2>
+                              <i> Free shipping and returns available all orders </i>
+                           </div>
                         </div>
                      </div>
                   </div>
                )}
-               <div className={cx('description-container')}>
+               <div className={cx('description-container', 'w-100')}>
                   <h2>Description</h2>
                   <p className={cx('description')} dangerouslySetInnerHTML={{ __html: product?.description || '' }}></p>
                </div>
-               <div className={cx('review-container')}>
+               <div className={cx('review-container', 'w-100')}>
                   <h2>Review</h2>
                   <div className={cx('reviews')}>
                      <div className={cx('form-submit')}>
@@ -360,7 +367,7 @@ function SingleProduct() {
                            className={cx('textarea')}
                            placeholder="Enter review"
                         />
-                        <div className={cx('btn-submit')}>
+                        <div className={cx('btn-submit', 'd-flex justify-content-center justify-content-md-end')}>
                            <Button primary className={cx('btn')} lazyLoad={isLoading} onClick={handleRating}>
                               Submit review
                            </Button>
@@ -378,18 +385,18 @@ function SingleProduct() {
 
                <div className={cx('popular-container')}>
                   <h2>Our Products Popular</h2>
-                  <div className={cx('products')}>
+                  <div className="w-100 row">
                      <Marquee
-                        delay={4}
+                        delay={2}
                         pauseOnHover={true}
-                        gradientWidth={10}
+                        gradientWidth={5}
                         gradientColor={[255, 255, 255]}
                         className="w-100"
                      >
                         {productPop?.map((product, index) => {
                            return (
-                              <div key={index} className="w-50">
-                                 <Collection data={product} />
+                              <div key={index} className="w-50  d-flex">
+                                 <CardProduct data={product} />
                               </div>
                            )
                         })}

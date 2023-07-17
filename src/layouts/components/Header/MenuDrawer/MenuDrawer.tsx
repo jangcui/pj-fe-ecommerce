@@ -1,15 +1,14 @@
 import classNames from 'classnames/bind'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
-
-import styles from './MenuDrawer.module.scss'
-import Button from '~/components/Button/Button'
-
 import { useNavigate } from 'react-router-dom'
 import { RxMagnifyingGlass } from 'react-icons/rx'
 import { IoMdClose } from 'react-icons/io'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+
+import styles from './MenuDrawer.module.scss'
+import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/store/store'
 import config from '~/config/config'
 import { getProducts } from '~/features/products/productsService'
@@ -54,7 +53,7 @@ function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
    }
    return (
       <div className={cx('wrapper', isOpen && 'open')}>
-         <div className={cx('container', 'row d-flex justify-content-center  align-items-start flex-column')}>
+         <div className={cx('container', 'row d-flex justify-content-center align-items-start flex-column')}>
             <Button text className={cx('btn-close')} onClick={() => setIsOpen(false)}>
                <IoMdClose className={cx('icon')} />{' '}
             </Button>
@@ -111,7 +110,7 @@ function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
                            dispatch(getProducts({}))
                         }}
                      >
-                        our store
+                        Store
                      </Button>
                      <Button text className={cx('btn')} to={config.routes.blogs} onClick={() => setIsOpen(false)}>
                         blogs

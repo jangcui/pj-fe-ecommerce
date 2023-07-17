@@ -23,7 +23,7 @@ const slides = [
       image: imgDefault.imgMain1,
       caption: 'Slide 1',
       text: 'Supercharged for pros.',
-      title: 'Special Sell',
+      title: 'Special Sell.',
       description: {
          line1: 'From $999.00 or $41.62/mo.',
          line2: 'for 24 mo. Footnote*',
@@ -38,6 +38,28 @@ const slides = [
       description: {
          line1: 'From $999.00 or $41.62/mo.',
          line2: 'for 24 mo. Footnote*',
+      },
+   },
+   {
+      id: 3,
+      image: imgDefault.imgMain3,
+      caption: 'Slide 2',
+      text: 'Supercharged for pros.',
+      title: 'Global And Total.',
+      description: {
+         line1: 'Based Seo, Based Online.',
+         line2: 'The Ecommerce People.',
+      },
+   },
+   {
+      id: 4,
+      image: imgDefault.imgMain4,
+      caption: 'Slide 2',
+      text: 'Supercharged for pros.',
+      title: 'Got Cart?',
+      description: {
+         line1: 'Successful Ecommerce.',
+         line2: 'Work Hard, Purchase Harder.',
       },
    },
 ]
@@ -96,7 +118,7 @@ function Banner() {
    }
    return (
       <div className={cx('wrapper', 'row')}>
-         <div className={cx('slider', 'col-12 col-md-8 col-xl-7 ')}>
+         <div className={cx('slider', 'col-12 col-md-8 col-xl-7')}>
             <Swiper
                modules={[Autoplay, Navigation, Pagination, Scrollbar, A11y]}
                autoplay={{ delay: 30000, pauseOnMouseEnter: true, disableOnInteraction: false }}

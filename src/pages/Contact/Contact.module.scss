@@ -1,29 +1,22 @@
 .wrapper {
-   width: 90%;
    padding: 24px 0;
-
-   h3 {
-      font-size: 36px;
-      margin-bottom: 16px;
-   }
+   margin-bottom: 40px;
 
    .map {
       width: 100%;
       min-height: 450px;
    }
-
    .content {
-      display: flex;
-      width: 100%;
-      box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
       padding: 20px;
-      margin-top: 20px;
+      margin-top: 40px;
       border-radius: 4px;
 
       .form-submit {
-         width: 50%;
-         display: flex;
-         flex-direction: column;
+         margin-top: 20px;
+         background-color: var(--white);
+         border-radius: 6px;
+         padding: 14px;
+         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
 
          .field {
             margin: 12px 0;
@@ -33,6 +26,7 @@
                padding: 12px;
                border-radius: 4px;
                font-size: 20px;
+               background-color: var(--bg-color);
             }
             textarea {
                width: 100%;
@@ -40,6 +34,7 @@
                border-radius: 4px;
                font-size: 20px;
                resize: unset;
+               background-color: var(--bg-color);
                padding: 12px;
             }
          }
@@ -55,24 +50,20 @@
          }
       }
       .contact {
-         flex: 1;
          padding-left: 20px;
-         display: flex;
-         flex-direction: column;
          font-size: 18px;
          align-items: flex-start;
+         margin-top: 20px;
+         background-color: var(--white);
+         border-radius: 6px;
+         padding: 14px;
+         box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
 
-         ul {
-            margin-left: 20px;
-
-            li {
-               margin: 12px auto;
-            }
-         }
-
-         .btn {
-            font-size: 18px;
+         .link {
+            font-size: 16px;
             color: #545252bd;
+            width: 100%;
+            justify-content: flex-start;
 
             &:hover {
                text-decoration: underline;

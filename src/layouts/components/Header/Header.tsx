@@ -7,7 +7,7 @@ import { CgProfile } from 'react-icons/cg'
 import { IoMdArrowDropdown } from 'react-icons/io'
 import { RxMagnifyingGlass } from 'react-icons/rx'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { BiLogOut } from 'react-icons/bi'
 
 import ModalCustom from '~/components/ModalCustom'
@@ -17,12 +17,13 @@ import { logOutUser } from '~/features/customers/customerSlice'
 import { AppDispatch, RootState } from '~/store/store'
 import styles from './Header.module.scss'
 import Button from '~/components/Button'
-import MenuHeader from './MenuHeader'
-import { TiShoppingCart } from 'react-icons/ti'
 import MenuDrawer from './MenuDrawer'
 import { getProdCates } from '~/features/prodCategories/productCateService'
-import Image from '~/components/Image/Image'
+import Image from '~/components/Image'
 import images from '~/assets/images'
+import MenuHeader from './MenuHeader/MenuHeader'
+import MenuCart from './MenuCart'
+
 const cx = classNames.bind(styles)
 
 interface SearchProductType {
@@ -33,7 +34,7 @@ interface SearchProductType {
 
 function Header() {
    const dispatch = useDispatch<AppDispatch>()
-   const { cartList, user, totalPrice } = useSelector((state: RootState) => state?.customer)
+   const { user } = useSelector((state: RootState) => state?.customer)
    const { productList } = useSelector((state: RootState) => state?.products)
    const categories = useSelector((state: RootState) => state.prodCates.itemList)
 
@@ -104,24 +105,24 @@ function Header() {
             <ModalCustom title={'Log Out'} open={openModal} onOk={handleLogout} onCancel={() => setOpenModal(false)} />
             <MenuDrawer data={productOpt} categoryList={categoryList} isOpen={openNavBar} setIsOpen={setOpenNavBar} />
             <div className={cx('contact', 'row d-flex justify-content-center')}>
-               <div className="col-11 d-flex justify-content-center justify-content-md-between align-items-center">
+               <div className="col-10 col-lg-11  d-flex justify-content-center justify-content-md-between align-items-center">
                   <i className="d-none d-md-block fs-4 fs-sm-5">Free Ship Over 100$ And Free Return </i>
-                  <span className="fs-4 fs-sm-5">Hotline: +84 84 666 9107</span>
+                  <span className="fs-3 fs-sm-4">Hotline: +84 84 666 9107</span>
                </div>
             </div>
             <div className={cx('content', 'row d-flex justify-content-center', isScroll && 'fixed')}>
-               <div className={cx('content-main', 'row col-11 ')}>
+               <div className={cx('content-main', 'row col-10 col-lg-11')}>
                   <div className="col-4 d-sm-flex d-md-none justify-content-start d-flex align-items-center">
                      <Button text onClick={() => setOpenNavBar(true)}>
                         <AiOutlineBars className={cx('icon')} />
                      </Button>
                   </div>
 
-                  <div className={cx('trademark', 'row col-4 col-md-3 col-lg-1 col-xl-2')}>
+                  <div className={cx('trademark', 'row col-4 col-md-3 col-lg-1 col-xl-2 p-0')}>
                      <Button
                         text
                         to={config.routes.home}
-                        className="justify-content-center justify-content-md-start w-100"
+                        className="justify-content-center justify-content-md-start w-100 p-0"
                      >
                         <Image src={images.logo} className={cx('img')} />
                      </Button>
@@ -151,16 +152,14 @@ function Header() {
                   <div className="col-4 col-md-3  col-lg-4">
                      <div className={cx('option-wrapper', 'w-100')}>
                         <>
-                           {user && (
-                              <Button
-                                 text
-                                 className={cx('option')}
-                                 leftIcon={<AiOutlineHeart className={cx('icon')} />}
-                                 to={config.routes.wishlist}
-                              >
-                                 <p className="mb-0">Favorite Wishlist </p>
-                              </Button>
-                           )}
+                           <Button
+                              text
+                              className={cx('option')}
+                              leftIcon={<AiOutlineHeart className={cx('icon')} />}
+                              to={config.routes.wishlist}
+                           >
+                              <p className="mb-0">Favorite Wishlist </p>
+                           </Button>
                            {!user ? (
                               <Button
                                  className={cx('option', 'w-100 d-flex justify-content-center')}
@@ -190,21 +189,19 @@ function Header() {
                                           Log Out
                                           <BiLogOut className={cx('icon')} />
                                        </Button>
-                                       <Button text className={cx('drop-element')} to={config.routes.profile}>
+                                       <Button
+                                          text
+                                          className={cx('drop-element')}
+                                          onClick={() => setIsDropDown(false)}
+                                          to={config.routes.profile}
+                                       >
                                           Go to profile
                                           <CgProfile className={cx('icon')} />
                                        </Button>{' '}
                                     </div>
                                  </div>
-
                                  <div className={cx('option')}>
-                                    <Link to={config.routes.cart}>
-                                       <TiShoppingCart className={cx('icon-cart')} />
-                                    </Link>
-                                    <div className={cx('option-content')}>
-                                       <span className={cx('quantity')}>{cartList?.length ? cartList?.length : 0}</span>
-                                       <span className={cx('total')}>${totalPrice ? totalPrice : 0}</span>
-                                    </div>
+                                    <MenuCart />
                                  </div>
                               </>
                            )}

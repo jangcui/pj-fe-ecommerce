@@ -1,62 +1,89 @@
 .wrapper {
-   display: flex;
-   align-items: center;
-   flex-direction: column;
    background-color: var(--bg-header);
-   color: #ccc;
-   width: 100%;
+   color: var(--text-gray);
 
+   .news-letter {
+      margin-top: 20px;
+      padding: 70px 0px;
+      border-bottom: 1px solid var(--border-color-gray);
+      .text {
+         color: var(--white);
+
+         h4 {
+            font-size: 25px;
+         }
+         p {
+            font-size: 16px;
+         }
+      }
+      .input {
+         padding: 17px 20px;
+         border-radius: 4px;
+         border: none;
+      }
+
+      .btn {
+         color: var(--white);
+         background-color: var(--bg-header);
+         padding-inline: 10px;
+
+         &:hover {
+            transition: all 0.25s;
+            color: var(--bg-header);
+            background-color: var(--orange-color);
+         }
+      }
+   }
    .container {
-      width: 90%;
-      padding: 24px 0;
-      display: flex;
+      padding: 40px 0;
 
       .logo {
-         color: var(--orange-color);
          margin-top: 12px;
-         width: 200px;
          overflow: hidden;
          transition: all 0.3s;
+         padding-inline: 10px;
+         overflow: hidden;
+         color: var(--white);
 
-         .wrap-icon {
-            display: flex;
-            margin-top: 16px;
-            justify-content: space-evenly;
+         .link {
+            color: var(--white);
+            width: 100%;
+            &:hover {
+               text-decoration: underline;
+            }
          }
+
          .wrap-logo {
-            display: flex;
-            align-items: flex-end;
             border-bottom: 1px solid var(--border-color-gray);
-            width: 400px;
+            padding-inline: 10px;
+            overflow: hidden;
 
             .marquee {
-               width: 100%;
+               display: flex;
+               width: 600px;
             }
             .img {
-               width: 66px;
-               height: 66px;
+               width: 70px;
+               height: 70px;
             }
          }
       }
       .information {
-         display: flex;
-         flex: 1;
-         justify-content: space-around;
-
+         margin: 20px 0;
          .content {
-            display: flex;
-            flex-direction: column;
-
             h3 {
+               font-size: 18px;
+               text-align: center;
                color: var(--white);
             }
 
-            span {
+            p {
                cursor: pointer;
-               text-align: left;
-               font-size: 14px;
+               text-align: center;
+               font-size: 16px;
                margin-top: 4px;
-               color: #ccc;
+               margin-bottom: 0;
+               color: var(--border-color-gray);
 
                &:hover {
                   text-decoration: underline;
@@ -66,8 +93,7 @@
       }
    }
    .copyright {
-      width: 90%;
-      display: flex;
-      justify-content: flex-end;
+      border-top: 1px solid var(--border-color-gray);
+      width: 100%;
    }
 }

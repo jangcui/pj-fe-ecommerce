@@ -37,30 +37,36 @@ function ForgotPwd() {
       <>
          <ChangeTitle title={'Forgot Password'} />
          <BreadCrumb title={'Forgot Password'} />
-         <div className={cx('wrapper')}>
-            <form className={cx('container')} onSubmit={formik.handleSubmit}>
-               <h3 className={cx('title')}>Forgot Password</h3>
-               <span className={cx('instruction')}>We will send your email to reset password </span>
-               <InputCustom
-                  value={formik.values.email}
-                  onChange={formik.handleChange('email')}
-                  onBlur={formik.handleBlur('email')}
-                  className={cx('input')}
-                  type={'text'}
-                  placeholder={'Email'}
-               />
-               {formik.touched.email && formik.errors.email ? (
-                  <span className={cx('error')}>{formik.errors.email}</span>
-               ) : null}
-               <div className={cx('rs-pw-btn')}>
-                  <Button primary className={cx('btn')} type={'submit'}>
-                     Submit
-                  </Button>
-                  <Button text type={'button'} className={cx('btn')} to={config.routes.login}>
-                     Cancel
-                  </Button>
-               </div>
-            </form>
+         <div className={cx('wrapper', 'row w-100 mt-4')}>
+            <div className="col-10 col-md-8 col-lg-6 col-xl-4">
+               <form className={cx('container')} onSubmit={formik.handleSubmit}>
+                  <h3 className="fs-2 fw-bold text-center mb-4">Forgot Password</h3>
+                  <p className={cx('instruction', 'mb-4')}>We will send your email to reset password </p>
+                  <div className="col-12 mb-4">
+                     <p className="mb-0 fs-4 text-secondary">Enter Your Email Address:</p>
+                     <InputCustom
+                        value={formik.values.email}
+                        onChange={formik.handleChange('email')}
+                        onBlur={formik.handleBlur('email')}
+                        className={cx('input')}
+                        type={'text'}
+                        placeholder={'Enter Email Registered'}
+                     />
+                     {formik.touched.email && formik.errors.email ? (
+                        <span className={cx('error')}>{formik.errors.email}</span>
+                     ) : null}
+                  </div>
+
+                  <div className="text-center mt-4">
+                     <Button primary className={cx('btn')} type={'submit'}>
+                        Submit
+                     </Button>
+                     <Button text type={'button'} className={cx('btn')} to={config.routes.login}>
+                        Cancel
+                     </Button>
+                  </div>
+               </form>
+            </div>
          </div>
       </>
    )

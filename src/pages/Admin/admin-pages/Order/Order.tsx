@@ -63,7 +63,7 @@ function Order() {
          dispatch(getAOrder(orderId))
       }
    }, [dispatch, orderId])
-
+   console.log(order)
    data1.push({
       name: (order && order?.user.fist_name + ' ' + order?.user.last_name) || '',
       product: (
@@ -88,7 +88,7 @@ function Order() {
          <>
             {order?.orderItems.map((item, index) => (
                <ul key={index} className="list-unstyled">
-                  <li style={{ fontWeight: '600' }}>{item.productId.price.toFixed(2)}</li>
+                  <li style={{ fontWeight: '600' }}>{item.productId.price}</li>
                </ul>
             ))}
          </>

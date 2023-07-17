@@ -8,7 +8,11 @@
       margin-right: 4px;
       color: var(--slug-color);
    }
-
+   .color {
+      width: 16px;
+      height: 16px;
+      border-radius: 100%;
+   }
    .form {
       display: flex;
       flex-direction: column;

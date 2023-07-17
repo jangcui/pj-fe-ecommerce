@@ -3,7 +3,6 @@
    display: flex;
    flex-direction: column;
    align-items: center;
-   margin-top: 20px;
 
    h2 {
       font-size: 24px;
@@ -24,27 +23,21 @@
    img {
       object-fit: cover !important;
    }
-   .detail-container {
-      width: 90%;
+   .container {
       display: flex;
       flex-direction: column;
       align-items: center;
 
       .detail {
-         display: flex;
          padding: 16px;
-         width: 100%;
          box-shadow: 0 1px 4px 0 #c0c0c0, 0 2px 6px 2px rgba(101, 105, 108, 0.15);
          background-color: var(--white);
          border-radius: 6px;
          overflow: hidden;
+         gap: 20px;
 
          .wrap-img {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             padding: 12px;
-            gap: 20px;
             align-items: center;
 
             .img {
@@ -54,24 +47,14 @@
                padding: 8px;
                border-radius: 4px;
                background-color: var(--bg-color);
-               cursor: zoom-in;
             }
             .img-zoom {
                margin-bottom: 20px;
                border-radius: 4px;
-            }
-            .grid {
-               display: flex;
-               justify-content: space-evenly;
-               gap: 10px;
-
-               .img {
-                  flex: 1;
-               }
+               padding-inline: 0;
             }
          }
          .content {
-            width: 50%;
             padding: 0 16px;
             display: flex;
             flex-direction: column;
@@ -120,98 +103,88 @@
                }
             }
 
-            .field {
+            .btn-nav {
+               padding: 4px 10px;
+               color: var(--bg-header);
+               font-size: 20px;
+               font-weight: 600;
+               text-transform: capitalize;
+
+               &:hover {
+                  background-color: var(--text-gray);
+                  color: var(--text-color);
+               }
+            }
+
+            .color-select {
+               margin: 6px;
                display: flex;
-               flex-wrap: wrap;
+               align-items: flex-end;
+               border: 1px solid transparent;
+               padding: 3px;
+
+               .btn-color {
+                  display: flex;
+                  width: 30px;
+                  align-items: center;
+                  justify-content: center;
+                  height: 30px;
+                  border-radius: 100%;
+               }
+            }
+            .active {
+               border-radius: 100%;
+               align-items: flex-start;
+               border-color: var(--bg-header);
+            }
+            .option {
+               flex: 1;
+               padding-bottom: 10px;
+               width: 100%;
+               display: flex;
+               justify-content: space-between;
                align-items: center;
-               margin-bottom: 12px;
+               border-bottom: 1px solid rgba(60, 64, 67, 0.231);
 
-               .name {
-                  font-weight: 600;
-                  font-size: 20px;
-                  margin-right: 10px;
-               }
-               .value {
-                  padding: 4px 10px;
-                  color: var(--bg-header);
-                  font-size: 20px;
-                  font-weight: 600;
-                  text-transform: capitalize;
-
-                  &:hover {
-                     background-color: var(--text-gray);
-                     color: var(--white);
-                  }
-               }
-
-               .color {
-                  width: 100%;
-                  display: flex;
-
-                  .color-select {
-                     margin: 6px;
-                     background-color: var(--bg-color);
-
-                     .btn-color {
-                        cursor: pointer;
-                        display: flex;
-                        width: 30px;
-                        align-items: center;
-                        justify-content: center;
-                        height: 30px;
-                        border-radius: 100%;
-                     }
-                  }
-                  .active {
-                     border-radius: 100%;
-                     padding: 4px;
-                     border: 1px solid #000;
-                  }
-               }
-               .option {
-                  flex: 1;
-                  display: flex;
+               span {
                   padding: 10px 0;
+               }
+               .wrap-input {
+                  display: flex;
+                  align-items: center;
 
-                  .wrap-input {
-                     display: flex;
-                     align-items: center;
-                     margin: 0 20px;
-
-                     .input-btn {
-                        width: 60px;
-                        height: 40px;
-                        display: contents;
-                        margin-right: 12px;
-                        padding: 12px;
-                     }
-                     input {
-                        width: 30px;
-                        height: 30px;
-                        text-align: center;
-                        margin: 0 8px;
-                        border-radius: 4px;
-                        font-size: 16px;
-                        border: 1px solid var(--text-gray);
-                     }
-                     input[type='number']::-webkit-inner-spin-button,
-                     input[type='number']::-webkit-outer-spin-button {
-                        -webkit-appearance: none;
-                        margin: 0;
-                        display: none;
-                     }
+                  .input-btn {
+                     width: 60px;
+                     height: 40px;
+                     display: contents;
+                     margin-right: 12px;
+                     padding: 12px;
                   }
-                  .wrap-btn {
-                     display: flex;
-                     gap: 12px;
+                  input {
+                     width: 30px;
+                     height: 30px;
+                     text-align: center;
+                     margin: 0 8px;
+                     border-radius: 4px;
+                     font-size: 16px;
+                     border: 1px solid var(--text-gray);
+                  }
+                  input[type='number']::-webkit-inner-spin-button,
+                  input[type='number']::-webkit-outer-spin-button {
+                     -webkit-appearance: none;
+                     margin: 0;
+                     display: none;
+                  }
+               }
+               .wrap-btn {
+                  display: flex;
+                  gap: 12px;
 
-                     .btn {
-                        display: flex;
-                        padding: 0 12px;
-                        margin-right: 12px;
-                        border-radius: 4px;
-                        color: var(--white);
-                     }
+                  .btn {
+                     display: flex;
+                     padding: 0 12px;
+                     margin-right: 12px;
+                     border-radius: 4px;
                   }
                }
             }
@@ -225,22 +198,10 @@
                   }
                }
             }
-            .option {
-               width: 100%;
-               display: flex;
-               justify-content: space-between;
-               align-items: center;
-               border-bottom: 1px solid rgba(60, 64, 67, 0.231);
-
-               span {
-                  padding: 10px 0;
-               }
-            }
          }
       }
    }
    .description-container {
-      width: 100%;
       margin: 30px 0;
 
       .description {
@@ -248,11 +209,11 @@
          border-radius: 4px;
          box-shadow: 0 1px 2px 0 var(--text-gray), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
          font-size: 14px;
+         background-color: var(--white);
          color: var(--bg-header);
       }
    }
    .review-container {
-      width: 100%;
       margin-bottom: 30px;
 
       .reviews {
@@ -298,8 +259,6 @@
             }
 
             .btn-submit {
-               display: flex;
-               justify-content: flex-end;
                border-bottom: 0.5px solid var(--border-color-gray);
                padding: 20px 0;
 
@@ -361,12 +320,5 @@
    .popular-container {
       width: 100%;
       margin-bottom: 50px;
-
-      .products {
-         width: 100%;
-         display: flex;
-         flex-wrap: wrap;
-         gap: 10px;
-      }
    }
 }

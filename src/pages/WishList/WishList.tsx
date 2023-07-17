@@ -58,7 +58,12 @@ function WishList() {
       <>
          <ChangeTitle title={'WishList'} />
          <BreadCrumb title={'WishList'} />
-         <div className={cx('wrapper')}>
+         <div
+            className={cx(
+               'wrapper',
+               'w-100 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4',
+            )}
+         >
             {isLoading ? (
                <div className={cx('loading')}>
                   {' '}
@@ -76,39 +81,41 @@ function WishList() {
                      const imgList = product.images?.map((img: ImgType) => img.url)
 
                      return (
-                        <div className={cx('container')} key={index}>
-                           <>
-                              <Button
-                                 text
-                                 onClick={() => {
-                                    value.index = index
-                                    value.id = product._id
-                                    setValue({ ...value })
-                                    setOpen(true)
-                                 }}
-                              >
-                                 <AiOutlineClose className={cx('icon')} />
-                              </Button>
+                        <div key={index} className="col">
+                           <div className={cx('container')}>
+                              <>
+                                 <Button
+                                    text
+                                    onClick={() => {
+                                       value.index = index
+                                       value.id = product._id
+                                       setValue({ ...value })
+                                       setOpen(true)
+                                    }}
+                                 >
+                                    <AiOutlineClose className={cx('icon')} />
+                                 </Button>
 
-                              <Button
-                                 text
-                                 className={cx('btn')}
-                                 onClick={() => {
-                                    navigate(`/product/${product?.slug}`)
-                                 }}
-                              ></Button>
-                              <div className={cx('wrap-img')}>
-                                 <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
-                              </div>
-                              <div className={cx('content')}>
-                                 <h3 className={cx('title')}>{product.title}</h3>
-                                 {product?.discountCode ? (
-                                    <p className={cx('price')}>${product?.price_after_discount.toFixed(2)}</p>
-                                 ) : (
-                                    <p className={cx('price')}> ${product.price.toFixed(2)}</p>
-                                 )}
-                              </div>
-                           </>{' '}
+                                 <Button
+                                    text
+                                    className={cx('btn')}
+                                    onClick={() => {
+                                       navigate(`/product/${product?.slug}`)
+                                    }}
+                                 ></Button>
+                                 <div className={cx('wrap-img')}>
+                                    <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
+                                 </div>
+                                 <div className={cx('content')}>
+                                    <h3 className={cx('title')}>{product.title}</h3>
+                                    {product?.discountCode ? (
+                                       <p className={cx('price')}>${product?.price_after_discount.toFixed(2)}</p>
+                                    ) : (
+                                       <p className={cx('price')}> ${product.price.toFixed(2)}</p>
+                                    )}
+                                 </div>
+                              </>{' '}
+                           </div>
                         </div>
                      )
                   })}

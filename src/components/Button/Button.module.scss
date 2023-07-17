@@ -13,6 +13,10 @@
       pointer-events: none;
       opacity: 0.5;
    }
+
+   &:active {
+      opacity: 0.8;
+   }
 }
 .primary {
    background-color: var(--bg-header);

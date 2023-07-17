@@ -17,10 +17,12 @@ function ModalLogin() {
       <>
          <div className={cx('wrapper', isOpen ? 'open' : 'close', 'row')}>
             <div className={cx('overlay')}></div>
-            <div className={cx('container')}>
-               <Button text className={cx('btn-close')} onClick={() => dispatch(closeModalLogin())}>
+            <Button text className={cx('btn-close')} onClick={() => dispatch(closeModalLogin())}>
+               <div className={cx('btn')}>
                   <AiOutlineClose className={cx('icon')} />
-               </Button>
+               </div>
+            </Button>
+            <div className={cx('container')}>
                <LoginComp />
             </div>
          </div>

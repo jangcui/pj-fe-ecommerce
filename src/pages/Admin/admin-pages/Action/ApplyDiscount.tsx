@@ -43,7 +43,7 @@ function ApplyDiscountCode() {
       }))
       setProductOpt(data)
    }, [productList])
-
+   console.log(productName)
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
@@ -58,7 +58,7 @@ function ApplyDiscountCode() {
    })
    const handleValues = (value: any) => {
       if (value.length > 0) {
-         setProductName(value[0].name)
+         setProductName(value[0].product)
       }
    }
    return (

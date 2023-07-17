@@ -54,7 +54,7 @@
          }
          .navigation {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             margin-bottom: 30px;
             padding: 16px 12px;
@@ -71,13 +71,6 @@
                &:hover {
                   text-decoration: underline;
                }
-            }
-
-            .wrap-icon {
-               display: flex;
-               width: 150px;
-               justify-content: space-between;
-               align-items: center;
             }
          }
          .form-comment {

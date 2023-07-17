@@ -38,40 +38,47 @@ function LoginAdmin() {
          navigate('')
       }
    }, [navigate, isSuccess, isAdmin, admin])
+   console.log(message)
    return (
-      <div className={cx('wrapper')}>
-         <form className={cx('container')} onSubmit={formik.handleSubmit}>
-            <h3 className={cx('title')}> Login Admin</h3>
-            <div className={cx('error')}>
-               {message.message === 'Rejected' ? 'Something went wrong, try again!' : ''}
-            </div>
-            <InputCustom
-               value={formik.values.email}
-               onChange={formik.handleChange('email')}
-               className={cx('input')}
-               type={'text'}
-               placeholder={'Email'}
-            />
-            {formik.touched.email && formik.errors.email ? (
-               <span className={cx('error')}>{formik.errors.email}</span>
-            ) : null}
-            <InputCustom
-               pwdStyle={true}
-               value={formik.values.password}
-               onChange={formik.handleChange('password')}
-               className={cx('input')}
-               type={'password'}
-               placeholder={'Enter Password'}
-            />
-            {formik.touched.password && formik.errors.password ? (
-               <span className={cx('error')}>{formik.errors.password}</span>
-            ) : null}
-            <div className={cx('login-btn')}>
-               <Button className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
-                  Login
-               </Button>
-            </div>
-         </form>
+      <div className={cx('wrapper', 'row w-100 m-0')}>
+         <div className="col-10 col-md-8 col-lg-6 col-xl-4">
+            <form className={cx('container')} onSubmit={formik.handleSubmit}>
+               <h3 className="fs-2 fw-bold text-center mb-4"> Login</h3>
+               <div className={cx('error')}>
+                  {message.message === 'Rejected' ? 'Something went wrong, try again!' : ''}
+               </div>
+               <div className="col-12 mb-4">
+                  <InputCustom
+                     value={formik.values.email}
+                     onChange={formik.handleChange('email')}
+                     className={cx('input')}
+                     type={'text'}
+                     placeholder={'Email'}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                     <span className={cx('error')}>{formik.errors.email}</span>
+                  ) : null}
+               </div>
+               <div className="col-12 mb-4">
+                  <InputCustom
+                     pwdStyle={true}
+                     value={formik.values.password}
+                     onChange={formik.handleChange('password')}
+                     className={cx('input')}
+                     type={'password'}
+                     placeholder={'Enter Password'}
+                  />
+                  {formik.touched.password && formik.errors.password ? (
+                     <span className={cx('error')}>{formik.errors.password}</span>
+                  ) : null}
+               </div>
+               <div className="text-center mt-4">
+                  <Button className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
+                     Login
+                  </Button>
+               </div>
+            </form>
+         </div>
       </div>
    )
 }

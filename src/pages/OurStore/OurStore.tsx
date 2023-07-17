@@ -3,18 +3,18 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { BiReset } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import debounce from 'lodash.debounce'
-
+import { AiFillCaretDown } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
+
 import BreadCrumb from '~/components/BreadCrumb'
-import Button from '~/components/Button/Button'
+import Button from '~/components/Button'
 import ChangeTitle from '~/components/ChangeTitle'
 import { Sort2Icon, Sort3Icon, Sort4Icon, SortHorizon } from '~/components/Icon'
-import Loading from '~/components/Loading/Loading'
+import Loading from '~/components/Loading'
 import { getProducts } from '~/features/products/productsService'
 import { AppDispatch, RootState } from '~/store/store'
-import { ProductType } from '~/types/productStage'
 import styles from './OurStore.module.scss'
-import Collection from '~/components/Collection'
+import CardProduct from '~/components/CardProduct'
 import { getBrands } from '~/features/brands/brandService'
 const cx = classNames.bind(styles)
 
@@ -53,8 +53,8 @@ function OurStore() {
    const [brand, setBrand] = useState<string>('')
    const [category, setCategory] = useState<string>('')
    const [tag, setTag] = useState<string>('')
-   const [minPrice, setMinPrice] = useState<number | undefined>(undefined)
-   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined)
+   const [minPrice, setMinPrice] = useState<number | undefined>()
+   const [maxPrice, setMaxPrice] = useState<number | undefined>()
    const [sort, setSort] = useState<string>('')
    const navigate = useNavigate()
 
@@ -117,21 +117,24 @@ function OurStore() {
       }
    }, [brandList, categoryList])
    const handleSortClick = (id: number) => {
-      const newSort = sortBtn.map((el) => {
-         if (el.id === id) {
-            return { ...el, isActive: true }
-         } else {
-            return { ...el, isActive: false }
-         }
-      })
-      setSortBtn(newSort)
+      const sortButton = sortBtn.find((button) => button.id === id)
+      if (sortButton && !sortButton.isActive) {
+         const newSort = sortBtn.map((el) => {
+            if (el.id === id) {
+               return { ...el, isActive: true }
+            } else {
+               return { ...el, isActive: false }
+            }
+         })
+         setSortBtn(newSort)
+      }
    }
    const handleReset = () => {
       setBrand('')
       setCategory('')
       setTag('')
-      setMinPrice(undefined)
-      setMaxPrice(undefined)
+      setMinPrice(0)
+      setMaxPrice(0)
       setSort('')
       navigate('')
       dispatch(getProducts({}))
@@ -139,8 +142,10 @@ function OurStore() {
 
    const handleMinPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
       const newValue = +e.target.value
-      setMinPrice(newValue > 0 ? newValue : 0)
+      console.log(newValue)
+      setMinPrice(isNaN(newValue) || newValue <= 0 ? undefined : newValue)
    }, 1000)
+
    const handleMaxPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
       const newValue = +e.target.value
       setMaxPrice(newValue)
@@ -148,13 +153,24 @@ function OurStore() {
 
    return (
       <>
-         <ChangeTitle title={'Our Store'} />
-         <BreadCrumb title={'Our Store'} />
-         <div className={cx('wrapper')}>
-            <div className={cx('filter-list')}>
-               <div className={cx('filter-block')}>
-                  <div className={cx('filter-container')}>
-                     <h1 className={cx('title')}>Sort by Categories</h1>
+         <ChangeTitle title={'Store'} />
+         <BreadCrumb title={'Store'} />
+
+         <div className={cx('wrapper', 'row col-11')}>
+            <div className="multi-collapse  col-12 col-lg-2 p-0 me-2">
+               <div className="col-3 col-lg-12 mb-1">
+                  <Button
+                     className="w-100 d-flex btn btn-secondary"
+                     data-bs-toggle="collapse"
+                     href="#collapseOption"
+                     aria-expanded="true"
+                  >
+                     <AiFillCaretDown className={cx('icon')} />
+                  </Button>
+               </div>
+               <div id="collapseOption" className={cx('filter-list', 'collapse show')}>
+                  <div className={cx('filter-block', 'd-none gap-5 d-lg-block col-12 col-lg')}>
+                     <h1 className="fs-3 mb-0 mb-lg-3 ">Sort by Categories: </h1>
                      <div className={cx('option')}>
                         {categories?.map((category, index) => (
                            <span key={index}>
@@ -171,15 +187,12 @@ function OurStore() {
                         ))}
                      </div>
                   </div>
-               </div>
-
-               <div className={cx('filter-block')}>
-                  <div className={cx('filter-container')}>
-                     <h1 className={cx('title')}>Price :</h1>
-                     <div className={cx('price')}>
+                  <div className={cx('filter-block', 'd-flex gap-5 d-lg-block col-12 col-lg')}>
+                     <h1 className="fs-3  mb-0 mb-lg-3 col-1 col-lg-12">Price: </h1>
+                     <div className="d-flex gap-2 col">
                         <input
-                           value={minPrice}
-                           className={cx('input')}
+                           defaultValue={minPrice}
+                           className={cx('input', 'col')}
                            onChange={handleMinPriceChange}
                            type="number"
                            step={10}
@@ -188,8 +201,8 @@ function OurStore() {
                            pattern="[0-9]*"
                         />
                         <input
-                           className={cx('input')}
-                           value={maxPrice}
+                           className={cx('input', 'col')}
+                           defaultValue={maxPrice}
                            onChange={handleMaxPriceChange}
                            type="number"
                            placeholder="To"
@@ -199,49 +212,43 @@ function OurStore() {
                         />
                      </div>
                   </div>
-
-                  <div className={cx('filter-container')}>
-                     <div className={cx('filter-block')}>
-                        <h1 className={cx('title')}>Product Brands</h1>
-                        <div className={cx('option')}>
-                           {brands?.map((brand, index) => (
-                              <span key={index}>
-                                 <Button text className={cx('btn')} onClick={() => setBrand(brand)}>
-                                    {brand}
-                                 </Button>
-                              </span>
-                           ))}
-                        </div>
+                  <div className={cx('filter-block', 'd-flex gap-5 d-lg-block col-12 col-lg')}>
+                     <h1 className="fs-3  mb-0 mb-lg-3 col-1 col-lg-12">Brands: </h1>
+                     <div className={cx('option')}>
+                        {brands?.map((brand, index) => (
+                           <span key={index}>
+                              <Button text className={cx('btn')} onClick={() => setBrand(brand)}>
+                                 {brand}
+                              </Button>
+                           </span>
+                        ))}
                      </div>
                   </div>
-
-                  <div className={cx('filter-container')}>
-                     <div className={cx('filter-block')}>
-                        <h1 className={cx('title')}>Product Tags</h1>
-                        <div className={cx('option')}>
-                           {tags?.map((tag, index) => (
-                              <span key={index}>
-                                 <Button text className={cx('btn')} onClick={() => setTag(tag)}>
-                                    {tag}
-                                 </Button>
-                              </span>
-                           ))}
-                        </div>
+                  <div className={cx('filter-block', 'd-flex gap-5 d-lg-block col-12 col-lg')}>
+                     <h1 className="fs-3  mb-0 mb-lg-3 col-1 col-lg-12">Tags: </h1>
+                     <div className={cx('option')}>
+                        {tags?.map((tag, index) => (
+                           <span key={index}>
+                              <Button text className={cx('btn')} onClick={() => setTag(tag)}>
+                                 {tag}
+                              </Button>
+                           </span>
+                        ))}
                      </div>
                   </div>
                </div>
             </div>
-            <div className={cx('products')}>
-               <div className={cx('filter-sort')}>
-                  <div className={cx('sort-by')}>
-                     <span className="mb-0 d-block" style={{ width: '130px' }}>
+            <div className={cx('products', 'col ms-2')}>
+               <div className={cx('filter-sort', 'row row-cols-2 justify-content-between')}>
+                  <div className={cx('sort-by', 'col-7 md-6')}>
+                     <span className="mb-0 d-none d-sm-block" style={{ width: '130px' }}>
                         Sort By:{' '}
                      </span>
                      <select
                         onChange={(e: any) => setSort(e.target.value)}
                         name=""
                         defaultValue="manula"
-                        className="form-control form-select fs-3 m-2"
+                        className="form-control form-select fs-4"
                         id=""
                      >
                         <option value="title">Alphabetically, A-Z</option>
@@ -252,15 +259,20 @@ function OurStore() {
                         <option value="-createAt">Date, New to Old </option>
                      </select>
                      <Button text className="btn btn-light" onClick={handleReset}>
-                        <span> Reset</span>
+                        <span className="d-none d-sm-block"> Reset</span>
                         <BiReset className="icon" />
                      </Button>
                   </div>
-                  <div className={cx('sort-icons')}>
-                     <p>{productList.length} product</p>
+                  <div className={cx('sort-icons', 'col-4 col-md-5')}>
+                     <p>{productList.length} Pcs</p>
                      <div className={cx('wrap-icon')}>
                         {sortBtn.map((el, i) => (
-                           <Button text onClick={() => handleSortClick(el.id)} key={i}>
+                           <Button
+                              text
+                              onClick={() => handleSortClick(el.id)}
+                              key={i}
+                              className={cx(`btn-sort-${el.id}`)}
+                           >
                               <span className={cx('icon-filter', el.isActive && 'active')}>{el.icon}</span>
                            </Button>
                         ))}
@@ -276,7 +288,7 @@ function OurStore() {
                         {productList.length > 0 ? (
                            productList?.map((product, index) => (
                               <div className={cx('collection')} key={index}>
-                                 <Collection data={product} isSort={sortClass === 'sort-1'} />
+                                 <CardProduct data={product} isSort={sortClass === 'sort-1'} />
                               </div>
                            ))
                         ) : (

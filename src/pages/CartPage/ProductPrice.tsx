@@ -1,15 +1,18 @@
-import Image from '~/components/Image/Image'
-import classNames from 'classnames/bind'
-import styles from './CartPage.module.scss'
-import { AiFillDelete, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
-import Button from '~/components/Button/Button'
-import { CartType } from '~/types/cartStage'
 import { useEffect, useState } from 'react'
-import { getCarts, removeProductFromCart, updateQuantityProductFromCart } from '~/features/customers/customerService'
+import classNames from 'classnames/bind'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '~/store/store'
-import images from '~/assets/images'
 import debounce from 'lodash.debounce'
+import { FiMinus } from 'react-icons/fi'
+import { BiPlus } from 'react-icons/bi'
+import styles from './CartPage.module.scss'
+import { AiFillDelete } from 'react-icons/ai'
+
+import Image from '~/components/Image'
+import { getCarts, removeProductFromCart, updateQuantityProductFromCart } from '~/features/customers/customerService'
+import { AppDispatch } from '~/store/store'
+import { CartType } from '~/types/cartStage'
+import images from '~/assets/images'
+import Button from '~/components/Button'
 
 const cx = classNames.bind(styles)
 
@@ -52,20 +55,20 @@ function ProductPrice({ data }: { data: CartType }) {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [quantity, dispatch])
    return (
-      <div className={cx('section')}>
-         <div className={cx('block')}>
+      <>
+         <div className="col-8 d-flex justify-content-between">
             <div className={cx('product-detail')}>
-               <div className={cx('info')}>
-                  <Button text to={`/product/${data?.productId?.slug}`}>
+               <div className={cx('info', 'row')}>
+                  <Button className="col-3" text to={`/product/${data?.productId?.slug}`}>
                      <Image
                         className={cx('img')}
                         src={data?.productId?.images?.[0]?.url ? data?.productId?.images?.[0]?.url : images.errorImage}
                      />
                   </Button>
-                  <div className={cx('content')}>
+                  <div className="col-8">
                      <Button text to={`/product/${data?.productId?.slug}`}>
                         {' '}
-                        <h3>{data?.productId?.title}</h3>
+                        <h3 className={cx('content')}>{data?.productId?.title}</h3>
                      </Button>
                      <p>
                         <span
@@ -86,45 +89,55 @@ function ProductPrice({ data }: { data: CartType }) {
                   </div>
                </div>
             </div>
-            <span className={cx('price')}>
+            <div className={cx('price', 'd-none d-md-flex')}>
                $
                {data.productId?.discountCode
                   ? data.productId?.price_after_discount.toFixed(2)
                   : data.productId?.price.toFixed(2)}
-            </span>
+            </div>
          </div>
-         <div className={cx('block')}>
-            <div className={cx('quantity')}>
-               <div className={cx('update-quantity')}>
+         <div className="col-3 d-flex flex-column flex-md-row justify-content-around justify-content-md-between">
+            <div className="d-flex align-items-center">
+               <div className="w-100 d-flex flex-row-reverse flex-md-column justify-content-between">
                   <Button
                      text
+                     className={cx('btn-quantity', 'col-2 col-md-4')}
                      onClick={() => {
                         setQuantity(quantity + 1)
                      }}
                   >
-                     <AiOutlinePlus className={cx('icon')} />
+                     <BiPlus className={cx('icon')} />
                   </Button>
-                  <input type="number" onChange={() => setQuantity} value={quantity} min={0} step={1} max={1000} />
+                  <input
+                     className="col-3 col-md-4"
+                     type="number"
+                     onChange={() => setQuantity}
+                     value={quantity}
+                     min={0}
+                     step={1}
+                     max={1000}
+                  />
                   <Button
                      text
+                     className={cx('btn-quantity', 'col-2 col-md-4')}
                      onClick={() => {
                         if (quantity > 0) {
                            setQuantity(quantity - 1)
                         }
                      }}
                   >
-                     <AiOutlineMinus className={cx('icon')} />
+                     <FiMinus className={cx('icon')} />
                   </Button>
                </div>
             </div>
-            <span className={cx('price')}>
+            <div className="d-flex flex-row-reverse flex-md-row justify-content-between align-items-center">
                <Button text className={cx('btn-delete')} onClick={() => handleRemoveProduct()}>
                   <AiFillDelete className={cx('icon')} />
                </Button>
-               ${total}
-            </span>
+               <span className="fs-2 fs-md-3 fw-bold ms-2"> ${total}</span>
+            </div>
          </div>
-      </div>
+      </>
    )
 }
 

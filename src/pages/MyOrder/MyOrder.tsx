@@ -32,8 +32,8 @@ function MyOrder() {
 
    return (
       <>
-         <ChangeTitle title={'Our Store'} />
-         <BreadCrumb title={'Our Store'} />
+         <ChangeTitle title={'Store'} />
+         <BreadCrumb title={'Store'} />
 
          <div className={cx('wrapper', 'row w-100 d-flex justify-content-center mt-4')}>
             <div className="col-11">

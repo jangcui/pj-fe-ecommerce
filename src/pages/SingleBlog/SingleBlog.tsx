@@ -50,7 +50,10 @@ function SingleBlog() {
                            className={cx('description')}
                            dangerouslySetInnerHTML={{ __html: blog.description as string }}
                         ></p>
-                        <p className={cx('date')}> {new Date(blog.createdAt).toLocaleDateString()}</p>
+                        <div className="d-flex justify-content-between align-items-center">
+                           <p className={cx('date')}> {new Date(blog.createdAt).toLocaleDateString()}</p>
+                           <span className="fs-4 text-secondary">Views: {blog.numViews}</span>
+                        </div>
                      </>
                   )}
 
@@ -63,22 +66,6 @@ function SingleBlog() {
                      >
                         Back to blogs
                      </Button>
-                     <div className={cx('wrap-icon')} style={{ color: '#fff' }}>
-                        <Button
-                           text
-                           style={{ color: '#fff' }}
-                           className="col-4"
-                           to="https://github.com/jangcui?tab=repositories"
-                        >
-                           <GitHubIcon />
-                        </Button>
-                        <Button text className="col-4" to="https://www.facebook.com/profile.php?id=100004998315019">
-                           <FaceBookIcon />
-                        </Button>
-                        <Button text className="col-4" to="https://mail.google.com/mail/u/0/?tab=km#inbox">
-                           <GmailIcon />
-                        </Button>
-                     </div>
                   </div>
 
                   <div className={cx('form-comment')}>

@@ -8,9 +8,9 @@ function BreadCrumb({ title }: { title?: string }) {
       <div className={cx('wrapper')}>
          <div className={cx('container')}>
             <Link to="/">
-               <p>Home </p>
+               <span>Home </span>
             </Link>
-            / <p>{title}</p>
+            / <p className={cx('text')}>{title}</p>
          </div>
       </div>
    )

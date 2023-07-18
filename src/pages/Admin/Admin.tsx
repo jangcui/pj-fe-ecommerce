@@ -283,7 +283,7 @@ const Admin: React.FC = () => {
                   </div>
                </Header>
                <Content className={cx('content')}>
-                  <Routes></Routes>
+                  <Routes>
                      <Route path="" element={<Dashboard />} />
                      <Route path="customer" element={<Customers />} />
                      <Route path="orders" element={<OrderList />} />

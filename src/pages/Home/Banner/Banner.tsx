@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames/bind'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Navigation, Pagination, Scrollbar, A11y } from 'swiper'
@@ -116,6 +117,10 @@ function Banner() {
       '--swiper-pagination-bullet-size': '16px',
       '--swiper-pagination-bullet-horizontal-gap': '6px',
    }
+   const navigate = useNavigate()
+   const handleNavigate = () => {
+      return navigate('/product')
+   }
    return (
       <div className={cx('wrapper', 'row')}>
          <div className={cx('slider', 'col-12 col-md-8 col-xl-7')}>
@@ -139,11 +144,11 @@ function Banner() {
                               <br />
                               {item?.description?.line2}
                            </p>
-                           <Button className={cx('slide-btn')} primary>
+                           <Button className={cx('slide-btn')} primary onClick={handleNavigate}>
                               Buy Now
                            </Button>
                         </div>
-                        <Image className={cx('img')} src={item.image} alt="sdsd" />
+                        <Image className={cx('img')} src={item.image} />
                      </div>
                   </SwiperSlide>
                ))}
@@ -152,7 +157,7 @@ function Banner() {
 
          <div className={cx('banner', 'col-12 col-md-4 col-xl-5 row row-cols-4 row-cols-lg-2 d-flex')}>
             {banner?.map((item, index) => (
-               <div className={cx('element', 'col')} key={index}>
+               <Button text className={cx('element', 'col')} key={index} onClick={handleNavigate}>
                   <div className={cx('banner-show')}>
                      <p className={cx('banner-text')}>{item?.text}</p>
                      <h2 className={cx('banner-title')}>{item?.title}</h2>
@@ -163,7 +168,7 @@ function Banner() {
                      </p>
                   </div>
                   <Image className={cx('img-banner')} src={item?.image} />
-               </div>
+               </Button>
             ))}
          </div>
       </div>

@@ -311,7 +311,7 @@ export const customerSlice = createSlice({
             state.isSuccess = true
             state.message = 'fulfilled'
             state.token = action.payload.token
-            toast.success('Email Sended Successfully')
+            toast.success('Email sent')
          })
          .addCase(forgotPwdToken.rejected, (state, action: PayloadAction<any>) => {
             state.isError = true
@@ -328,7 +328,7 @@ export const customerSlice = createSlice({
             state.isLoading = false
             state.isSuccess = true
             state.message = 'fulfilled'
-            toast.success('PassWord reset successfully')
+            toast.success('Successfully, passWord changed.')
          })
          .addCase(resetPwdToken.rejected, (state) => {
             state.isError = true

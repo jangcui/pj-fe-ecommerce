@@ -78,6 +78,12 @@ function LoginAdmin() {
                   </Button>
                </div>
             </form>
+            <p className="text-left fs-4">
+               UserName: <i>Admin@gmail.com</i>
+            </p>
+            <p className="text-left fs-4">
+               PassWord: <i>admin123</i>
+            </p>
          </div>
       </div>
    )

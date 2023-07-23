@@ -157,7 +157,7 @@ function OurStore() {
          <BreadCrumb title={'Store'} />
 
          <div className={cx('wrapper', 'row col-11')}>
-            <div className="multi-collapse  col-12 col-lg-2 p-0 me-2">
+            <div className="multi-collapse  col-12 col-lg-2 p-0 me-0 me-lg-3">
                <div className="col-3 col-lg-12 mb-1">
                   <Button
                      className="w-100 d-flex btn btn-secondary"
@@ -238,8 +238,8 @@ function OurStore() {
                   </div>
                </div>
             </div>
-            <div className={cx('products', 'col ms-2')}>
-               <div className={cx('filter-sort', 'row row-cols-2 justify-content-between')}>
+            <div className={cx('products', 'col ms-0 ms-lg-2')}>
+               <div className={cx('filter-sort', 'w-100 row row-cols-2 justify-content-between mx-0')}>
                   <div className={cx('sort-by', 'col-7 md-6')}>
                      <span className="mb-0 d-none d-sm-block" style={{ width: '130px' }}>
                         Sort By:{' '}

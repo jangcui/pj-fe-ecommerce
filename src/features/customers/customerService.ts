@@ -186,11 +186,11 @@ export const paymentVerify = createAsyncThunk('user/order/payment-verify', async
 })
 export const forgotPwdToken = createAsyncThunk(
    'user/password/token',
-   async ({ email }: { email: string }, thunkAPI) => {
+   async ({ email, mobile }: { email: string; mobile: number }, thunkAPI) => {
       try {
          const response = await httpRequest.post(
             'user/forgot-password-token',
-            { email },
+            { email, mobile },
             {
                signal: thunkAPI.signal,
             },

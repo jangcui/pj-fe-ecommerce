@@ -51,7 +51,7 @@ function PopularProduct({ data }: { data: ProductType[] }) {
    return (
       <>
          <div className={cx('row mt-4')}>
-            <div className="col-8 col-lg-2">
+            <div className="col-12  col-lg-2">
                <div className={cx('wrap-btn')}>
                   {activeBtn.map((act, index) => (
                      <Button

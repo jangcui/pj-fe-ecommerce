@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
+import { BiArrowBack } from 'react-icons/bi'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { useState } from 'react'
 
-import InputCustom from '~/components/InputCustom/InputCustom'
+import InputCustom from '~/components/InputCustom'
 import { AppDispatch, RootState } from '~/store/store'
 import styles from './Login.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Button from '~/components/Button'
 import { register } from '~/features/customers/customerService'
-import { BsArrowLeft } from 'react-icons/bs'
-import { BiArrowBack } from 'react-icons/bi'
 
 const cx = classNames.bind(styles)
 
@@ -29,6 +30,7 @@ const signUpSchema = Yup.object().shape({
 function SignUp() {
    const dispatch = useDispatch<AppDispatch>()
    const { isLoading } = useSelector((state: RootState) => state.customer)
+   const [isVerified, setIsVerified] = useState<boolean | null>(null)
 
    const navigate = useNavigate()
 
@@ -44,12 +46,20 @@ function SignUp() {
       },
       validationSchema: signUpSchema,
       onSubmit: async (values) => {
-         const result = await dispatch(register(values))
-         if (result.payload._id) {
-            navigate('/login')
+         if (!isVerified) {
+            setIsVerified(false)
+         } else {
+            const result = await dispatch(register(values))
+            if (result.payload._id) {
+               navigate('/login')
+            }
          }
       },
    })
+   const handleVerify = (value: any) => {
+      if (value) setIsVerified(true)
+      else setIsVerified(false)
+   }
    return (
       <>
          <ChangeTitle title={'SignUp'} />
@@ -57,18 +67,17 @@ function SignUp() {
          <div className={cx('wrapper', 'row w-100')}>
             <div className="col-10 col-md-8 col-lg-6 col-xl-4">
                <div className={cx('container')}>
-                  <Button text className={cx('btn-back')} onClick={() => navigate('/login')}>
+                  <Button text className={cx('btn-back')} onClick={() => window.history.back()}>
                      <BiArrowBack className="fs-1" />
                   </Button>
-                  <h3 className="fs-2 fw-bold text-center mb-4">Sing Up</h3>
+                  <h3 className="fs-2 fw-bold text-center mb-3">Sing Up</h3>
                   <form action="" onSubmit={formik.handleSubmit}>
-                     <div className="row row-cols-2  mb-4">
+                     <div className="row row-cols-2 mb-3 mt-4">
                         <div className="col">
-                           <p className="mb-0 fs-4 text-secondary">Fist Name:</p>
                            <InputCustom
                               className={cx('input')}
                               type={'text'}
-                              placeholder="Enter Fist Name..."
+                              placeholder="Fist Name..."
                               value={formik.values.fist_name}
                               onChange={formik.handleChange('fist_name')}
                               onBlur={formik.handleBlur('fist_name')}
@@ -76,11 +85,10 @@ function SignUp() {
                            <span className={cx('error')}>{formik.touched.fist_name && formik.errors.fist_name} </span>
                         </div>
                         <div className="col ">
-                           <p className="mb-0 fs-4 text-secondary">Last Name:</p>
                            <InputCustom
                               className={cx('input')}
                               type={'text'}
-                              placeholder="Enter Last Name..."
+                              placeholder="Last Name..."
                               value={formik.values.last_name}
                               onChange={formik.handleChange('last_name')}
                               onBlur={formik.handleBlur('last_name')}
@@ -89,8 +97,7 @@ function SignUp() {
                         </div>
                      </div>
 
-                     <div className="col-12 mb-4">
-                        <p className="mb-0 fs-4 text-secondary">Email:</p>
+                     <div className="col-12 mb-3">
                         <InputCustom
                            className={cx('input')}
                            type="email"
@@ -101,21 +108,19 @@ function SignUp() {
                         />
                         <span className={cx('error')}>{formik.touched.email && formik.errors.email} </span>
                      </div>
-                     <div className="col-12 mb-4">
-                        <p className="mb-0 fs-4 text-secondary">Phone Number:</p>
+                     <div className="col-12 mb-3">
                         <InputCustom
                            className={cx('input')}
                            type="text"
-                           placeholder="+84....."
-                           value={formik.values.mobile}
+                           placeholder="0123-456-789"
                            onChange={formik.handleChange('mobile')}
+                           defaultValue=""
                            onBlur={formik.handleBlur('mobile')}
                         />
                         <span className={cx('error')}>{formik.touched.mobile && formik.errors.mobile} </span>
                      </div>
 
-                     <div className="col-12 mb-4">
-                        <p className="mb-0 fs-4 text-secondary">Password:</p>
+                     <div className="col-12 mb-3">
                         <InputCustom
                            value={formik.values.password}
                            onChange={formik.handleChange('password')}
@@ -129,8 +134,7 @@ function SignUp() {
                         <span className={cx('error')}>{formik.touched.password && formik.errors.password} </span>
                      </div>
 
-                     <div className="col-12 mb-4">
-                        <p className="mb-0 fs-4 text-secondary">Password Confirm:</p>
+                     <div className="col-12 mb-3">
                         <InputCustom
                            pwdStyle
                            name={'email'}
@@ -139,18 +143,34 @@ function SignUp() {
                            onBlur={formik.handleBlur('passwordConfirm')}
                            className={cx('input')}
                            type={'password'}
-                           placeholder={'ConfirmPassword'}
+                           placeholder={'Password Confirm'}
                         />
                         <span className={cx('error')}>
                            {formik.touched.passwordConfirm && formik.errors.passwordConfirm}{' '}
                         </span>
                      </div>
-                     <div className="text-center mt-5">
+                     <div className="d-flex align-items-center flex-column mt-5 ">
+                        <ReCAPTCHA
+                           hl="en"
+                           sitekey="6LdM9zcnAAAAAP9uuAnM7r0w3TxcuhXfJ2W25mHy"
+                           onChange={(value) => handleVerify(value)}
+                        />
+                        <p>
+                           {isVerified === false ? <span className={cx('error')}>Please select to verify</span> : null}
+                        </p>
+                     </div>
+                     <div className="text-center mt-2">
                         <Button primary className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
-                           Sign Up
+                           Submit
                         </Button>
                      </div>
                   </form>
+                  <div className="d-flex gap-2 justify-content-center align-items-center mt-4">
+                     <p className="mb-0 fs-4"> Already have an account?</p>
+                     <Button text onClick={() => navigate('/login')} className={cx('btn-sign-up')} type={'button'}>
+                        Log In
+                     </Button>
+                  </div>
                </div>
             </div>
          </div>

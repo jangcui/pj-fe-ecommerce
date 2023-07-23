@@ -19,7 +19,7 @@ function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
    const [isScrolled, setIsScrolled] = useState(false)
    const isLoadingProduct = useSelector((state: RootState) => state.products.isLoading)
    const isLoadingBlog = useSelector((state: RootState) => state.blogs.isLoading)
-   const [isLoding, setIsLoding] = useState(false)
+
    useEffect(() => {
       dispatch(getProducts({}))
       dispatch(getBlogs())

@@ -128,7 +128,7 @@ function Header() {
                      </Button>
                   </div>
 
-                  <div className={cx('input-form', 'd-none d-md-flex col-md-6 ')}>
+                  <div className={cx('input-form', 'd-none d-md-flex col-md-5 ')}>
                      <Typeahead
                         id="pagination-example"
                         options={productOpt}

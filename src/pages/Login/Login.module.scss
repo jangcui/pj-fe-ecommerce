@@ -21,8 +21,7 @@
          }
       }
       .btn {
-         padding: 10px 14px;
-         cursor: pointer;
+         padding: 10px 16px;
          margin: 0 10px;
          background-color: var(--bg-header);
          color: var(--white);
@@ -54,11 +53,20 @@
       .sub {
          font-size: 14px;
          justify-content: flex-start;
-         margin: 8px;
          color: var(--text-gray);
 
          &:hover {
             text-decoration: underline;
+         }
+      }
+      .btn-sign-up {
+         color: var(--slug-color);
+         font-size: 16px;
+         font-weight: 600;
+
+         &:hover {
+            text-decoration: underline;
+            text-transform: initial;
          }
       }
    }

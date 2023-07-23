@@ -54,9 +54,7 @@ function Login() {
                <form className={cx('container')} onSubmit={formik.handleSubmit}>
                   <h3 className="fs-2 fw-bold text-center mb-4"> Login</h3>
                   <div className={cx('error')}>{isError ? message : ''}</div>
-
                   <div className="col-12 mb-4">
-                     {' '}
                      <InputCustom
                         value={formik.values.email}
                         onChange={formik.handleChange('email')}
@@ -86,14 +84,18 @@ function Login() {
                   <Button to={config.routes.forgotPwd} text className={cx('sub')} type={'button'}>
                      <p className="fs-5">Forgot your password?</p>
                   </Button>
-                  <div className="text-center mt-4">
+                  <div className="text-center mt-3">
                      <Button className={cx('btn')} type={'submit'} lazyLoad={isLoading}>
                         Login
                      </Button>
+                  </div>
+                  <div className="d-flex gap-2 justify-content-center align-items-center mt-4">
+                     <p className="mb-0 fs-4">You don&apos;t have an account?</p>
                      <Button
                         to={config.routes.signup}
+                        text
                         onClick={() => dispatch(closeModalLogin())}
-                        className={cx('btn')}
+                        className={cx('btn-sign-up')}
                         type={'button'}
                      >
                         Sign Up

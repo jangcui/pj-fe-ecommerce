@@ -13,7 +13,6 @@
    .btn {
       padding: 10px 20px;
       color: var(--bg-header);
-      // border: 1px solid transparent;
       opacity: 0.75;
       font-size: 20px;
 
@@ -24,6 +23,7 @@
    .active {
       opacity: 1;
       color: var(--slug-color);
+      border-radius: 1px;
    }
 }
 

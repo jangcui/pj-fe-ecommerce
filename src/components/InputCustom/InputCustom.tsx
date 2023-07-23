@@ -8,7 +8,8 @@ import Button from '~/components/Button/Button'
 const cx = classNames.bind(styles)
 
 interface InputProps<T> {
-   value: T | number | string
+   value?: T | number | string
+   defaultValue?: T | number | string
    onChange: (value: T) => void
    onBlur?: (e: React.FocusEvent<any>) => void
    placeholder?: string
@@ -24,6 +25,7 @@ interface InputProps<T> {
 function InputCustom<T>(props: InputProps<T>) {
    const {
       value,
+      defaultValue,
       onChange,
       placeholder,
       name,
@@ -48,6 +50,7 @@ function InputCustom<T>(props: InputProps<T>) {
                   type={type}
                   name={name}
                   value={value as unknown as string}
+                  defaultValue={defaultValue as unknown as string}
                   onChange={handleChange}
                   placeholder={placeholder}
                   className={cx('input', className)}
@@ -62,6 +65,7 @@ function InputCustom<T>(props: InputProps<T>) {
                <input
                   type={hidden ? 'text' : 'password'}
                   value={value as unknown as string}
+                  defaultValue={defaultValue as unknown as string}
                   onChange={handleChange}
                   placeholder={placeholder}
                   className={cx('input', className)}

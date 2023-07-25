@@ -73,7 +73,7 @@ const Admin: React.FC = () => {
          <Layout className={cx('wrapper')}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                <div className={cx('logo')}>
-                  <h2>NO CAP</h2>{' '}
+                  <h2>Admin</h2>{' '}
                   <ModalCustom
                      title={'Log Out'}
                      open={openModal}

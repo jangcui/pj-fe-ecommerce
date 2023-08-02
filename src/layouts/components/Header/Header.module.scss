@@ -79,8 +79,9 @@
                position: relative;
                color: var(--white);
                cursor: pointer;
+               justify-content: flex-end;
                align-items: center;
-               max-width: 32%;
+               width: 30%;
 
                .btn-action {
                   color: var(--white);
@@ -92,36 +93,6 @@
                      overflow: hidden;
                      text-overflow: ellipsis;
                      white-space: nowrap;
-                  }
-
-                  .icon-drop {
-                     position: absolute;
-                     right: -12px;
-                     top: 26%;
-                     width: 28px;
-                     height: 28px;
-
-                     animation: rotateRight 0.5s forwards;
-                     @keyframes rotateRight {
-                        from {
-                           transform: rotate(-180deg);
-                        }
-                        to {
-                           transform: rotate(0);
-                        }
-                     }
-                  }
-
-                  .rotate {
-                     animation: rotateLeft 0.3s forwards;
-                     @keyframes rotateLeft {
-                        from {
-                           transform: rotate(0);
-                        }
-                        to {
-                           transform: rotate(-180deg);
-                        }
-                     }
                   }
                }
 
@@ -167,6 +138,12 @@
                }
             }
             .active {
+               .icon,
+               .text {
+                  transition: all 0.3s;
+                  color: var(--border-color-gray);
+                  opacity: 0.76;
+               }
                .drop-down {
                   opacity: 1;
                   z-index: 99;
@@ -193,9 +170,7 @@
       gap: 10px !important;
 
       .option {
-         p,
-         .icon-drop,
-         .rotate {
+         p {
             display: none;
          }
       }

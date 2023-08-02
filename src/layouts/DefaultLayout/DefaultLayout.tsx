@@ -49,7 +49,12 @@ function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
             <Button text className={cx('btn', !isScrolled && 'isScroll')} onClick={handleButtonClick}>
                <BiArrowToTop className={cx('icon')} />
             </Button>
-            {isLoadingProduct && isLoadingBlog ? (
+            <>
+               <Header />
+               <Container>{children}</Container>
+               <Footer />
+            </>
+            {/* {isLoadingProduct && isLoadingBlog ? (
                <>
                   <div className={cx('loading')}>
                      <div className={cx('loader-1')} />
@@ -58,12 +63,8 @@ function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
                   </div>
                </>
             ) : (
-               <>
-                  <Header />
-                  <Container>{children}</Container>
-                  <Footer />
-               </>
-            )}
+              
+            )} */}
          </div>
       </div>
    )

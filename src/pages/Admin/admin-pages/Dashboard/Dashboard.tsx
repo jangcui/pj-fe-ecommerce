@@ -66,7 +66,7 @@ function Dashboard() {
       dispatch(getYearlyOrders())
       dispatch(getAllOrders())
    }, [dispatch])
-   console.log(orderList)
+
    useEffect(() => {
       const monthNames = [
          'January',
@@ -145,7 +145,6 @@ function Dashboard() {
          },
       },
    }
-   console.log(dataMonthlyCount)
    const configMonthlyCount = {
       data: dataMonthlyCount,
       xField: 'type',

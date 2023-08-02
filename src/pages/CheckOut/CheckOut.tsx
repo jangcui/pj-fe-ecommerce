@@ -63,7 +63,7 @@ function CheckOut() {
          quantity: item.quantity || 0,
          price: item.productId?.price || 0,
       }))
-      console.log(itemOrder), setOrderItem(itemOrder)
+      setOrderItem(itemOrder)
    }, [cartList])
 
    const formik = useFormik({

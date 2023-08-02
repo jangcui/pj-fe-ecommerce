@@ -82,7 +82,6 @@ function Product() {
          setImgConvert(product?.images.map((item: ImgType) => item.url))
       }
    }, [product])
-   console.log(product)
    const colorOpt: SelectProps['options'] = []
    colorState?.forEach((color) => {
       colorOpt.push({

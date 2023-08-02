@@ -148,7 +148,6 @@ export const productSlice = createSlice({
             state.isSuccess = true
             toast.success('Ratting added successfully')
             state.product = action.payload
-            console.log(action.payload)
          })
          .addCase(rateProduct.rejected, (state, action) => {
             state.isError = true

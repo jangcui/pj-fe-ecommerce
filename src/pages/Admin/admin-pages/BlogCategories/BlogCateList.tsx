@@ -54,7 +54,6 @@ function BlogCateList() {
          setColorId(value)
       }
    }
-   console.log(blogCateState)
    const hideModal = () => {
       setOpen(false)
    }

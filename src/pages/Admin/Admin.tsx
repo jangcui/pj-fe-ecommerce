@@ -66,7 +66,6 @@ const Admin: React.FC = () => {
       dispatch(logOutAdmin())
       window.location.reload()
    }
-   console.log(admin)
    return (
       <>
          <ChangeTitle title={'Admin'} />

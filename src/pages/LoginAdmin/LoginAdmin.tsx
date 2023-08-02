@@ -38,7 +38,6 @@ function LoginAdmin() {
          navigate('')
       }
    }, [navigate, isSuccess, isAdmin, admin])
-   console.log(message)
    return (
       <div className={cx('wrapper', 'row w-100 m-0')}>
          <div className="col-10 col-md-8 col-lg-6 col-xl-4">

@@ -35,7 +35,6 @@ function Contact() {
       },
       validationSchema: contactSchema,
       onSubmit: async (values) => {
-         console.log(values)
          dispatch(createEnquiry(values))
       },
    })

@@ -142,7 +142,6 @@ function OurStore() {
 
    const handleMinPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
       const newValue = +e.target.value
-      console.log(newValue)
       setMinPrice(isNaN(newValue) || newValue <= 0 ? undefined : newValue)
    }, 1000)
 

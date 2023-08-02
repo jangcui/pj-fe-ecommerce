@@ -63,7 +63,6 @@ function Order() {
          dispatch(getAOrder(orderId))
       }
    }, [dispatch, orderId])
-   console.log(order)
    data1.push({
       name: (order && order?.user.fist_name + ' ' + order?.user.last_name) || '',
       product: (

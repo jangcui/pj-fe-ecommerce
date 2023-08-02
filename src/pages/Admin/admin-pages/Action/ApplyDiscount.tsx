@@ -43,7 +43,6 @@ function ApplyDiscountCode() {
       }))
       setProductOpt(data)
    }, [productList])
-   console.log(productName)
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {

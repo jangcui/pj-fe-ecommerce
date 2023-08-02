@@ -89,7 +89,6 @@ function ProductList() {
       setOpen(false)
    }
    const handleDelete = async (id: string) => {
-      console.log(id)
       hideModal()
       await dispatch(toggleProductToTrashBin(id))
       setTimeout(() => {

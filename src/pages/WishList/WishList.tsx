@@ -66,7 +66,6 @@ function WishList() {
          >
             {isLoading ? (
                <div className={cx('loading')}>
-                  {' '}
                   <Loading />
                </div>
             ) : (
@@ -86,6 +85,7 @@ function WishList() {
                               <>
                                  <Button
                                     text
+                                    className={cx('btn-close')}
                                     onClick={() => {
                                        value.index = index
                                        value.id = product._id

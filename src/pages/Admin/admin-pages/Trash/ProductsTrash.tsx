@@ -77,7 +77,6 @@ function ProductsTrash() {
          setProductId(value)
       }
    }
-   console.log(trashState)
    const handleDelete = async (id: string) => {
       setOpenModalDelete(false)
       await dispatch(deleteProduct(id))

@@ -26,8 +26,6 @@ function SingleBlog() {
       }
    }, [dispatch, blogId])
 
-   console.log(blog)
-
    return (
       <>
          <ChangeTitle title={`${blog.title}`} />

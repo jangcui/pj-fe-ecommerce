@@ -89,7 +89,6 @@ export const customerSlice = createSlice({
                token: action.payload.refreshToken,
             }
             localStorage.setItem('USER', JSON.stringify(userResult))
-            console.log(userResult)
             toast.success('Updated')
          })
          .addCase(updateProfile.rejected, (state, action: PayloadAction<any>) => {

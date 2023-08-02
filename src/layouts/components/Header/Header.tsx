@@ -3,7 +3,7 @@ import classNames from 'classnames/bind'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import { AiOutlineBars, AiOutlineHeart, AiOutlineUser } from 'react-icons/ai'
-import { CgProfile } from 'react-icons/cg'
+import { CgExpand, CgProfile } from 'react-icons/cg'
 import { IoMdArrowDropdown } from 'react-icons/io'
 import { RxMagnifyingGlass } from 'react-icons/rx'
 import { useDispatch, useSelector } from 'react-redux'
@@ -178,11 +178,10 @@ function Header() {
                                        leftIcon={<AiOutlineUser className={cx('icon')} />}
                                        onClick={() => setIsDropDown(!isDropDown)}
                                     >
-                                       <p className="mb-0">
+                                       <p className={cx('text', 'mb-0')}>
                                           <span className={cx('name')}>{user.fist_name}</span>
                                           <span className={cx('name')}>{user.last_name}</span>
                                        </p>
-                                       <IoMdArrowDropdown className={cx('icon-drop', !isDropDown && 'rotate')} />
                                     </Button>
                                     <div className={cx('drop-down')}>
                                        <Button className={cx('drop-element')} text onClick={() => setOpenModal(true)}>

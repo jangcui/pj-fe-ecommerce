@@ -33,7 +33,6 @@ function ResetPwd() {
       validationSchema: forgotPwdSchema,
       onSubmit: async (values) => {
          const result = await dispatch(resetPwdToken({ password: values.pwdConfirm, token: token }))
-         console.log(result)
          if (result.payload._id) {
             navigate('/login')
          }

@@ -36,8 +36,8 @@ export const getUsers = createAsyncThunk('admin/get-user', async (__, thunkAPI) 
       return await adminRequest.get('user', {
          signal: thunkAPI.signal,
       })
-   } catch (err) {
-      return console.log(thunkAPI)
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 export const toggleBlockAUser = createAsyncThunk('admin/toggle-block-user', async (id: string, thunkAPI) => {
@@ -45,8 +45,8 @@ export const toggleBlockAUser = createAsyncThunk('admin/toggle-block-user', asyn
       return await adminRequest.put(`user/toggle-block/${id}`, {
          signal: thunkAPI.signal,
       })
-   } catch (err) {
-      return console.log(thunkAPI)
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 
@@ -55,8 +55,8 @@ export const deleteAUser = createAsyncThunk('admin/delete-user', async (id: stri
       return await adminRequest.Delete(`user/${id}`, {
          signal: thunkAPI.signal,
       })
-   } catch (err) {
-      return console.log(thunkAPI)
+   } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data)
    }
 })
 

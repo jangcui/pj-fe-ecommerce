@@ -18,7 +18,7 @@ function ProductSeller({ data }: { data: ProductType }) {
 
    return (
       <div className={cx('wrapper')}>
-         {!isLoading ? (
+         {isLoading ? (
             <LoadingStyle2 />
          ) : (
             <div className={cx('container', 'row')}>

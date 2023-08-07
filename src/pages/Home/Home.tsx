@@ -12,13 +12,12 @@ import { BsFillCreditCard2BackFill } from 'react-icons/bs'
 import Category from './Category'
 import Banner from './Banner/Banner'
 import ChangeTitle from '~/components/ChangeTitle'
-import { useSelector } from 'react-redux'
-import { RootState } from '~/store/store'
-import PopularProduct from './PopularProduct/PopularProduct'
+import PopularProduct from './PopularProduct'
 import OnSale from './BestSeller/OnSale'
 import BlogSlider from './BlogSlider/BlogSlider'
 import * as imagesHotDeal from '~/assets/imagesHotDeal'
 import HotDeal from './HotDeal/HotDeal'
+
 const cx = classNames.bind(styles)
 
 const serviceArr = [
@@ -55,9 +54,6 @@ const serviceArr = [
 ]
 
 function Home() {
-   const { productList } = useSelector((state: RootState) => state.products)
-   const { blogs } = useSelector((state: RootState) => state.blogs)
-
    return (
       <div className={cx('wrapper')}>
          <ChangeTitle title={'E-commerce'} />
@@ -80,7 +76,7 @@ function Home() {
 
          <section className={cx('popular')}>
             <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">flash Sales</h1>
-            <OnSale data={productList} />
+            <OnSale />
          </section>
 
          <section className={cx('popular')}>
@@ -92,14 +88,14 @@ function Home() {
          </section>
          <div className={cx('popular')}>
             <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">products by tags</h1>
-            <PopularProduct data={productList} />
+            <PopularProduct />
          </div>
          <section className={cx('popular')}>
             <HotDeal percent1={50} percent2={29} linkImg1={imagesHotDeal.imgHd1} linkImg2={imagesHotDeal.imgHd2} />
          </section>
          <section className={cx('popular')}>
             <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">Recent Blogs</h1>
-            <BlogSlider data={blogs} />
+            <BlogSlider />
          </section>
       </div>
    )

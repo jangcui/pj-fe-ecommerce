@@ -9,17 +9,25 @@ import CountdownTimer from './CountDown'
 import LoadingStyle2 from '~/components/LoadingStyle2'
 import { useSelector } from 'react-redux'
 import { RootState } from '~/store/store'
+import { useEffect, useState } from 'react'
 
 const cx = classNames.bind(styles)
 
 function ProductSeller({ data }: { data: ProductType }) {
    const imgList = data.images?.map((img) => img.url)
    const { isLoading } = useSelector((state: RootState) => state.products)
+   const [isLoadData, setIsLoadData] = useState<boolean>(true)
+
+   useEffect(() => {
+      setIsLoadData(isLoading)
+   }, [isLoading])
 
    return (
       <div className={cx('wrapper')}>
-         {isLoading ? (
-            <LoadingStyle2 />
+         {isLoadData ? (
+            <div className={cx('loading')}>
+               <LoadingStyle2 />
+            </div>
          ) : (
             <div className={cx('container', 'row')}>
                <div className={cx('block-img', 'col-6')}>

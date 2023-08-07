@@ -12,7 +12,7 @@ interface UpdateStatusOrderType {
 
 export const loginAdmin = createAsyncThunk('admin/login', async (user: LoginType, thunkAPI) => {
    try {
-      const response = await adminRequest.post('user/admin-login', user, {
+      const response = await adminRequest.post('admin/login', user, {
          signal: thunkAPI.signal,
       })
       return response
@@ -22,7 +22,7 @@ export const loginAdmin = createAsyncThunk('admin/login', async (user: LoginType
 })
 export const toggleCustomerToTrashBin = createAsyncThunk('admin/add-to-trash-bin', async (data: string, thunkAPI) => {
    try {
-      const response = await adminRequest.put(`user/trash/${data}`, {
+      const response = await adminRequest.put(`admin/trash/${data}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -33,7 +33,7 @@ export const toggleCustomerToTrashBin = createAsyncThunk('admin/add-to-trash-bin
 
 export const getUsers = createAsyncThunk('admin/get-user', async (__, thunkAPI) => {
    try {
-      return await adminRequest.get('user', {
+      return await adminRequest.get('admin', {
          signal: thunkAPI.signal,
       })
    } catch (error: any) {
@@ -42,7 +42,7 @@ export const getUsers = createAsyncThunk('admin/get-user', async (__, thunkAPI) 
 })
 export const toggleBlockAUser = createAsyncThunk('admin/toggle-block-user', async (id: string, thunkAPI) => {
    try {
-      return await adminRequest.put(`user/toggle-block/${id}`, {
+      return await adminRequest.put(`admin/toggle-block/${id}`, {
          signal: thunkAPI.signal,
       })
    } catch (error: any) {
@@ -52,7 +52,7 @@ export const toggleBlockAUser = createAsyncThunk('admin/toggle-block-user', asyn
 
 export const deleteAUser = createAsyncThunk('admin/delete-user', async (id: string, thunkAPI) => {
    try {
-      return await adminRequest.Delete(`user/${id}`, {
+      return await adminRequest.Delete(`admin/${id}`, {
          signal: thunkAPI.signal,
       })
    } catch (error: any) {
@@ -62,7 +62,7 @@ export const deleteAUser = createAsyncThunk('admin/delete-user', async (id: stri
 
 export const getAOrder = createAsyncThunk('admin/order/get', async (id: string, thunkAPI) => {
    try {
-      const response = await adminRequest.get(`user/order/${id}`, {
+      const response = await adminRequest.get(`admin/order/${id}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -72,7 +72,7 @@ export const getAOrder = createAsyncThunk('admin/order/get', async (id: string, 
 })
 export const getAllOrders = createAsyncThunk('admin/orders/get-all', async (__, thunkAPI) => {
    try {
-      const response = await adminRequest.get('user/all-orders', {
+      const response = await adminRequest.get('admin/orders', {
          signal: thunkAPI.signal,
       })
       return response
@@ -82,7 +82,7 @@ export const getAllOrders = createAsyncThunk('admin/orders/get-all', async (__, 
 })
 export const deleteOrder = createAsyncThunk('admin/orders/delete', async (id: string, thunkAPI) => {
    try {
-      const response = await adminRequest.Delete(`user/order/${id}`, {
+      const response = await adminRequest.Delete(`admin/order/${id}`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -95,7 +95,7 @@ export const updateOrderStatus = createAsyncThunk(
    async (data: UpdateStatusOrderType, thunkAPI) => {
       try {
          const response = await adminRequest.put(
-            `user/order/${data.id}`,
+            `admin/order/${data.id}`,
             { order_status: data.order_status },
             {
                signal: thunkAPI.signal,
@@ -109,7 +109,7 @@ export const updateOrderStatus = createAsyncThunk(
 )
 export const getMonthlyOrders = createAsyncThunk('admin/orders/monthly-income-data', async (__, thunkAPI) => {
    try {
-      const response = await adminRequest.get('user/month-wise-order-income', {
+      const response = await adminRequest.get('admin/month-wise-order-income', {
          signal: thunkAPI.signal,
       })
       return response
@@ -119,7 +119,7 @@ export const getMonthlyOrders = createAsyncThunk('admin/orders/monthly-income-da
 })
 export const getYearlyOrders = createAsyncThunk('admin/orders/yearly-income-data', async (__, thunkAPI) => {
    try {
-      const response = await adminRequest.get('user/year-total-orders', {
+      const response = await adminRequest.get('admin/year-total-orders', {
          signal: thunkAPI.signal,
       })
       return response

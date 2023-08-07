@@ -7,6 +7,7 @@ const cx = classNames.bind(styles)
 
 function BlogComp({ data }: { data: BlogType }) {
    const imgList = data.images?.map((img) => img.url)
+
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container')}>

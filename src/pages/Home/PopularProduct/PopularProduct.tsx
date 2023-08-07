@@ -6,10 +6,17 @@ import SliderCustom from '~/components/SliderCustom'
 import styles from './PopularProduct.module.scss'
 import CardProduct from '~/components/CardProduct'
 import Button from '~/components/Button'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/store/store'
+import LoadingStyle2 from '~/components/LoadingStyle2'
 
 const cx = classNames.bind(styles)
 
-function PopularProduct({ data }: { data: ProductType[] }) {
+function PopularProduct() {
+   const { productList, isLoading } = useSelector((state: RootState) => state.products)
+
+   const [isLoadData, setIsLoadData] = useState<boolean>(true)
+
    const [dataProduct, setDataProduct] = useState<ProductType[]>([])
    const [activeBtn, setActiveBtn] = useState([
       {
@@ -28,6 +35,7 @@ function PopularProduct({ data }: { data: ProductType[] }) {
          title: 'Special',
       },
    ])
+
    const handleButtonClick = (buttonId: number) => {
       const updatedButtons = activeBtn.map((button) => {
          if (button.id === buttonId) {
@@ -39,15 +47,19 @@ function PopularProduct({ data }: { data: ProductType[] }) {
       setActiveBtn(updatedButtons)
    }
    useEffect(() => {
-      if (data) {
+      if (productList) {
          activeBtn.forEach((el) => {
             if (el.isActive) {
-               const newData = data?.filter((item) => item?.tags === el.title.toLocaleLowerCase())
+               const newData = productList?.filter((item) => item?.tags === el.title.toLocaleLowerCase())
                setDataProduct(newData)
             }
          })
       }
-   }, [data, activeBtn])
+   }, [productList, activeBtn])
+   useEffect(() => {
+      setIsLoadData(isLoading)
+   }, [isLoading])
+
    return (
       <>
          <div className={cx('row mt-4')}>
@@ -66,6 +78,11 @@ function PopularProduct({ data }: { data: ProductType[] }) {
                </div>
             </div>
             <div className={cx('col-12 col-lg-10')}>
+               {isLoadData && (
+                  <div className={cx('loading')}>
+                     <LoadingStyle2 />
+                  </div>
+               )}
                <SliderCustom isBullet={true}>
                   {dataProduct?.map((product, index) => {
                      return (

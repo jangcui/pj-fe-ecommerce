@@ -271,7 +271,7 @@ const Admin: React.FC = () => {
                         <AiOutlineMenuFold className={cx('icon')} />
                      )}
                   </Button>
-                  <h2 className="text-center w-100 fs-1  mb-0">Well Come Back!!</h2>
+                  <h2 className="text-center w-100 fs-1 mb-0">Well Come Back!!</h2>
                   <div className="row col-3">
                      <h3 className="col-12 fs-3 fw-bold mb-0 lh-sm">
                         {admin && `${admin.fist_name} ${admin.last_name}`}

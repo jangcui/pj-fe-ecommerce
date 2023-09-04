@@ -1,23 +1,25 @@
 import classNames from 'classnames/bind'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { BsArrowLeft } from 'react-icons/bs'
+
+import { AppDispatch, RootState } from '~/redux/store/store'
+import Button from '~/components/Button'
+import config from '~/routes/config'
+import Image from '~/components/Image'
+import Loading from '~/components/Loading/Loading'
 import styles from './SingleBlog.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
-import Button from '~/components/Button'
-import config from '~/config/config'
-import Image from '~/components/Image/Image'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '~/store/store'
-import { useEffect } from 'react'
-import { getBlog } from '~/features/blogs/blogService'
-import { useParams } from 'react-router-dom'
-import Loading from '~/components/Loading/Loading'
-import { BsArrowLeft } from 'react-icons/bs'
+import { getBlog } from '~/redux/features/blogs/blogService'
+
 const cx = classNames.bind(styles)
 
 function SingleBlog() {
    const dispatch = useDispatch<AppDispatch>()
    const { blog, isLoading } = useSelector((state: RootState) => state.blogs)
-   const imgList = blog.images?.map((img) => img.url)
    const { blogId } = useParams()
 
    useEffect(() => {
@@ -41,15 +43,15 @@ function SingleBlog() {
                      <>
                         <h3 className={cx('title')}>{blog.title}</h3>
                         <div className={cx('wrap-img')}>
-                           <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
+                           <Image className={cx('img')} src={blog?.images ? blog?.images : ''} />
                         </div>
                         <p
                            className={cx('description')}
-                           dangerouslySetInnerHTML={{ __html: blog.description as string }}
+                           dangerouslySetInnerHTML={{ __html: blog?.description as string }}
                         ></p>
                         <div className="d-flex justify-content-between align-items-center">
-                           <p className={cx('date')}> {new Date(blog.createdAt).toLocaleDateString()}</p>
-                           <span className="fs-4 text-secondary">Views: {blog.numViews}</span>
+                           <p className={cx('date')}> {new Date(blog?.updatedAt).toLocaleDateString()}</p>
+                           <span className="fs-4 text-secondary">Views: {blog?.numViews}</span>
                         </div>
                      </>
                   )}

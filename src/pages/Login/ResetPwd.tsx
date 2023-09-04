@@ -5,13 +5,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 
 import InputCustom from '~/components/InputCustom'
-import { AppDispatch } from '~/store/store'
+import { AppDispatch } from '~/redux/store/store'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
 import ChangeTitle from '~/components/ChangeTitle'
-import config from '~/config'
-import { resetPwdToken } from '~/features/customers/customerService'
+import config from '~/routes/config'
 import styles from './Login.module.scss'
+import { resetPwdToken } from '~/redux/features/user/auth/authService'
 
 const cx = classNames.bind(styles)
 

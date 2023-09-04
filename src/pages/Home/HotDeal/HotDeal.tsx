@@ -2,7 +2,7 @@ import classNames from 'classnames/bind'
 import styles from './HotDeal.module.scss'
 import Image from '~/components/Image'
 import Button from '~/components/Button/Button'
-import config from '~/config/config'
+import config from '~/routes/config/config'
 const cx = classNames.bind(styles)
 
 type HotDealProps = {

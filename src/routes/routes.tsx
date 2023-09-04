@@ -1,5 +1,4 @@
-import config from '~/config'
-import Admin from '~/pages/Admin'
+import config from '~/routes/config'
 import BlogPage from '~/pages/BlogPage'
 import CartPage from '~/pages/CartPage'
 import CheckOut from '~/pages/CheckOut'
@@ -8,7 +7,6 @@ import Home from '~/pages/Home'
 import Login, { ResetPwd } from '~/pages/Login'
 import ForgotPwd from '~/pages/Login/ForgotPwd'
 import SignUp from '~/pages/Login/SignUp'
-import LoginAdmin from '~/pages/LoginAdmin/LoginAdmin'
 import MyOrder from '~/pages/MyOrder'
 import NotFound from '~/pages/NotFound'
 import OurStore from '~/pages/OurStore'
@@ -25,7 +23,6 @@ interface Route {
 
 const publicRouter: Route[] = [
    { path: config.routes.home, component: Home },
-   { path: config.routes.admin, component: Admin, layout: null },
    { path: config.routes.products, component: OurStore },
    { path: config.routes.product, component: SingleProduct },
    { path: config.routes.blogs, component: BlogPage },
@@ -35,7 +32,6 @@ const publicRouter: Route[] = [
    { path: config.routes.cart, component: CartPage },
    { path: config.routes.forgotPwd, component: ForgotPwd },
    { path: config.routes.signup, component: SignUp },
-   { path: config.routes.loginAdmin, component: LoginAdmin, layout: null },
    { path: config.routes.checkout, component: CheckOut },
    { path: config.routes.login, component: Login },
    { path: config.routes.order, component: MyOrder },

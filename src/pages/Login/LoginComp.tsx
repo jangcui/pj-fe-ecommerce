@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
 
 import Button from '~/components/Button'
-import config from '~/config/config'
+import config from '~/routes/config/config'
 import InputCustom from '~/components/InputCustom'
 import styles from './Login.module.scss'
 import { useNavigate } from 'react-router-dom'
-import { AppDispatch, RootState } from '~/store/store'
-import { login } from '~/features/customers/customerService'
-import { closeModalLogin } from '~/features/modalLogin/modalLoginSlice'
+import { AppDispatch, RootState } from '~/redux/store/store'
+import { login } from '~/redux/features/user/auth/authService'
+import { closeModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
 
 const cx = classNames.bind(styles)
 const loginSchema = Yup.object().shape({
@@ -22,7 +22,7 @@ const loginSchema = Yup.object().shape({
 function Login() {
    const dispatch = useDispatch<AppDispatch>()
    const navigate = useNavigate()
-   const { isLoading, isError } = useSelector((state: RootState) => state.customer)
+   const { isLoading, isError } = useSelector((state: RootState) => state.auth)
    const [message, setMessage] = useState<string>('')
 
    const formik = useFormik({
@@ -36,7 +36,7 @@ function Login() {
          if (result.payload.message) {
             setMessage(result.payload.message)
          } else {
-            toast.success(`Login Successfully, well come ${result.payload.fist_name} ${result.payload.last_name}`)
+            toast.success(`Logged in, welcome ${result.payload.first_name} ${result.payload.last_name}`)
             if (window.location.pathname === '/login') {
                navigate('/')
                dispatch(closeModalLogin())

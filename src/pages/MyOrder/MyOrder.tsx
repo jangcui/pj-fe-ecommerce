@@ -7,28 +7,28 @@ import moment from 'moment'
 import styles from './MyOrder.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
-import { AppDispatch, RootState } from '~/store/store'
-import { getMyOrder } from '~/features/customers/customerService'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import { TbMoodCry } from 'react-icons/tb'
 import Button from '~/components/Button/Button'
-import { getProducts } from '~/features/products/productsService'
+import { getAllProducts } from '~/redux/features/products/productsService'
+import { getMyOrder } from '~/redux/features/user/order/orderService'
 
 const cx = classNames.bind(styles)
 
 function MyOrder() {
    const dispatch = useDispatch<AppDispatch>()
-
-   const { orderList, user } = useSelector((state: RootState) => state.customer)
+   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const { orderList } = useSelector((state: RootState) => state.orderData)
 
    const navigate = useNavigate()
 
    useEffect(() => {
-      if (!user) {
+      if (!isLogin) {
          navigate('/login')
       } else {
          dispatch(getMyOrder())
       }
-   }, [user, navigate, dispatch])
+   }, [isLogin, navigate, dispatch])
 
    return (
       <>
@@ -53,25 +53,24 @@ function MyOrder() {
                            <tr key={index}>
                               <th>{index + 1}</th>
                               <th scope="row" className="col-5 p-2">
-                                 {item?.orderItems?.map((product, index) => (
+                                 {item?.productList?.map((product, index) => (
                                     <p key={index} className={cx('product')}>
                                        <Button
                                           text
                                           className={cx('action')}
-                                          onClick={() => navigate(`/product/${product?.productId?.slug}`)}
+                                          onClick={() => navigate(`/product/${product?.slug}`)}
                                        >
-                                          {product?.productId?.title}
+                                          {product?.title}
                                           <i className={cx('quantity')}>( x{product.quantity} ) </i>
                                        </Button>
                                     </p>
                                  ))}
                               </th>
                               <th>
-                                 <i className={cx('date')}>{moment(item.createdAt).format('HH:mm, DD/MM/YYYY')}</i>
+                                 <i className={cx('date')}>{moment(item.date).format('HH:mm, DD/MM/YYYY')}</i>
                               </th>
-                              <th>{item.total_price.toFixed(2)} ( $ )</th>
-
-                              <th>{item.order_status}</th>
+                              <th>{item.total_price_after_discount.toFixed(2)} ( $ )</th>
+                              <th>{item.status}</th>
                            </tr>
                         ))}
                      </tbody>
@@ -86,7 +85,7 @@ function MyOrder() {
                         className={cx('btn-back')}
                         onClick={() => {
                            navigate('/product')
-                           dispatch(getProducts({}))
+                           dispatch(getAllProducts({}))
                         }}
                      >
                         Go to shopping{' '}

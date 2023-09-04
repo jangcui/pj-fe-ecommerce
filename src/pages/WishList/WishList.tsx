@@ -4,16 +4,14 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Image from '~/components/Image'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '~/store/store'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import { useEffect, useState } from 'react'
-import { addToWishList, getUserWishList } from '~/features/customers/customerService'
-import { ProductType } from '~/types/productStage'
-import { ImgType } from '~/types/imageStage'
 import Button from '~/components/Button'
 import Loading from '~/components/Loading/Loading'
 import ModalCustom from '~/components/ModalCustom'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineClose } from 'react-icons/ai'
+import { getUserWishList, toggleWWishListProduct } from '~/redux/features/user/wishList/wishListService'
 
 const cx = classNames.bind(styles)
 interface ValueType {
@@ -22,8 +20,9 @@ interface ValueType {
 }
 function WishList() {
    const dispatch = useDispatch<AppDispatch>()
-   const { wishlist, isLoading, user } = useSelector((state: RootState) => state.customer)
-   const [dataList, setDataList] = useState<ProductType[]>([])
+   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const { wishList, isLoading } = useSelector((state: RootState) => state.wishListData)
+   const [dataList, setDataList] = useState<typeof wishList>(wishList)
    const [open, setOpen] = useState(false)
    const [value, setValue] = useState<ValueType>({
       index: 0,
@@ -31,18 +30,18 @@ function WishList() {
    })
    const navigate = useNavigate()
    useEffect(() => {
-      if (!user) {
+      if (!isLogin) {
          navigate('/login')
       } else {
          dispatch(getUserWishList())
       }
-   }, [user, navigate, dispatch])
+   }, [isLogin, navigate, dispatch])
 
    useEffect(() => {
-      if (wishlist) {
-         setDataList(wishlist)
+      if (wishList) {
+         setDataList(wishList)
       }
-   }, [wishlist])
+   }, [wishList])
 
    const handleRemoveProduct = async ({ index, id }: { index: number; id?: string }) => {
       if (id) {
@@ -50,7 +49,7 @@ function WishList() {
          newData.splice(index, 1)
          setOpen(false)
          setDataList(newData)
-         await dispatch(addToWishList({ prodId: id }))
+         await dispatch(toggleWWishListProduct({ prodId: id }))
       }
    }
 
@@ -76,9 +75,6 @@ function WishList() {
                      </div>
                   )}
                   {dataList?.map((data, index) => {
-                     const product = data
-                     const imgList = product.images?.map((img: ImgType) => img.url)
-
                      return (
                         <div key={index} className="col">
                            <div className={cx('container')}>
@@ -88,7 +84,7 @@ function WishList() {
                                     className={cx('btn-close')}
                                     onClick={() => {
                                        value.index = index
-                                       value.id = product._id
+                                       value.id = data?.prodId
                                        setValue({ ...value })
                                        setOpen(true)
                                     }}
@@ -100,21 +96,21 @@ function WishList() {
                                     text
                                     className={cx('btn')}
                                     onClick={() => {
-                                       navigate(`/product/${product?.slug}`)
+                                       navigate(`/product/${data?.slug}`)
                                     }}
                                  ></Button>
                                  <div className={cx('wrap-img')}>
-                                    <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
+                                    <Image className={cx('img')} src={data.image ? data.image : ''} />
                                  </div>
                                  <div className={cx('content')}>
-                                    <h3 className={cx('title')}>{product.title}</h3>
-                                    {product?.discountCode ? (
-                                       <p className={cx('price')}>${product?.price_after_discount.toFixed(2)}</p>
+                                    <h3 className={cx('title')}>{data.title}</h3>
+                                    {data?.discountCode ? (
+                                       <p className={cx('price')}>${data?.price_after_discount.toFixed(2)}</p>
                                     ) : (
-                                       <p className={cx('price')}> ${product.price.toFixed(2)}</p>
+                                       <p className={cx('price')}> ${data.price.toFixed(2)}</p>
                                     )}
                                  </div>
-                              </>{' '}
+                              </>
                            </div>
                         </div>
                      )

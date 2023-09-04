@@ -4,7 +4,7 @@ function ChangeTitle({ title }: { title?: string }) {
    return (
       <Helmet>
          <meta charSet="utf-8" />
-         <title>{title} | Digitic.</title>
+         <title>{title}</title>
       </Helmet>
    )
 }

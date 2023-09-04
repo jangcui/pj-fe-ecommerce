@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { publicRouter } from './routes/routes'
-import { Fragment, ComponentType, FC } from 'react'
+import { Fragment, ComponentType, FC, useEffect } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+
 import DefaultLayout from './layouts/DefaultLayout'
-import ScrollTopWhenPageChange from './hook/ScroolTop'
+import ScrollTopWhenPageChange from './hook/ScrollTop'
 import ModalLogin from './components/ModalLogin/ModalLogin'
 
 const App: FC = () => {
@@ -36,6 +37,7 @@ const App: FC = () => {
                                     newestOnTop={true}
                                     rtl={false}
                                     draggable
+                                    className="fw-bold"
                                     theme="light"
                                  />
                                  <Layout>

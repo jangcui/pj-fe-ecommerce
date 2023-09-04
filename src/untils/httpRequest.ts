@@ -1,42 +1,59 @@
 import axios from 'axios'
 
-import { base_url } from './base_url'
+const base_url = process.env.BASE_URL_API
+// const base_url = 'http://localhost:4000/api/'
 
-export const requests = axios.create({
+export const instance = axios.create({
+   withCredentials: true,
    baseURL: base_url,
    headers: {
       'Content-Type': 'application/json',
    },
 })
-
-requests.interceptors.request.use(
-   function (config) {
-      const token: string | null = localStorage.getItem('USER_TOKEN')
-      if (token) {
-         const tokenParse: string = JSON.parse(token)
-         config.headers.Authorization = `Bearer ${tokenParse}`
-      }
-      return config
+// const refreshToken = async () => {
+//    try {
+//       const response: Response = await get(`user/refresh`)
+//       const result = await response.json()
+//       return result
+//    } catch (error: any) {
+//       return error
+//    }
+// }
+instance.interceptors.request.use(
+   async (request) => {
+      request.headers.Authorization = `Bearer ${getToken()}`
+      return request
    },
-   function (error) {
+   (error) => {
+      console.log(error)
       return Promise.reject(error)
    },
 )
+
+export const getToken = () => {
+   const token = localStorage.getItem('TOKEN')
+   if (token) {
+      const tokenParse = JSON.parse(token)
+      return tokenParse
+   }
+   return null
+}
 export const get = async (path: string, config?: any) => {
-   const response = await requests.get(path, config)
+   const response = await instance.get(path, config)
    return response.data
 }
 
 export const post = async (path: string, data?: any, config?: any) => {
-   const response = await requests.post(path, data, config)
+   const response = await instance.post(path, data, config)
    return response.data
 }
+
 export const Delete = async (path: string, config?: any) => {
-   const response = await requests.delete(path, config)
+   const response = await instance.delete(path, config)
    return response.data
 }
 export const put = async (path: string, data?: any, config?: any) => {
-   const response = await requests.put(path, data, config)
+   const response = await instance.put(path, data, config)
    return response.data
 }
-export default requests
+export default instance

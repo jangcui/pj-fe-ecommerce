@@ -9,12 +9,12 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import styles from './MenuDrawer.module.scss'
 import Button from '~/components/Button'
-import { AppDispatch, RootState } from '~/store/store'
-import config from '~/config/config'
-import { getProducts } from '~/features/products/productsService'
+import { AppDispatch, RootState } from '~/redux/store/store'
+import config from '~/routes/config/config'
 import { FaceBookIcon, GitHubIcon, GmailIcon } from '~/components/Icon'
-import { logOutUser } from '~/features/customers/customerSlice'
-import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
+import { openModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
+import { getAllProducts } from '~/redux/features/products/productsService'
+import { logout } from '~/redux/features/user/auth/authService'
 const cx = classNames.bind(styles)
 
 interface SearchProductType {
@@ -24,13 +24,13 @@ interface SearchProductType {
 }
 interface NavBarType {
    data: SearchProductType[]
-   categoryList: string[]
    isOpen: boolean
    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
+function MenuDrawer({ data, isOpen, setIsOpen }: NavBarType) {
    const dispatch = useDispatch<AppDispatch>()
-   const { user } = useSelector((state: RootState) => state?.customer)
+   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const { categoriesList } = useSelector((state: RootState) => state.prodCates)
 
    const [active, setActive] = useState<boolean>(true)
 
@@ -39,11 +39,11 @@ function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
    const handleRedirection = async (value: string) => {
       setIsOpen(false)
       navigate(`/product?${`category=${encodeURIComponent(value.trim())}`}`)
-      await dispatch(getProducts({ category: value }))
+      await dispatch(getAllProducts({ category: value }))
    }
 
    const handleLogOut = () => {
-      dispatch(logOutUser())
+      dispatch(logout())
       window.location.reload()
       setIsOpen(false)
    }
@@ -90,7 +90,7 @@ function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
             <div className={cx('tab-content', 'col-12 row')}>
                {active ? (
                   <>
-                     {categoryList?.map((item, index) => (
+                     {categoriesList?.map((item, index) => (
                         <Button text className={cx('btn')} key={index} onClick={() => handleRedirection(item)}>
                            {item}
                         </Button>
@@ -107,7 +107,7 @@ function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
                         onClick={() => {
                            setIsOpen(false)
                            navigate('/product')
-                           dispatch(getProducts({}))
+                           dispatch(getAllProducts({}))
                         }}
                      >
                         Store
@@ -118,7 +118,7 @@ function MenuDrawer({ data, categoryList, isOpen, setIsOpen }: NavBarType) {
                      <Button text className={cx('btn')} to={config.routes.contact} onClick={() => setIsOpen(false)}>
                         contact
                      </Button>
-                     {user ? (
+                     {isLogin ? (
                         <>
                            <Button text className={cx('btn')} to={config.routes.order} onClick={() => setIsOpen(false)}>
                               my orders

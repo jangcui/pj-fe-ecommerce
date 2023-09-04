@@ -6,9 +6,9 @@ import { SiYoutubegaming } from 'react-icons/si'
 import styles from './Category.module.scss'
 import Button from '~/components/Button/Button'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '~/store/store'
-import { getProducts } from '~/features/products/productsService'
+import { AppDispatch } from '~/redux/store/store'
 import { useNavigate } from 'react-router-dom'
+import { getAllProducts } from '~/redux/features/products/productsService'
 
 const cx = classNames.bind(styles)
 
@@ -61,7 +61,7 @@ function Category() {
 
    const handleRedirection = async (value: string) => {
       navigate(`/product?${`category=${encodeURIComponent(value.trim())}`}`)
-      await dispatch(getProducts({ category: value }))
+      await dispatch(getAllProducts({ category: value }))
    }
    return (
       <>

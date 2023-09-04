@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind'
 import styles from './CheckOut.module.scss'
 import ChangeTitle from '~/components/ChangeTitle'
-import Button from '~/components/Button/Button'
+import Button from '~/components/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -12,24 +12,18 @@ import * as Yup from 'yup'
 
 import * as httpRequest from '~/untils/httpRequest'
 import Image from '~/components/Image/Image'
-import config from '~/config/config'
-import { AppDispatch, RootState } from '~/store/store'
-import { checkout, createOrder, emptyCart, getCarts } from '~/features/customers/customerService'
+import config from '~/routes/config/config'
+import { AppDispatch, RootState } from '~/redux/store'
 import images from '~/assets/images'
 import logo from '~/assets/images/logo.png'
-import InputCustom from '~/components/InputCustom/InputCustom'
-import { ShippingInfo } from '~/types/orderStage'
+import InputCustom from '~/components/InputCustom'
+import { emptyCart, getCart } from '~/redux/features/user/cart/cartService'
+import { OrderType, checkOut, createOrder } from '~/redux/features/user/order/orderService'
+
 const cx = classNames.bind(styles)
 
-interface OrderType {
-   productId: string
-   color: string
-   quantity: number
-   price: number
-}
-
 const checkOutSchema = Yup.object().shape({
-   first_name: Yup.string().required('Fist name is required'),
+   first_name: Yup.string().required('First name is required'),
    last_name: Yup.string().required('Last name is required'),
    address: Yup.string().required('Address is required'),
    city: Yup.string().required('City is required'),
@@ -41,30 +35,32 @@ const checkOutSchema = Yup.object().shape({
 
 function CheckOut() {
    const dispatch = useDispatch<AppDispatch>()
-   const { cartList, totalPrice, user } = useSelector((state: RootState) => state.customer)
+   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
    const [shippingPrice, setShippingPrice] = useState<number>(5)
    const [isLoading, setIsLoading] = useState<boolean>(false)
+
    const navigate = useNavigate()
-   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>()
+
    const [orderItem, setOrderItem] = useState<OrderType[]>([])
 
    useEffect(() => {
-      if (!user) {
+      if (!isLogin) {
          navigate('/login')
       } else {
-         dispatch(getCarts())
+         dispatch(getCart())
       }
-   }, [user, navigate, dispatch])
+   }, [isLogin, navigate, dispatch])
 
    useEffect(() => {
-      const itemOrder = cartList?.map((item) => ({
-         productId: item.productId?._id || '',
-         color: item.color?._id || '',
-         quantity: item.quantity || 0,
-         price: item.productId?.price || 0,
+      const itemOrder = productList?.map((item) => ({
+         productId: item.productId?._id,
+         color: item.color._id,
+         quantity: item.quantity,
+         price: item.price,
       }))
-      setOrderItem(itemOrder)
-   }, [cartList])
+      setOrderItem([...itemOrder])
+   }, [productList])
 
    const formik = useFormik({
       initialValues: {
@@ -83,9 +79,9 @@ function CheckOut() {
          await handleCheckOut()
       },
    })
-   useEffect(() => {
-      setShippingInfo({ ...formik.values })
-   }, [formik.values])
+   // useEffect(() => {
+   //    setShippingInfo({ ...formik.values })
+   // }, [formik.values])
 
    function loadScript(src: any) {
       return new Promise((resolve) => {
@@ -107,7 +103,7 @@ function CheckOut() {
          alert('Razorpay SDK failed to load. Are you online?')
          return
       }
-      const result = await dispatch(checkout({ amount: totalPrice + shippingPrice }))
+      const result = await dispatch(checkOut({ amount: totalPrice + shippingPrice }))
       if (!result) {
          toast.error('Some thing went wrong, please try again')
          return
@@ -133,7 +129,7 @@ function CheckOut() {
                createOrder({
                   total_price: totalPrice,
                   total_price_after_discount: totalPrice,
-                  shippingInfo: shippingInfo ? shippingInfo : formik.values,
+                  shippingInfo: formik.values,
                   orderItems: orderItem,
                   paymentInfo: data,
                }),
@@ -142,7 +138,7 @@ function CheckOut() {
                formik.resetForm()
                navigate('/order')
                dispatch(emptyCart())
-               dispatch(getCarts())
+               dispatch(getCart())
             }
             setIsLoading(false)
          },
@@ -189,8 +185,10 @@ function CheckOut() {
                            onChange={formik.handleChange('country')}
                            onBlur={formik.handleBlur('country')}
                         >
-                           <option value="">---Select Country---</option>
+                           <option value="">Select</option>
                            <option value="VietNam">VietNam</option>
+                           <option value="China">China</option>
+                           <option value="Japan">Japan</option>
                         </select>
 
                         {formik.touched.country && formik.errors.country ? (
@@ -205,7 +203,7 @@ function CheckOut() {
                               onChange={formik.handleChange('first_name')}
                               onBlur={formik.handleBlur('first_name')}
                               className={cx('input')}
-                              placeholder={'Fist Name'}
+                              placeholder={'First Name'}
                            />
 
                            {formik.touched.first_name && formik.errors.first_name ? (
@@ -313,31 +311,27 @@ function CheckOut() {
                </div>
                <div className={cx('product', 'col p-5')}>
                   <div className={cx('wrap-product')}>
-                     {cartList &&
-                        cartList?.map((item, index) => (
+                     {productList &&
+                        productList?.map((item, index) => (
                            <div className={cx('info')} key={index}>
                               <div className={cx('wrap-img')}>
                                  <Image
-                                    src={
-                                       item?.productId?.images?.[0]?.url
-                                          ? item?.productId?.images?.[0]?.url
-                                          : images.errorImage
-                                    }
+                                    src={item?.productId?.image ? item?.productId?.image : images.errorImage}
                                     className={cx('img')}
                                  />
                                  <span className={cx('count')}>{item.quantity}</span>
                                  <span className={cx('wrap-name')}>
                                     <p className={cx('name-prod')}>{item.productId?.title}</p>
-                                    <p className={cx('color')} style={{ backgroundColor: item.color?.title }}></p>
+                                    <p className={cx('color')} style={{ backgroundColor: item.color.title }}></p>
                                     {item?.productId?.discountCode ? (
                                        <>
-                                          <s className="fs-4">${item?.productId.price}</s>{' '}
+                                          <s className="fs-4">${item?.productId?.price}</s>{' '}
                                           <span className="fs-4 fw-bold" style={{ color: '#dd551b' }}>
                                              ${item?.productId?.price_after_discount.toFixed(2)}
                                           </span>
                                        </>
                                     ) : (
-                                       <p className="fs-4">${item?.productId.price}</p>
+                                       <p className="fs-4">${item?.productId?.price}</p>
                                     )}
                                  </span>
                               </div>

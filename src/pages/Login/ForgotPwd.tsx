@@ -7,14 +7,14 @@ import * as Yup from 'yup'
 import ReCAPTCHA from 'react-google-recaptcha'
 
 import InputCustom from '~/components/InputCustom'
-import { AppDispatch } from '~/store/store'
+import { AppDispatch } from '~/redux/store/store'
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
 import ChangeTitle from '~/components/ChangeTitle'
-import config from '~/config'
-import { forgotPwdToken } from '~/features/customers/customerService'
+import config from '~/routes/config'
 import styles from './Login.module.scss'
 import { useState } from 'react'
+import { forgotPwdToken } from '~/redux/features/user/auth/authService'
 
 const cx = classNames.bind(styles)
 

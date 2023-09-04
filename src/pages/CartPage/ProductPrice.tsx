@@ -8,11 +8,11 @@ import styles from './CartPage.module.scss'
 import { AiFillDelete } from 'react-icons/ai'
 
 import Image from '~/components/Image'
-import { getCarts, removeProductFromCart, updateQuantityProductFromCart } from '~/features/customers/customerService'
-import { AppDispatch } from '~/store/store'
-import { CartType } from '~/types/cartStage'
+import { AppDispatch } from '~/redux/store/store'
 import images from '~/assets/images'
 import Button from '~/components/Button'
+import { CartType } from '~/redux/features/user/cart/cartSlice'
+import { getCart, removeProductFromCart, updateQuantityProductFromCart } from '~/redux/features/user/cart/cartService'
 
 const cx = classNames.bind(styles)
 
@@ -23,7 +23,7 @@ function ProductPrice({ data }: { data: CartType }) {
 
    const handleRemoveProduct = debounce(async () => {
       await dispatch(removeProductFromCart(data?._id as string))
-      await dispatch(getCarts())
+      await dispatch(getCart())
    }, 800)
 
    useEffect(() => {
@@ -33,7 +33,7 @@ function ProductPrice({ data }: { data: CartType }) {
    }, [data])
 
    useEffect(() => {
-      const totalOrigin = data?.productId.price * data?.quantity
+      const totalOrigin = data?.productId?.price * data?.quantity
       const totalAfterDiscount = data?.productId?.price_after_discount * data?.quantity
       setTotal(data?.productId?.discountCode ? totalAfterDiscount : totalOrigin)
    }, [quantity, data])
@@ -42,7 +42,7 @@ function ProductPrice({ data }: { data: CartType }) {
       const debouncedUpdateQuantity = debounce(async (cartItemId, quantity) => {
          await dispatch(updateQuantityProductFromCart({ cartItemId, quantity }))
       }, 1000)
-      const priceOrigin = data?.productId.price * quantity
+      const priceOrigin = data?.productId?.price * quantity
       const priceAfterDiscount = data?.productId?.price_after_discount * quantity
       if (data?.productId && data?._id) {
          debouncedUpdateQuantity(data._id, quantity)
@@ -62,7 +62,7 @@ function ProductPrice({ data }: { data: CartType }) {
                   <Button className="col-3" text to={`/product/${data?.productId?.slug}`}>
                      <Image
                         className={cx('img')}
-                        src={data?.productId?.images?.[0]?.url ? data?.productId?.images?.[0]?.url : images.errorImage}
+                        src={data?.productId?.image ? data?.productId?.image : images.errorImage}
                      />
                   </Button>
                   <div className="col-8">
@@ -73,18 +73,18 @@ function ProductPrice({ data }: { data: CartType }) {
                      <p>
                         <span
                            className={cx('color')}
-                           style={{ backgroundColor: data?.color?.title ? data?.color?.title : ' ' }}
+                           style={{ backgroundColor: data?.color.title ? data?.color.title : ' ' }}
                         ></span>
                      </p>
                      {data?.productId?.discountCode ? (
                         <div className="d-flex gap-2" style={{ color: '#99a2aa' }}>
-                           <s className="fs-3">${data?.productId.price.toFixed(2)}</s>{' '}
+                           <s className="fs-3">${data?.productId?.price.toFixed(2)}</s>{' '}
                            <span className="fs-3 fw-bolder" style={{ color: '#dd551b' }}>
                               ${data?.productId?.price_after_discount.toFixed(2)}
                            </span>
                         </div>
                      ) : (
-                        <p className="fs-3 ">${data?.productId.price.toFixed(2)}</p>
+                        <p className="fs-3 ">${data?.productId?.price.toFixed(2)}</p>
                      )}
                   </div>
                </div>

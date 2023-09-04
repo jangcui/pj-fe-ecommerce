@@ -8,16 +8,15 @@ import * as Yup from 'yup'
 import styles from './Profile.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
-import { AppDispatch, RootState } from '~/store/store'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import InputCustom from '~/components/InputCustom'
 import Button from '~/components/Button'
-import { updateProfile } from '~/features/customers/customerService'
 import { useNavigate } from 'react-router-dom'
-import { BsArrowRight } from 'react-icons/bs'
+import { updateProfile } from '~/redux/features/user/auth/authService'
 const cx = classNames.bind(styles)
 
 const profileSchema = Yup.object().shape({
-   fist_name: Yup.string().required('Fist Name is required'),
+   first_name: Yup.string().required('Fist Name is required'),
    last_name: Yup.string().required('Last Name is required'),
    email: Yup.string().email('Email should be valid').required('Email is required'),
    mobile: Yup.string().required('Mobile Number is required'),
@@ -25,22 +24,22 @@ const profileSchema = Yup.object().shape({
 
 function Profile() {
    const dispatch = useDispatch<AppDispatch>()
-   const { user } = useSelector((state: RootState) => state.customer)
+   const { isLogin, user } = useSelector((state: RootState) => state.auth)
    const [isEdit, setIsEdit] = useState<boolean>(true)
    const navigate = useNavigate()
 
    useEffect(() => {
-      if (!user) {
+      if (!isLogin) {
          navigate('/login')
       } else {
          return
       }
-   }, [user, navigate, dispatch])
+   }, [isLogin, navigate, dispatch])
 
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         fist_name: user?.fist_name ? user.fist_name : '',
+         first_name: user?.first_name ? user.first_name : '',
          last_name: user?.last_name ? user.last_name : '',
          email: user?.email ? user.email : '',
          mobile: user?.mobile ? user.mobile : '',
@@ -67,15 +66,15 @@ function Profile() {
                <div className={cx('field')}>
                   <h3>Fist Name: </h3>
                   <InputCustom
-                     value={formik.values.fist_name}
-                     onChange={formik.handleChange('fist_name')}
+                     value={formik.values.first_name}
+                     onChange={formik.handleChange('first_name')}
                      className={cx('input')}
                      disabled={isEdit}
-                     name={'fist_name'}
-                     onBlur={formik.handleBlur('fist_name')}
+                     name={'first_name'}
+                     onBlur={formik.handleBlur('first_name')}
                   />
-                  {formik.touched.fist_name && formik.errors.fist_name ? (
-                     <span className={cx('error')}>{formik.errors.fist_name}</span>
+                  {formik.touched.first_name && formik.errors.first_name ? (
+                     <span className={cx('error')}>{formik.errors.first_name}</span>
                   ) : null}
                </div>
                <div className={cx('field')}>
@@ -126,15 +125,6 @@ function Profile() {
                   </Button>
                )}
             </form>
-
-            <div className="row mt-5 justify-content-end">
-               <div className="col-8 col-md-4 text-end">
-                  <Button text className="btn btn-primary text-end" onClick={() => navigate('/admin')}>
-                     <span className="me-2 fs-4"> Go to Admin Panel </span>
-                     <BsArrowRight />
-                  </Button>{' '}
-               </div>
-            </div>
          </div>
       </>
    )

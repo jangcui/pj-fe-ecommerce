@@ -11,18 +11,18 @@ import Button from '~/components/Button'
 import ChangeTitle from '~/components/ChangeTitle'
 import { Sort2Icon, Sort3Icon, Sort4Icon, SortHorizon } from '~/components/Icon'
 import Loading from '~/components/Loading'
-import { getProducts } from '~/features/products/productsService'
-import { AppDispatch, RootState } from '~/store/store'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import styles from './OurStore.module.scss'
 import CardProduct from '~/components/CardProduct'
-import { getBrands } from '~/features/brands/brandService'
+import { getAllProducts } from '~/redux/features/products/productsService'
+import { getAllBrands } from '~/redux/features/brands/brandService'
 const cx = classNames.bind(styles)
 
 function OurStore() {
    const dispatch = useDispatch<AppDispatch>()
    const { productList, isLoading } = useSelector((state: RootState) => state.products)
-   const categoryList = useSelector((state: RootState) => state.prodCates.itemList)
-   const brandList = useSelector((state: RootState) => state.brands.itemList)
+   const categoryList = useSelector((state: RootState) => state.prodCates.categoriesList)
+   const { brandList } = useSelector((state: RootState) => state.brands)
    const [sortClass, setSortClass] = useState<string>('')
    const [sortBtn, setSortBtn] = useState([
       {
@@ -47,7 +47,7 @@ function OurStore() {
    ])
    const [brands, setBrands] = useState<string[]>([])
    const [categories, setCategories] = useState<string[]>([])
-   const [tags, setTags] = useState<string[]>(['featured ', 'popular', 'special'])
+   const tags = ['featured ', 'popular', 'special']
 
    ////filter
    const [brand, setBrand] = useState<string>('')
@@ -78,7 +78,7 @@ function OurStore() {
       navigate(url)
 
       if (queryParams.length > 0) {
-         dispatch(getProducts({ brand, category, tag, sort, minPrice, maxPrice }))
+         dispatch(getAllProducts({ brand, category, tag, sort, minPrice, maxPrice }))
       }
    }, [dispatch, brand, category, sort, minPrice, maxPrice, tag, navigate])
 
@@ -89,30 +89,16 @@ function OurStore() {
    }, [sortBtn])
 
    useEffect(() => {
-      dispatch(getBrands())
+      dispatch(getAllBrands())
    }, [dispatch])
 
-   // useEffect(() => {
-   //    const uniqueBrands = new Set<string>()
-   //    const uniqueTags = new Set<string>()
-   //    productList?.forEach((product: ProductType) => {
-   //       uniqueBrands.add(product.brand)
-   //       uniqueTags.add(product.tags)
-   //    })
-   //    setTags(Array.from(uniqueTags))
-   //    setBrands(Array.from(uniqueBrands))
-   //    if (categoryList) {
-   //       const data = categoryList.map((item) => item.title || '')
-   //       setCategories(data)
-   //    }
-   // }, [productList, categoryList])
    useEffect(() => {
       if (brandList) {
-         const data = brandList.map((item) => item.title || '')
+         const data = brandList.map((item) => item.title)
          setBrands(data)
       }
       if (categoryList) {
-         const data = categoryList.map((item) => item.title || '')
+         const data = categoryList.map((item) => item)
          setCategories(data)
       }
    }, [brandList, categoryList])
@@ -137,7 +123,7 @@ function OurStore() {
       setMaxPrice(0)
       setSort('')
       navigate('')
-      dispatch(getProducts({}))
+      dispatch(getAllProducts({}))
    }
 
    const handleMinPriceChange = debounce((e: ChangeEvent<HTMLInputElement>) => {

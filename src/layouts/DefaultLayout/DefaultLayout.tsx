@@ -1,28 +1,28 @@
-import { ReactNode, ReactFragment, useState, useEffect } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
 import styles from './DefaultLayout.module.scss'
 import { BiArrowToTop } from 'react-icons/bi'
 import { useDispatch, useSelector } from 'react-redux'
 
-import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Button from '~/components/Button'
 import Container from '../components/Container'
-import { AppDispatch, RootState } from '~/store/store'
-import { getProducts } from '~/features/products/productsService'
-import { getBlogs } from '~/features/blogs/blogService'
+import { AppDispatch, RootState } from '~/redux/store/store'
+import { getAllBlogs } from '~/redux/features/blogs/blogService'
+import Header from '../components/Header'
+import { getAllProducts } from '~/redux/features/products/productsService'
+import { checkIsLogin } from '~/redux/features/user/auth/authService'
 
 const cx = classNames.bind(styles)
 
-function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
+function DefaultLayout({ children }: { children: ReactNode }) {
    const dispatch = useDispatch<AppDispatch>()
    const [isScrolled, setIsScrolled] = useState(false)
-   const isLoadingProduct = useSelector((state: RootState) => state.products.isLoading)
-   const isLoadingBlog = useSelector((state: RootState) => state.blogs.isLoading)
 
    useEffect(() => {
-      dispatch(getProducts({}))
-      dispatch(getBlogs())
+      dispatch(getAllProducts({}))
+      dispatch(getAllBlogs())
+      dispatch(checkIsLogin())
    }, [dispatch])
 
    const handleButtonClick = () => {
@@ -54,17 +54,6 @@ function DefaultLayout({ children }: { children: ReactNode | ReactFragment }) {
                <Container>{children}</Container>
                <Footer />
             </>
-            {/* {isLoadingProduct && isLoadingBlog ? (
-               <>
-                  <div className={cx('loading')}>
-                     <div className={cx('loader-1')} />
-                     <div className={cx('loader-1')} />
-                     <div className={cx('loader-1')} />
-                  </div>
-               </>
-            ) : (
-              
-            )} */}
          </div>
       </div>
    )

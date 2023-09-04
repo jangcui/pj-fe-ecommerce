@@ -2,33 +2,32 @@ import classNames from 'classnames/bind'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { BsArrowLeft } from 'react-icons/bs'
 
 import ProductPrice from './ProductPrice'
-import Button from '~/components/Button/Button'
-import { AppDispatch, RootState } from '~/store/store'
-import { getCarts } from '~/features/customers/customerService'
-import config from '~/config/config'
+import Button from '~/components/Button'
+import { AppDispatch, RootState } from '~/redux/store'
 import styles from './CartPage.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
-import { BsArrowLeft } from 'react-icons/bs'
+import { getCart } from '~/redux/features/user/cart/cartService'
+
 const cx = classNames.bind(styles)
 
 function CartPage() {
    const dispatch = useDispatch<AppDispatch>()
-   const { cartList, totalPrice, user } = useSelector((state: RootState) => state.customer)
+   const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
+   const { isLogin } = useSelector((state: RootState) => state.auth)
+
    const navigate = useNavigate()
-   useEffect(() => {
-      dispatch(getCarts())
-   }, [dispatch])
 
    useEffect(() => {
-      if (!user) {
+      if (!isLogin) {
          navigate('/login')
       } else {
-         dispatch(getCarts())
+         dispatch(getCart())
       }
-   }, [user, navigate, dispatch])
+   }, [isLogin, navigate, dispatch])
 
    return (
       <>
@@ -45,8 +44,8 @@ function CartPage() {
                   <h3 className="me-5 me-md-0">Total</h3>
                </div>
             </div>
-            {cartList &&
-               cartList?.map((data, index) => {
+            {productList &&
+               productList?.map((data, index) => {
                   return (
                      <div key={index} className={cx('title', 'row row-cols-2 gy-2 mt-0 justify-content-between')}>
                         <ProductPrice data={data} />

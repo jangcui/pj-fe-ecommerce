@@ -11,25 +11,26 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
 import Button from '~/components/Button'
-import { AppDispatch, RootState } from '~/store/store'
-import { getAProduct, getProducts, rateProduct } from '~/features/products/productsService'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import images from '~/assets/images'
-import { addToCart, addToWishList, getCarts, getUserWishList } from '~/features/customers/customerService'
-import { ItemType } from '~/types/itemStage'
-import { ProductType } from '~/types/productStage'
+import { ProductType } from '~/redux/features/products/productType'
 import Loading from '~/components/Loading'
 import StarRatingCustom from '~/components/StarRatingCustom'
-import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
 import CardProduct from '~/components/CardProduct'
-import PopularProduct from '../Home/PopularProduct'
+import { getAProduct, getAllProducts, rateProduct } from '~/redux/features/products/productsService'
+import { openModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
+import { getUserWishList, toggleWWishListProduct } from '~/redux/features/user/wishList/wishListService'
+import { addToCart, getCart } from '~/redux/features/user/cart/cartService'
 
 const cx = classNames.bind(styles)
 
 function SingleProduct() {
    const dispatch = useDispatch<AppDispatch>()
    const { product, productList, isLoading } = useSelector((state: RootState) => state.products)
-   const { cartList, wishlist, user } = useSelector((state: RootState) => state.customer)
-   const imgList = product?.images?.map((img) => img.url)
+   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const cartList = useSelector((state: RootState) => state.cartData.productList)
+   const { wishList } = useSelector((state: RootState) => state.wishListData)
+
    const [colorId, setColorId] = useState<string>('')
 
    const [productPop, setProductPop] = useState<ProductType[]>([])
@@ -38,6 +39,7 @@ function SingleProduct() {
    const [star, setStar] = useState<number>(0)
    const [comment, setComment] = useState<string>('')
    const [quantity, setQuantity] = useState<number>(1)
+
    const { slug } = useParams()
    const navigate = useNavigate()
 
@@ -47,19 +49,19 @@ function SingleProduct() {
       } else {
          navigate('')
          dispatch(getAProduct(slug))
-         dispatch(getProducts({}))
-         if (user) {
+         dispatch(getAllProducts({}))
+         if (isLogin) {
             dispatch(getUserWishList())
-            dispatch(getCarts())
+            dispatch(getCart())
          }
       }
-   }, [user, navigate, dispatch, slug])
+   }, [isLogin, navigate, dispatch, slug])
    const handleWishlist = async () => {
-      if (!user) {
+      if (!isLogin) {
          dispatch(openModalLogin())
       } else {
          setIsWishlist(!isWishlist)
-         await dispatch(addToWishList({ prodId: product._id || '' }))
+         await dispatch(toggleWWishListProduct({ prodId: product._id }))
          await dispatch(getUserWishList())
       }
    }
@@ -72,12 +74,13 @@ function SingleProduct() {
    }, [productList])
 
    useEffect(() => {
-      wishlist?.map((item) => {
-         if (item?._id === product?._id) {
+      wishList?.map((item) => {
+         if (item?.prodId === product?._id) {
             setIsWishlist(true)
          }
       })
-   }, [wishlist, product])
+   }, [wishList, product])
+
    useEffect(() => {
       for (const index in cartList) {
          if (product?._id === cartList[index]?.productId?._id) {
@@ -95,12 +98,12 @@ function SingleProduct() {
       } else {
          const data = { color: colorId, productId: product?._id, price: product?.price, quantity: quantity }
          await dispatch(addToCart(data))
-         await dispatch(getCarts())
+         await dispatch(getCart())
       }
    }
 
    const handleRating = async () => {
-      if (!user) {
+      if (!isLogin) {
          dispatch(openModalLogin())
       } else if (star === 0) {
          toast.error('Please add star rating')
@@ -117,7 +120,7 @@ function SingleProduct() {
          }
       }
    }
-
+   console.log(product)
    return (
       <>
          <ChangeTitle title={`${product?.title}`} />
@@ -139,10 +142,10 @@ function SingleProduct() {
                                  {...{
                                     smallImage: {
                                        isFluidWidth: true,
-                                       src: imgList && imgList[0] ? imgList[0] : images.errorImage,
+                                       src: product?.images[0]?.url ? product?.images[0]?.url : images.errorImage,
                                     },
                                     largeImage: {
-                                       src: imgList && imgList[0] ? imgList[0] : images.errorImage,
+                                       src: product?.images[0]?.url ? product?.images[0]?.url : images.errorImage,
                                        width: 2000,
                                        height: 2000,
                                     },
@@ -158,10 +161,10 @@ function SingleProduct() {
                                  {...{
                                     smallImage: {
                                        isFluidWidth: true,
-                                       src: imgList && imgList[1] ? imgList[1] : images.errorImage,
+                                       src: product?.images[1]?.url ? product?.images[1]?.url : images.errorImage,
                                     },
                                     largeImage: {
-                                       src: imgList && imgList[1] ? imgList[1] : images.errorImage,
+                                       src: product?.images[1]?.url ? product?.images[1]?.url : images.errorImage,
 
                                        width: 1200,
                                        height: 1200,
@@ -176,10 +179,10 @@ function SingleProduct() {
                                  {...{
                                     smallImage: {
                                        isFluidWidth: true,
-                                       src: imgList && imgList[2] ? imgList[2] : images.errorImage,
+                                       src: product?.images[2]?.url ? product?.images[2]?.url : images.errorImage,
                                     },
                                     largeImage: {
-                                       src: imgList && imgList[2] ? imgList[2] : images.errorImage,
+                                       src: product?.images[2]?.url ? product?.images[2]?.url : images.errorImage,
                                        width: 1200,
                                        height: 1200,
                                     },
@@ -220,7 +223,7 @@ function SingleProduct() {
                                     className={cx('btn-nav')}
                                     onClick={() => {
                                        navigate(`/product?${`brand=${encodeURIComponent(product?.brand)}`}`)
-                                       dispatch(getProducts({ brand: product?.brand }))
+                                       dispatch(getAllProducts({ brand: product?.brand }))
                                     }}
                                  >
                                     {product?.brand}
@@ -234,7 +237,7 @@ function SingleProduct() {
                                        navigate(
                                           `/product?${`category=${encodeURIComponent(product?.category.trim())}`}`,
                                        )
-                                       dispatch(getProducts({ category: product?.category }))
+                                       dispatch(getAllProducts({ category: product?.category }))
                                     }}
                                  >
                                     {product?.category}
@@ -246,7 +249,7 @@ function SingleProduct() {
                                     className={cx('btn-nav')}
                                     onClick={() => {
                                        navigate(`/product?${`tags=${encodeURIComponent(product?.tags)}`}`)
-                                       dispatch(getProducts({ tag: product?.tags }))
+                                       dispatch(getAllProducts({ tag: product?.tags }))
                                     }}
                                  >
                                     {product?.tags}
@@ -257,7 +260,7 @@ function SingleProduct() {
                                  <div className="d-flex align-items-center flex-wrap mb-4">
                                     <span className="fs-2 fw-bold me-3">Color:</span>
                                     <div className="d-flex gap-1">
-                                       {product?.color.map((color: ItemType | any, index) => (
+                                       {product?.color.map((color, index) => (
                                           <div
                                              key={index}
                                              className={cx('color-select', colorId === color?._id ? 'active' : '')}
@@ -310,7 +313,7 @@ function SingleProduct() {
                                           <Button
                                              className={cx('btn')}
                                              primary
-                                             onClick={!user ? () => dispatch(openModalLogin()) : handleAddToCart}
+                                             onClick={!isLogin ? () => dispatch(openModalLogin()) : handleAddToCart}
                                              lazyLoad={isLoading}
                                           >
                                              ADD TO CART
@@ -352,7 +355,7 @@ function SingleProduct() {
                )}
                <div className={cx('description-container', 'w-100')}>
                   <h2>Description</h2>
-                  <p className={cx('description')} dangerouslySetInnerHTML={{ __html: product?.description || '' }}></p>
+                  <p className={cx('description')} dangerouslySetInnerHTML={{ __html: product?.description }}></p>
                </div>
                <div className={cx('review-container', 'w-100')}>
                   <h2>Review</h2>

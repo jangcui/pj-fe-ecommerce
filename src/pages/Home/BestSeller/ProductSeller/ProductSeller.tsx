@@ -4,11 +4,11 @@ import styles from './ProductSeller.module.scss'
 import Image from '~/components/Image'
 import StarRatingCustom from '~/components/StarRatingCustom'
 import Button from '~/components/Button'
-import { ProductType } from '~/types/productStage'
+import { ProductType } from '~/redux/features/products/productType'
 import CountdownTimer from './CountDown'
 import LoadingStyle2 from '~/components/LoadingStyle2'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store/store'
+import { RootState } from '~/redux/store/store'
 import { useEffect, useState } from 'react'
 
 const cx = classNames.bind(styles)
@@ -30,8 +30,9 @@ function ProductSeller({ data }: { data: ProductType }) {
             </div>
          ) : (
             <div className={cx('container', 'row')}>
+               <Button text className={cx('btn-overlay')} to={`/product/${data.slug}`}></Button>
                <div className={cx('block-img', 'col-6')}>
-                  <div className={cx('badge')}>-{data.discountCode && data.discountCode.percentage}%</div>
+                  <div className={cx('badge')}>-{data?.discountCode && data?.discountCode?.percentage}%</div>
                   <div className={cx('main-img')}>
                      <Image className={cx('img')} src={imgList ? imgList[0] : ''} />
                   </div>
@@ -45,9 +46,8 @@ function ProductSeller({ data }: { data: ProductType }) {
                   </div>
                </div>
                <div className={cx('info', 'col-6')}>
-                  <span className={cx('brand')}>{data.brand}</span>
-                  <h3 className={cx('title')}>{data.title}</h3>
-
+                  <span className={cx('brand')}>{data?.brand}</span>
+                  <h3 className={cx('title')}>{data?.title}</h3>
                   <div className={cx('price', 'mb-3 d-flex gap-2')}>
                      {data?.discountCode ? (
                         <>

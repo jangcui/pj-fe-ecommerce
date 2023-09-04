@@ -1,37 +1,39 @@
 import classNames from 'classnames/bind'
-import styles from './CardProduct.module.scss'
-import Image from '~/components/Image/Image'
-import Button from '~/components/Button/Button'
 
-import { ProductType } from '~/types/productStage'
-import { useSelector, useDispatch } from 'react-redux'
-import { AppDispatch, RootState } from '~/store/store'
-import { addToWishList, getUserWishList } from '~/features/customers/customerService'
-import { AiOutlineHeart, AiTwotoneHeart } from 'react-icons/ai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ProductType } from '~/redux/features/products/productType'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppDispatch, RootState } from '~/redux/store/store'
+import { AiOutlineHeart, AiTwotoneHeart } from 'react-icons/ai'
+
+import styles from './CardProduct.module.scss'
+import Image from '~/components/Image'
+import Button from '~/components/Button'
 import StarRatingCustom from '../StarRatingCustom'
 import images from '~/assets/images'
-import { openModalLogin } from '~/features/modalLogin/modalLoginSlice'
+import { openModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
+import { getUserWishList, toggleWWishListProduct } from '~/redux/features/user/wishList/wishListService'
 
 const cx = classNames.bind(styles)
 
 function CardProduct({ data, isSort = false }: { data: ProductType; isSort?: boolean }) {
    const dispatch = useDispatch<AppDispatch>()
    const [isActive, setIsActive] = useState<boolean>(false)
-   const { wishlist, user } = useSelector((state: RootState) => state.customer)
+   const { user } = useSelector((state: RootState) => state.auth)
+   const { wishList } = useSelector((state: RootState) => state.wishListData)
 
    const imgList = data.images?.map((img) => img.url)
    const navigate = useNavigate()
 
    const handleAddToWishList = async () => {
       setIsActive(!isActive)
-      await dispatch(addToWishList({ prodId: data._id || '' }))
+      await dispatch(toggleWWishListProduct({ prodId: data._id || '' }))
       await dispatch(getUserWishList())
    }
    useEffect(() => {
-      wishlist?.map((item) => {
-         if (item._id === data._id) {
+      wishList?.map((item) => {
+         if (item.prodId === data._id) {
             setIsActive(true)
          }
       })

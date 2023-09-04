@@ -10,9 +10,9 @@ import styles from './Contact.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Button from '~/components/Button'
-import { AppDispatch, RootState } from '~/store/store'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import InputCustom from '~/components/InputCustom/InputCustom'
-import { createEnquiry } from '~/features/enquiry/enquiryService'
+import { createEnquiry } from '~/redux/features/enquiry/enquiryService'
 const cx = classNames.bind(styles)
 
 const contactSchema = Yup.object().shape({

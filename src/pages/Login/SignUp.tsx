@@ -8,17 +8,17 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import { useState } from 'react'
 
 import InputCustom from '~/components/InputCustom'
-import { AppDispatch, RootState } from '~/store/store'
+import { AppDispatch, RootState } from '~/redux/store/store'
 import styles from './Login.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import Button from '~/components/Button'
-import { register } from '~/features/customers/customerService'
+import { register } from '~/redux/features/user/auth/authService'
 
 const cx = classNames.bind(styles)
 
 const signUpSchema = Yup.object().shape({
-   fist_name: Yup.string().required('Fist name is required'),
+   first_name: Yup.string().required('Fist name is required'),
    last_name: Yup.string().required('Last name is required'),
    email: Yup.string().email('Email should be valid').required('Email is required'),
    mobile: Yup.number().required('Phone is required').positive().integer(),
@@ -29,7 +29,7 @@ const signUpSchema = Yup.object().shape({
 })
 function SignUp() {
    const dispatch = useDispatch<AppDispatch>()
-   const { isLoading } = useSelector((state: RootState) => state.customer)
+   const { isLoading } = useSelector((state: RootState) => state.auth)
    const [isVerified, setIsVerified] = useState<boolean | null>(null)
 
    const navigate = useNavigate()
@@ -37,7 +37,7 @@ function SignUp() {
    const formik = useFormik({
       enableReinitialize: true,
       initialValues: {
-         fist_name: '',
+         first_name: '',
          last_name: '',
          email: '',
          mobile: 0,
@@ -78,11 +78,11 @@ function SignUp() {
                               className={cx('input')}
                               type={'text'}
                               placeholder="Fist Name..."
-                              value={formik.values.fist_name}
-                              onChange={formik.handleChange('fist_name')}
-                              onBlur={formik.handleBlur('fist_name')}
+                              value={formik.values.first_name}
+                              onChange={formik.handleChange('first_name')}
+                              onBlur={formik.handleBlur('first_name')}
                            />
-                           <span className={cx('error')}>{formik.touched.fist_name && formik.errors.fist_name} </span>
+                           <span className={cx('error')}>{formik.touched.first_name && formik.errors.first_name} </span>
                         </div>
                         <div className="col ">
                            <InputCustom

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import 'swiper/css/scrollbar'
 
 import SliderCustom from '~/components/SliderCustom/SliderCustom'
-import { ProductType } from '~/types/productStage'
+import { ProductType } from '~/redux/features/products/productType'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store/store'
+import { RootState } from '~/redux/store/store'
 import ProductSeller from './ProductSeller'
 
 function OnSale() {

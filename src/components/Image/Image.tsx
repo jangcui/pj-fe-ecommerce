@@ -22,7 +22,7 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(function MyImage(
          ref={ref}
          src={src !== '' ? src : fallback}
          alt={alt}
-         loading="eager"
+         loading="lazy"
          {...props}
          onError={handleError}
       />

@@ -12,20 +12,20 @@ import styles from './MenuCart.module.scss'
 import Button from '~/components/Button'
 import Image from '~/components/Image'
 import images from '~/assets/images'
-import { AppDispatch, RootState } from '~/store/store'
-import { getCarts, removeProductFromCart } from '~/features/customers/customerService'
+import { AppDispatch, RootState } from '~/redux/store/store'
+import { getCart, removeProductFromCart } from '~/redux/features/user/cart/cartService'
 
 const cx = classNames.bind(styles)
 
 function MenuCart() {
    const dispatch = useDispatch<AppDispatch>()
-   const { cartList, totalPrice } = useSelector((state: RootState) => state?.customer)
+   const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
    const [openMenu, setOpenMenu] = useState<boolean>(false)
    const navigate = useNavigate()
 
    const handleRemoveProduct = debounce(async (data: string) => {
       await dispatch(removeProductFromCart(data))
-      await dispatch(getCarts())
+      await dispatch(getCart())
    }, 800)
 
    return (
@@ -34,11 +34,11 @@ function MenuCart() {
             <Button className={cx('btn')} onClick={() => setOpenMenu(true)}>
                <TiShoppingCart className={cx('icon')} />
                <span className={cx('sub-quantity', 'd-block d-sm-none ')}>
-                  {cartList?.length ? cartList?.length : 0}
+                  {productList?.length ? productList?.length : 0}
                </span>
             </Button>
             <div className={cx('option-content', 'd-none d-sm-flex')}>
-               <span className={cx('quantity')}>{cartList?.length ? cartList?.length : 0}</span>
+               <span className={cx('quantity')}>{productList?.length ? productList?.length : 0}</span>
                <p className="fs-4 d-flex m-0">
                   <span> ${totalPrice ? totalPrice : 0}</span>
                </p>
@@ -56,8 +56,8 @@ function MenuCart() {
                   <GrClose />
                </Button>
                <div className={cx('product-detail')}>
-                  {cartList.length > 0 ? (
-                     cartList.map((data, index) => (
+                  {productList.length > 0 ? (
+                     productList.map((data, index) => (
                         <div key={index} className={cx('product', 'row col-12')}>
                            <Button
                               text
@@ -68,24 +68,20 @@ function MenuCart() {
                                  <div className="col-4 p-0 d-flex justify-content-center align-items-center">
                                     <Image
                                        className={cx('img')}
-                                       src={
-                                          data?.productId?.images?.[0]?.url
-                                             ? data?.productId?.images?.[0]?.url
-                                             : images.errorImage
-                                       }
+                                       src={data?.productId?.image ? data?.productId?.image : images.errorImage}
                                     />
                                  </div>
                                  <div className="col-8 p-0">
                                     <h3 className="fs-4 mb-3">{data?.productId?.title}</h3>
                                     {data?.productId?.discountCode ? (
                                        <div className="d-flex gap-2 mb-2" style={{ color: '#99a2aa' }}>
-                                          <s className="fs-4">${data?.productId.price.toFixed(2)}</s>{' '}
+                                          <s className="fs-4">${data?.productId?.price.toFixed(2)}</s>{' '}
                                           <span className="fs-4 fw-bolder" style={{ color: '#dd551b' }}>
                                              ${data?.productId?.price_after_discount.toFixed(2)}
                                           </span>
                                        </div>
                                     ) : (
-                                       <p className="fs-4">${data?.productId.price.toFixed(2)}</p>
+                                       <p className="fs-4">${data?.productId?.price.toFixed(2)}</p>
                                     )}
                                     <div className="col-12 row align-items-center">
                                        <div
@@ -113,17 +109,17 @@ function MenuCart() {
                   )}
                </div>
                <div className={cx('summary')}>
-                  <div className="w-100  row justify-content-between  ">
-                     <span className="col text-center fs-4 fs-xl-3 fw-bold "> Total Items:</span>
-                     <span className="col text-center fs-4 fs-xl-3 fw-bold "> Sub Total:</span>
+                  <div className="w-100  row justify-content-between">
+                     <span className="col text-center fs-4 fs-xl-3 fw-bold"> Total Items:</span>
+                     <span className="col text-center fs-4 fs-xl-3 fw-bold"> Sub Total:</span>
                   </div>
                   <div className="w-100  row justify-content-between">
-                     <span className="col text-center fs-3 ">{cartList.length}</span>
+                     <span className="col text-center fs-3 ">{productList.length}</span>
                      <span className="col text-center fs-3 ">${totalPrice}</span>
                   </div>
                </div>
                <div className={cx('view-cart', 'w-100 d-flex justify-content-center gap-4')}>
-                  {cartList.length > 0 ? (
+                  {productList.length > 0 ? (
                      <>
                         <Button
                            primary

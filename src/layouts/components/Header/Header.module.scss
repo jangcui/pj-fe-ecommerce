@@ -81,7 +81,7 @@
                cursor: pointer;
                justify-content: flex-end;
                align-items: center;
-               width: 30%;
+               // width: 30%;
 
                .btn-action {
                   color: var(--white);
@@ -167,13 +167,7 @@
 
 @include media-breakpoint-down(lg) {
    .option-wrapper {
-      gap: 10px !important;
-
-      .option {
-         p {
-            display: none;
-         }
-      }
+      gap: 6px !important;
    }
 }
 

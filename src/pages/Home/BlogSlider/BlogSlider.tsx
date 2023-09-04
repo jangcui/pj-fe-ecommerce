@@ -1,15 +1,15 @@
 import BlogComp from '~/components/BlogComp/BlogComp'
 import SliderCustom from '~/components/SliderCustom/SliderCustom'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store/store'
+import { RootState } from '~/redux/store/store'
 
 function BlogSlider() {
-   const { blogs } = useSelector((state: RootState) => state.blogs)
+   const { blogList } = useSelector((state: RootState) => state.blogs)
 
    return (
       <>
          <SliderCustom isBullet={false}>
-            {blogs?.map((blog, index) => {
+            {blogList?.map((blog, index) => {
                return (
                   <div key={index} className="pe-2">
                      <BlogComp data={blog} />

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import classNames from 'classnames/bind'
 
-import { ProductType } from '~/types/productStage'
+import { ProductType } from '~/redux/features/products/productType'
 import SliderCustom from '~/components/SliderCustom'
 import styles from './PopularProduct.module.scss'
 import CardProduct from '~/components/CardProduct'
 import Button from '~/components/Button'
 import { useSelector } from 'react-redux'
-import { RootState } from '~/store/store'
+import { RootState } from '~/redux/store/store'
 import LoadingStyle2 from '~/components/LoadingStyle2'
 
 const cx = classNames.bind(styles)

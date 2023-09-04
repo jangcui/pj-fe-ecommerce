@@ -1,28 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames/bind'
+import { useEffect, useRef, useState } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import 'react-bootstrap-typeahead/css/Typeahead.css'
 import { AiOutlineBars, AiOutlineHeart, AiOutlineUser } from 'react-icons/ai'
-import { CgExpand, CgProfile } from 'react-icons/cg'
-import { IoMdArrowDropdown } from 'react-icons/io'
+import { BiLogOut } from 'react-icons/bi'
+import { CgProfile } from 'react-icons/cg'
 import { RxMagnifyingGlass } from 'react-icons/rx'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { BiLogOut } from 'react-icons/bi'
 
-import ModalCustom from '~/components/ModalCustom'
-import config from '~/config/config'
-import { getCarts } from '~/features/customers/customerService'
-import { logOutUser } from '~/features/customers/customerSlice'
-import { AppDispatch, RootState } from '~/store/store'
-import styles from './Header.module.scss'
-import Button from '~/components/Button'
-import MenuDrawer from './MenuDrawer'
-import { getProdCates } from '~/features/prodCategories/productCateService'
-import Image from '~/components/Image'
 import images from '~/assets/images'
-import MenuHeader from './MenuHeader/MenuHeader'
+import Button from '~/components/Button'
+import Image from '~/components/Image'
+import ModalCustom from '~/components/ModalCustom'
+import { getAllProdCates } from '~/redux/features/prodCategories/productCateService'
+import { AppDispatch, RootState } from '~/redux/store/store'
+import config from '~/routes/config/config'
+import styles from './Header.module.scss'
 import MenuCart from './MenuCart'
+import MenuDrawer from './MenuDrawer'
+import MenuHeader from './MenuHeader/MenuHeader'
+import { getCart } from '~/redux/features/user/cart/cartService'
+import { logout } from '~/redux/features/user/auth/authService'
 
 const cx = classNames.bind(styles)
 
@@ -34,14 +33,11 @@ interface SearchProductType {
 
 function Header() {
    const dispatch = useDispatch<AppDispatch>()
-   const { user } = useSelector((state: RootState) => state?.customer)
+   const { user, isLogin } = useSelector((state: RootState) => state.auth)
    const { productList } = useSelector((state: RootState) => state?.products)
-   const categories = useSelector((state: RootState) => state.prodCates.itemList)
-
    const [isDropDown, setIsDropDown] = useState<boolean>(false)
    const [openNavBar, setOpenNavBar] = useState<boolean>(false)
    const [productOpt, setProductOpt] = useState<SearchProductType[]>([])
-   const [categoryList, setCategoryList] = useState<string[]>([])
    const [openModal, setOpenModal] = useState(false)
    const [isScroll, setIsScroll] = useState(false)
 
@@ -49,19 +45,13 @@ function Header() {
    const navigate = useNavigate()
 
    useEffect(() => {
-      dispatch(getProdCates())
-      if (user) {
-         dispatch(getCarts())
+      dispatch(getAllProdCates())
+      if (isLogin) {
+         dispatch(getCart())
       } else {
          return
       }
-   }, [dispatch, user])
-   useEffect(() => {
-      if (categories) {
-         const data = categories.map((item) => item.title || '')
-         setCategoryList(data)
-      }
-   }, [categories])
+   }, [dispatch, isLogin])
 
    useEffect(() => {
       const onScroll = () => {
@@ -95,23 +85,26 @@ function Header() {
    }, [productList])
 
    const handleLogout = () => {
-      dispatch(logOutUser())
-      window.location.reload()
+      dispatch(logout())
+      setOpenModal(false)
+      // window.location.reload()
    }
 
    return (
       <div className={cx('wrapper', 'row d-flex justify-content-center w-100')}>
          <div className={cx('container', 'col-12')}>
             <ModalCustom title={'Log Out'} open={openModal} onOk={handleLogout} onCancel={() => setOpenModal(false)} />
-            <MenuDrawer data={productOpt} categoryList={categoryList} isOpen={openNavBar} setIsOpen={setOpenNavBar} />
+
+            <MenuDrawer data={productOpt} isOpen={openNavBar} setIsOpen={setOpenNavBar} />
+
             <div className={cx('contact', 'row d-flex justify-content-center')}>
-               <div className="col-10 col-lg-11  d-flex justify-content-center justify-content-md-between align-items-center">
+               <div className="col-11 d-flex justify-content-center justify-content-md-between align-items-center">
                   <i className="d-none d-md-block fs-4 fs-sm-5">Free Ship Over 100$ And Free Return </i>
-                  <span className="fs-3 fs-sm-4">Hotline: +84 84 666 9107</span>
+                  <span className="fs-4">Hotline: +84 84 666 9107</span>
                </div>
             </div>
             <div className={cx('content', 'row d-flex justify-content-center', isScroll && 'fixed')}>
-               <div className={cx('content-main', 'row col-10 col-lg-11')}>
+               <div className={cx('content-main', 'row col-11 ')}>
                   <div className="col-4 d-sm-flex d-md-none justify-content-start d-flex align-items-center">
                      <Button text onClick={() => setOpenNavBar(true)}>
                         <AiOutlineBars className={cx('icon')} />
@@ -158,16 +151,21 @@ function Header() {
                               leftIcon={<AiOutlineHeart className={cx('icon')} />}
                               to={config.routes.wishlist}
                            >
-                              <p className="mb-0">Favorite Wishlist </p>
+                              <div className={cx('text', 'mb-0 ms-2 d-none d-lg-block')}>
+                                 <p className={cx('name', 'fs-4 mb-0')}>Favorite</p>
+                                 <p className={cx('name', 'fs-4 mb-0')}>Wishlist</p>
+                              </div>
                            </Button>
-                           {!user ? (
+                           {!isLogin ? (
                               <Button
-                                 className={cx('option', 'w-100 d-flex justify-content-center')}
+                                 className={cx('btn-action')}
                                  text
                                  leftIcon={<AiOutlineUser className={cx('icon')} />}
                                  to={config.routes.login}
                               >
-                                 <p className="mb-0">Log In</p>
+                                 <div className={cx('text', 'mb-0 d-none d-lg-block')}>
+                                    <p className={cx('name', 'fs-4 mb-0 text-light ms-2')}>Log In</p>
+                                 </div>
                               </Button>
                            ) : (
                               <>
@@ -178,10 +176,10 @@ function Header() {
                                        leftIcon={<AiOutlineUser className={cx('icon')} />}
                                        onClick={() => setIsDropDown(!isDropDown)}
                                     >
-                                       <p className={cx('text', 'mb-0')}>
-                                          <span className={cx('name')}>{user.fist_name}</span>
-                                          <span className={cx('name')}>{user.last_name}</span>
-                                       </p>
+                                       <div className={cx('text', 'mb-0 ms-2 d-none d-lg-block')}>
+                                          <p className={cx('name', 'fs-4 mb-0')}>{user.first_name}</p>
+                                          <p className={cx('name', 'fs-4 mb-0')}>{user.last_name}</p>
+                                       </div>
                                     </Button>
                                     <div className={cx('drop-down')}>
                                        <Button className={cx('drop-element')} text onClick={() => setOpenModal(true)}>
@@ -210,7 +208,7 @@ function Header() {
                </div>
             </div>
             <>
-               <MenuHeader data={categoryList} />
+               <MenuHeader />
             </>
          </div>
       </div>

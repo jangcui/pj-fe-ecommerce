@@ -11,8 +11,6 @@ const Dotenv = require('dotenv-webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const webpack = require('webpack')
 
-// Cái dòng này giúp Editor gợi ý được các giá trị cho dòng code config ngay phía dưới nó
-// (giống như đang dùng Typescript vậy đó 😉)
 /** @type {(env: any, arg: {mode: string}) => import('webpack').Configuration} **/
 
 module.exports = (env, argv) => {

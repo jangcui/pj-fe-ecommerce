@@ -66,7 +66,13 @@ const Button: FC<ButtonProps> = ({
       <Comp className={classes} {...props}>
          {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
          <span className={cx('title')}>
-            {lazyLoad ? <AiOutlineLoading3Quarters className={cx('icon-loading')} /> : children}
+            {lazyLoad ? (
+               <span>
+                  <AiOutlineLoading3Quarters className={cx('icon-spin')} />{' '}
+               </span>
+            ) : (
+               children
+            )}
          </span>
          {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
       </Comp>

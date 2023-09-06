@@ -35,7 +35,7 @@ const checkOutSchema = Yup.object().shape({
 
 function CheckOut() {
    const dispatch = useDispatch<AppDispatch>()
-   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const { isLogin, user } = useSelector((state: RootState) => state.auth)
    const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
    const [shippingPrice, setShippingPrice] = useState<number>(5)
    const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -64,8 +64,8 @@ function CheckOut() {
 
    const formik = useFormik({
       initialValues: {
-         first_name: '',
-         last_name: '',
+         first_name: user.first_name,
+         last_name: user.last_name,
          other: '',
          address: '',
          city: '',
@@ -79,10 +79,6 @@ function CheckOut() {
          await handleCheckOut()
       },
    })
-   // useEffect(() => {
-   //    setShippingInfo({ ...formik.values })
-   // }, [formik.values])
-
    function loadScript(src: any) {
       return new Promise((resolve) => {
          const script = document.createElement('script')
@@ -173,10 +169,6 @@ function CheckOut() {
                         Back to cart
                      </Button>
                      <h2 className="fs-2 fw-bold mb-5">Check Out</h2>
-                     {/* <div className="overflow-hidden d-flex align-items-center gap-2 mb-4">
-                        <h3> Contact Information : </h3>
-                        <p className={cx('text')}>Tung Phan (tungphan12h@gmail.com)</p>
-                     </div> */}
                      <div className="mb-4">
                         <select
                            className="form-select fs-3"
@@ -272,8 +264,8 @@ function CheckOut() {
                            >
                               <option value="">---Select Country---</option>
                               <option value="Hanoi">Ha Nội</option>
-                              <option value="HoChiMinh">Hồ Chí Minh</option>
-                              <option value="ThaiBinh">Thái Bình</option>
+                              <option value="HoChiMinh">Ho Chi Minh</option>
+                              <option value="ThaiBinh">Thai Binh</option>
                            </select>
 
                            {formik.touched.state && formik.errors.state ? (

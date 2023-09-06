@@ -31,7 +31,7 @@ function MenuHeader() {
    }
    return (
       <div className={cx('wrapper', 'row d-flex justify-content-center d-none d-md-flex')}>
-         <div className="col-10 col-lg-11  d-flex justify-content-center">
+         <div className="col-11  d-flex justify-content-center">
             <Button className={cx('nav', 'd-block d-sm-none')} text>
                <IoFilterOutline className={cx('icon')} />
             </Button>

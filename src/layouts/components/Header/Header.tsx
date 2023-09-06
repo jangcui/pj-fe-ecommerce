@@ -103,7 +103,7 @@ function Header() {
                   <span className="fs-4">Hotline: +84 84 666 9107</span>
                </div>
             </div>
-            <div className={cx('content', 'row d-flex justify-content-center', isScroll && 'fixed')}>
+            <div className={cx('content', 'row d-flex justify-content-center shadow', isScroll && 'fixed')}>
                <div className={cx('content-main', 'row col-11 ')}>
                   <div className="col-4 d-sm-flex d-md-none justify-content-start d-flex align-items-center">
                      <Button text onClick={() => setOpenNavBar(true)}>

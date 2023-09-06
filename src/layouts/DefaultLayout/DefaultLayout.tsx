@@ -1,15 +1,15 @@
 import { ReactNode, useState, useEffect } from 'react'
 import classNames from 'classnames/bind'
-import styles from './DefaultLayout.module.scss'
 import { BiArrowToTop } from 'react-icons/bi'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import Footer from '../components/Footer'
 import Button from '~/components/Button'
 import Container from '../components/Container'
-import { AppDispatch, RootState } from '~/redux/store/store'
+import { AppDispatch } from '~/redux/store/store'
 import { getAllBlogs } from '~/redux/features/blogs/blogService'
 import Header from '../components/Header'
+import styles from './DefaultLayout.module.scss'
 import { getAllProducts } from '~/redux/features/products/productsService'
 import { checkIsLogin } from '~/redux/features/user/auth/authService'
 
@@ -20,9 +20,9 @@ function DefaultLayout({ children }: { children: ReactNode }) {
    const [isScrolled, setIsScrolled] = useState(false)
 
    useEffect(() => {
+      dispatch(checkIsLogin())
       dispatch(getAllProducts({}))
       dispatch(getAllBlogs())
-      dispatch(checkIsLogin())
    }, [dispatch])
 
    const handleButtonClick = () => {

@@ -73,7 +73,7 @@ function MenuCart() {
                                  </div>
                                  <div className="col-8 p-0">
                                     <h3 className="fs-4 mb-3">{data?.productId?.title}</h3>
-                                    {data?.productId?.discountCode ? (
+                                    {data?.productId?.price_after_discount ? (
                                        <div className="d-flex gap-2 mb-2" style={{ color: '#99a2aa' }}>
                                           <s className="fs-4">${data?.productId?.price.toFixed(2)}</s>{' '}
                                           <span className="fs-4 fw-bolder" style={{ color: '#dd551b' }}>

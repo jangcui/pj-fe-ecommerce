@@ -64,7 +64,7 @@ function Profile() {
             </div>
             <form className={cx('container')} action="" onSubmit={formik.handleSubmit}>
                <div className={cx('field')}>
-                  <h3>Fist Name: </h3>
+                  <h3>Fist name: </h3>
                   <InputCustom
                      value={formik.values.first_name}
                      onChange={formik.handleChange('first_name')}
@@ -78,7 +78,7 @@ function Profile() {
                   ) : null}
                </div>
                <div className={cx('field')}>
-                  <h3>Last Name: </h3>
+                  <h3>Last name: </h3>
                   <InputCustom
                      value={formik.values.last_name}
                      onChange={formik.handleChange('last_name')}

@@ -67,6 +67,7 @@ export const authSlice = createSlice({
                            title: item?.productId?.title,
                            colorId: item?.color?.title,
                            quantity: item?.quantity,
+                           slug: item?.productId?.slug,
                         }
                         return fItem
                      }),

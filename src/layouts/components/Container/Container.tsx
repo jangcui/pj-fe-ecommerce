@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind'
 import styles from './Container.module.scss'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 const cx = classNames.bind(styles)
 
 function Container({ children }: { children: ReactNode }) {

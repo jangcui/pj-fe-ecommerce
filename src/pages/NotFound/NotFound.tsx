@@ -23,11 +23,6 @@ function NotFound() {
             >
                Return to Home Page
             </Button>
-         </p>{' '}
-         <p className="text-center w-100 mt-3">
-            <Button primary className="px-4 py-2">
-               test
-            </Button>
          </p>
       </>
    )

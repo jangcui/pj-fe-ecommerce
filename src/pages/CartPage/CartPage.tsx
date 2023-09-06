@@ -10,24 +10,23 @@ import { AppDispatch, RootState } from '~/redux/store'
 import styles from './CartPage.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
-import { getCart } from '~/redux/features/user/cart/cartService'
 
 const cx = classNames.bind(styles)
 
 function CartPage() {
    const dispatch = useDispatch<AppDispatch>()
    const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
-   const { isLogin } = useSelector((state: RootState) => state.auth)
+   const { isLogin, isLoading } = useSelector((state: RootState) => state.auth)
 
    const navigate = useNavigate()
 
    useEffect(() => {
-      if (!isLogin) {
+      if (isLogin === false && isLoading === false) {
          navigate('/login')
       } else {
-         dispatch(getCart())
+         return
       }
-   }, [isLogin, navigate, dispatch])
+   }, [isLogin, navigate, dispatch, isLoading])
 
    return (
       <>

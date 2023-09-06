@@ -3,9 +3,7 @@
    border-radius: 6px;
    border: 1px solid var(--border-color-gray);
    background-color: var(--white);
-   &:hover {
-      border-color: var(--text-gray);
-   }
+
    .container {
       position: relative;
       border-radius: 6px;
@@ -15,6 +13,16 @@
       &:hover .img {
          transform: scale(1.03);
          transition: all 0.2s;
+      }
+
+      .btn-overlay {
+         position: absolute;
+         inset: 0;
+         z-index: 1;
+
+         &:hover {
+            border: 1px solid var(--text-gray);
+         }
       }
 
       .category {
@@ -73,7 +81,8 @@
          .btn {
             padding: 8px 12px;
             color: var(--white);
-
+            position: relative;
+            z-index: 10;
             &:hover {
                color: var(--bg-header);
             }

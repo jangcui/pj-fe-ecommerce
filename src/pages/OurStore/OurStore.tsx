@@ -102,6 +102,7 @@ function OurStore() {
          setCategories(data)
       }
    }, [brandList, categoryList])
+
    const handleSortClick = (id: number) => {
       const sortButton = sortBtn.find((button) => button.id === id)
       if (sortButton && !sortButton.isActive) {

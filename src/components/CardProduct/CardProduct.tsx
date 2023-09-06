@@ -20,7 +20,7 @@ const cx = classNames.bind(styles)
 function CardProduct({ data, isSort = false }: { data: ProductType; isSort?: boolean }) {
    const dispatch = useDispatch<AppDispatch>()
    const [isActive, setIsActive] = useState<boolean>(false)
-   const { user } = useSelector((state: RootState) => state.auth)
+   const { isLogin } = useSelector((state: RootState) => state.auth)
    const { wishList } = useSelector((state: RootState) => state.wishListData)
 
    const imgList = data.images?.map((img) => img.url)
@@ -56,7 +56,7 @@ function CardProduct({ data, isSort = false }: { data: ProductType; isSort?: boo
                   <Button
                      text
                      className={cx('btn')}
-                     onClick={user ? () => handleAddToWishList() : () => dispatch(openModalLogin())}
+                     onClick={isLogin ? () => handleAddToWishList() : () => dispatch(openModalLogin())}
                   >
                      {isActive ? (
                         <AiTwotoneHeart style={{ color: '#dd551b' }} className={cx('icon')} />

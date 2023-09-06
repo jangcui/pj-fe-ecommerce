@@ -46,7 +46,7 @@ export const productSlice = createSlice({
             state.isSuccess = true
             state.productList = action.payload
             if (action.payload) {
-               const result = action?.payload?.map((data: any) => {
+               const result = action.payload.map((data: any) => {
                   const filterData = {
                      _id: data?._id,
                      title: data?.title,

@@ -21,7 +21,7 @@ interface Route {
    layout?: React.ComponentType<any> | null
 }
 
-const publicRouter: Route[] = [
+const routeCustom: Route[] = [
    { path: config.routes.home, component: Home },
    { path: config.routes.products, component: OurStore },
    { path: config.routes.product, component: SingleProduct },
@@ -40,4 +40,4 @@ const publicRouter: Route[] = [
    { path: config.routes.notfound, component: NotFound, layout: null },
 ]
 
-export { publicRouter }
+export { routeCustom }

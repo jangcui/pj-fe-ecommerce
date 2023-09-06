@@ -1,7 +1,16 @@
 import axios from 'axios'
 
-const base_url = process.env.BASE_URL_API
+const base_url = process.env.REACT_APP_API_KEY
 // const base_url = 'http://localhost:4000/api/'
+
+export const getToken = () => {
+   const token = localStorage.getItem('TOKEN')
+   if (token) {
+      const tokenParse = JSON.parse(token)
+      return tokenParse
+   }
+   return null
+}
 
 export const instance = axios.create({
    withCredentials: true,
@@ -30,14 +39,6 @@ instance.interceptors.request.use(
    },
 )
 
-export const getToken = () => {
-   const token = localStorage.getItem('TOKEN')
-   if (token) {
-      const tokenParse = JSON.parse(token)
-      return tokenParse
-   }
-   return null
-}
 export const get = async (path: string, config?: any) => {
    const response = await instance.get(path, config)
    return response.data

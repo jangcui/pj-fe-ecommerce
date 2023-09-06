@@ -9,6 +9,7 @@ function BlogComp({ data }: { data: BlogType }) {
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container')}>
+            <Button text className={cx('btn-overlay')} to={`/blog/${data._id}`}></Button>
             <div className={cx('category')}>{data.category}</div>
             <div className={cx('wrap-img')}>
                <Image className={cx('img')} src={data?.images ? data?.images : ''} />

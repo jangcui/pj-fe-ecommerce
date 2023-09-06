@@ -35,7 +35,7 @@ function ProductPrice({ data }: { data: CartType }) {
    useEffect(() => {
       const totalOrigin = data?.productId?.price * data?.quantity
       const totalAfterDiscount = data?.productId?.price_after_discount * data?.quantity
-      setTotal(data?.productId?.discountCode ? totalAfterDiscount : totalOrigin)
+      setTotal(data?.productId?.price_after_discount ? totalAfterDiscount : totalOrigin)
    }, [quantity, data])
 
    useEffect(() => {
@@ -46,7 +46,7 @@ function ProductPrice({ data }: { data: CartType }) {
       const priceAfterDiscount = data?.productId?.price_after_discount * quantity
       if (data?.productId && data?._id) {
          debouncedUpdateQuantity(data._id, quantity)
-         setTotal(data?.productId?.discountCode ? priceAfterDiscount : priceOrigin)
+         setTotal(data?.productId?.price_after_discount ? priceAfterDiscount : priceOrigin)
       }
 
       return () => {
@@ -54,6 +54,7 @@ function ProductPrice({ data }: { data: CartType }) {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [quantity, dispatch])
+   console.log(data)
    return (
       <>
          <div className="col-8 d-flex justify-content-between">
@@ -76,7 +77,7 @@ function ProductPrice({ data }: { data: CartType }) {
                            style={{ backgroundColor: data?.color.title ? data?.color.title : ' ' }}
                         ></span>
                      </p>
-                     {data?.productId?.discountCode ? (
+                     {data?.productId?.price_after_discount ? (
                         <div className="d-flex gap-2" style={{ color: '#99a2aa' }}>
                            <s className="fs-3">${data?.productId?.price.toFixed(2)}</s>{' '}
                            <span className="fs-3 fw-bolder" style={{ color: '#dd551b' }}>
@@ -91,7 +92,7 @@ function ProductPrice({ data }: { data: CartType }) {
             </div>
             <div className={cx('price', 'd-none d-md-flex')}>
                $
-               {data.productId?.discountCode
+               {data.productId?.price_after_discount
                   ? data.productId?.price_after_discount.toFixed(2)
                   : data.productId?.price.toFixed(2)}
             </div>

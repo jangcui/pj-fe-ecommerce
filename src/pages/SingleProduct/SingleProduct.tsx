@@ -11,7 +11,7 @@ import BreadCrumb from '~/components/BreadCrumb'
 import ChangeTitle from '~/components/ChangeTitle'
 import styles from './SingleProduct.module.scss'
 import Button from '~/components/Button'
-import { AppDispatch, RootState } from '~/redux/store/store'
+import { AppDispatch, RootState } from '~/redux/store'
 import images from '~/assets/images'
 import { ProductType } from '~/redux/features/products/productType'
 import Loading from '~/components/Loading'
@@ -394,11 +394,12 @@ function SingleProduct() {
                         pauseOnHover={true}
                         gradientWidth={5}
                         gradientColor={[255, 255, 255]}
-                        className="w-100"
+                        className={cx('marquee')}
+                        autoFill={true}
                      >
                         {productPop?.map((product, index) => {
                            return (
-                              <div key={index} className="w-50  d-flex">
+                              <div key={index} className={cx('popular-cart')}>
                                  <CardProduct data={product} />
                               </div>
                            )

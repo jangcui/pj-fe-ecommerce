@@ -320,5 +320,14 @@
    .popular-container {
       width: 100%;
       margin-bottom: 50px;
+
+      .marquee {
+         width: 100%;
+
+         .popular-cart {
+            width: 300px;
+            margin-inline: 10px;
+         }
+      }
    }
 }

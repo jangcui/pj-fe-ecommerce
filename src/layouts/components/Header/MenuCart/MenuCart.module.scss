@@ -102,8 +102,19 @@
          padding: 30px 10px;
          border-bottom: 1px solid var(--border-color-gray);
 
+         .title {
+            margin-left: 8px;
+            font-size: 14px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-transform: capitalize;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+         }
          .product {
             margin-inline: 0;
+            width: 100%;
             padding: 10px;
             background-color: var(--white);
             margin-bottom: 4px;

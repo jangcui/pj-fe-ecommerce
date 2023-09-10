@@ -58,11 +58,11 @@ function MenuCart() {
                <div className={cx('product-detail')}>
                   {productList.length > 0 ? (
                      productList.map((data, index) => (
-                        <div key={index} className={cx('product', 'row col-12')}>
+                        <div key={index} className={cx('product', 'row d-flex justify-content-between')}>
                            <Button
                               text
                               to={`/product/${data?.productId?.slug}`}
-                              className="col-10 d-flex justify-content-between"
+                              className="col d-flex justify-content-between"
                            >
                               <div className="col-12 row">
                                  <div className="col-4 p-0 d-flex justify-content-center align-items-center">
@@ -71,29 +71,29 @@ function MenuCart() {
                                        src={data?.productId?.image ? data?.productId?.image : images.errorImage}
                                     />
                                  </div>
-                                 <div className="col-8 p-0">
-                                    <h3 className="fs-4 mb-3">{data?.productId?.title}</h3>
+                                 <div className="col p-0">
+                                    <h3 className={cx('title')}>{data?.productId?.title}</h3>
                                     {data?.productId?.price_after_discount ? (
                                        <div className="d-flex gap-2 mb-2" style={{ color: '#99a2aa' }}>
-                                          <s className="fs-4">${data?.productId?.price.toFixed(2)}</s>{' '}
+                                          <s className="fs-4 ms-2">${data?.productId?.price.toFixed(2)}</s>{' '}
                                           <span className="fs-4 fw-bolder" style={{ color: '#dd551b' }}>
                                              ${data?.productId?.price_after_discount.toFixed(2)}
                                           </span>
                                        </div>
                                     ) : (
-                                       <p className="fs-4">${data?.productId?.price.toFixed(2)}</p>
+                                       <p className="fs-4 mb-0 ms-2">${data?.productId?.price.toFixed(2)}</p>
                                     )}
-                                    <div className="col-12 row align-items-center">
+                                    <div className="col-12 ms-4 row align-items-center">
                                        <div
-                                          className={cx('color')}
+                                          className={cx('color', '')}
                                           style={{ backgroundColor: data?.color?.title ? data?.color?.title : ' ' }}
                                        ></div>
-                                       <i className="col ms-2 fw-bold">X{data.quantity}</i>
+                                       <i className="col fw-bold">X{data.quantity}</i>
                                     </div>
                                  </div>
                               </div>
                            </Button>
-                           <div className="col-2 d-flex align-items-center justify-content-center p-0">
+                           <div className="col-1 d-flex align-items-center justify-content-center p-0">
                               <Button
                                  text
                                  className={cx('btn-delete')}

@@ -1,32 +1,18 @@
 import classNames from 'classnames/bind'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
+import { useSelector } from 'react-redux'
 
-import ProductPrice from './ProductPrice'
-import Button from '~/components/Button'
-import { AppDispatch, RootState } from '~/redux/store'
-import styles from './CartPage.module.scss'
 import BreadCrumb from '~/components/BreadCrumb'
+import Button from '~/components/Button'
 import ChangeTitle from '~/components/ChangeTitle'
+import { RootState } from '~/redux/store'
+import styles from './CartPage.module.scss'
+import ProductPrice from './ProductPrice'
 
 const cx = classNames.bind(styles)
 
 function CartPage() {
-   const dispatch = useDispatch<AppDispatch>()
    const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
-   const { isLogin, isLoading } = useSelector((state: RootState) => state.auth)
-
-   const navigate = useNavigate()
-
-   useEffect(() => {
-      if (isLogin === false && isLoading === false) {
-         navigate('/login')
-      } else {
-         return
-      }
-   }, [isLogin, navigate, dispatch, isLoading])
 
    return (
       <>
@@ -43,26 +29,32 @@ function CartPage() {
                   <h3 className="me-5 me-md-0">Total</h3>
                </div>
             </div>
-            {productList &&
+            {productList.length > 0 ? (
                productList?.map((data, index) => {
                   return (
                      <div key={index} className={cx('title', 'row row-cols-2 gy-2 mt-0 justify-content-between')}>
                         <ProductPrice data={data} />
                      </div>
                   )
-               })}
+               })
+            ) : (
+               <div className="my-5">
+                  {' '}
+                  <h1 className="fs-2 fw-bold text-center mt-3">Your cart is currently empty.</h1>
+               </div>
+            )}
             <div className={cx('title', 'row row-cols-2 gy-2  mt-0')}>
                <div className={cx('country', 'col-12 col-md-8')}>
-                  <Button leftIcon={<BsArrowLeft />} onClick={() => navigate('/product')} primary className={cx('btn')}>
+                  <Button leftIcon={<BsArrowLeft />} to={'/product'} primary className={cx('btn')}>
                      Country Shopping
                   </Button>
                </div>
                {totalPrice !== 0 && (
                   <div className="row col-12 col-md-4 mt-5 mt-md-0 ">
                      <div className={cx('text', 'col text-center text-md-end ')}>
-                        Subtotal: <span className="fs-1 fw-bold ms-3">${totalPrice}</span>
+                        Subtotal: <span className="d-flex flex-column gap-4 fs-1 fw-bold ms-3">${totalPrice}</span>
                      </div>
-                     <Button onClick={() => navigate('/checkout')} primary className={cx('btn')}>
+                     <Button to={'/checkout'} primary className={cx('btn')}>
                         Check out
                      </Button>
                   </div>

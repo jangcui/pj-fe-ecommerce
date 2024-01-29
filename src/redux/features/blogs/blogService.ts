@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import * as httpRequest from '~/untils/httpRequest'
+import * as httpRequest from '~/utils/httpRequest'
 
 export const getBlog = createAsyncThunk('blog/get', async (id: string, thunkAPI) => {
    try {

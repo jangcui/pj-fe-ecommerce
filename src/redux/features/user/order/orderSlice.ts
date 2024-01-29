@@ -41,7 +41,7 @@ export const authSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            toast.success('Created Order.')
+            toast.success('Order succeed.')
          })
          .addCase(createOrder.rejected, (state) => {
             state.isError = true
@@ -65,7 +65,7 @@ export const authSlice = createSlice({
                      productList: data?.orderItems?.map((item: any) => {
                         const fItem = {
                            title: item?.productId?.title,
-                           colorId: item?.color?.title,
+                           colorId: item?.colorId?.title,
                            quantity: item?.quantity,
                            slug: item?.productId?.slug,
                         }

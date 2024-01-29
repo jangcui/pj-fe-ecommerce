@@ -1,21 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import * as httpRequest from '~/untils/httpRequest'
-
-type itemType = {
-   cartItemId: string
-   quantity: number
-}
+import * as httpRequest from '~/utils/httpRequest'
 
 interface DataCartType {
    productId?: string
-   color?: string
-   price?: number
+   colorId?: string
    quantity?: number
 }
 
-export const addToCart = createAsyncThunk('user/cart/add', async (cartData: DataCartType, thunkAPI) => {
+export const addToCart = createAsyncThunk('cart/add_to_cart', async (cartData: DataCartType, thunkAPI) => {
    try {
-      const response = await httpRequest.post(`user/cart`, cartData, {
+      const response = await httpRequest.post(`cart`, cartData, {
          signal: thunkAPI.signal,
       })
       return response
@@ -23,9 +17,9 @@ export const addToCart = createAsyncThunk('user/cart/add', async (cartData: Data
       return thunkAPI.rejectWithValue(error.response.data)
    }
 })
-export const getCart = createAsyncThunk('user/cart/get', async (__, thunkAPI) => {
+export const getCart = createAsyncThunk('cart/get', async (__, thunkAPI) => {
    try {
-      const response = await httpRequest.get(`user/cart`, {
+      const response = await httpRequest.get(`cart`, {
          signal: thunkAPI.signal,
       })
       return response
@@ -33,13 +27,18 @@ export const getCart = createAsyncThunk('user/cart/get', async (__, thunkAPI) =>
       return thunkAPI.rejectWithValue(error.response.data)
    }
 })
+
 export const removeProductFromCart = createAsyncThunk(
-   'user/cart/remove-product',
-   async (cartItemId: string, thunkAPI) => {
+   'cart/remove-product',
+   async ({ productId, colorId }: { productId: string; colorId: string }, thunkAPI) => {
       try {
-         const response = await httpRequest.Delete(`user/delete-product-cart/${cartItemId}`, {
-            signal: thunkAPI.signal,
-         })
+         const response = await httpRequest.post(
+            'cart/del',
+            { productId, colorId },
+            {
+               signal: thunkAPI.signal,
+            },
+         )
          return response
       } catch (error: any) {
          return thunkAPI.rejectWithValue(error.response.data)
@@ -57,11 +56,11 @@ export const emptyCart = createAsyncThunk('user/cart/clear', async (__, thunkAPI
    }
 })
 
-export const updateQuantityProductFromCart = createAsyncThunk(
+export const updateQuantityProduct = createAsyncThunk(
    'user/cart/update-product-quantity',
-   async (item: itemType, thunkAPI) => {
+   async (cartData: DataCartType, thunkAPI) => {
       try {
-         const response = await httpRequest.put(`user/update-product-cart/${item.cartItemId}/${item.quantity}`, {
+         const response = await httpRequest.put('cart', cartData, {
             signal: thunkAPI.signal,
          })
          return response

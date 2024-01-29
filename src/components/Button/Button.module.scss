@@ -33,15 +33,9 @@
 }
 .secondary {
    cursor: pointer;
-   background-color: var(--border-color-gray);
-   color: var(--orange-color);
+   background-color: var(--slug-color);
+   color: var(--white);
    border-radius: 8px;
-
-   &:hover {
-      transition: all 0.3s;
-      background-color: var(--text-color);
-      color: var(--bg-color);
-   }
 }
 .text {
    border: unset;
@@ -53,6 +47,7 @@
 .title {
    display: flex;
    align-items: center;
+   justify-content: center;
 
    .icon-spin {
       top: 10px;

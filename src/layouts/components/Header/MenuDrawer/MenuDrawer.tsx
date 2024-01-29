@@ -12,7 +12,7 @@ import Button from '~/components/Button'
 import { AppDispatch, RootState } from '~/redux/store/store'
 import config from '~/routes/config/config'
 import { FaceBookIcon, GitHubIcon, GmailIcon } from '~/components/Icon'
-import { openModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
+import { openModalLogin } from '~/redux/features/modals/modalSlice'
 import { getAllProducts } from '~/redux/features/products/productsService'
 import { logout } from '~/redux/features/user/auth/authService'
 const cx = classNames.bind(styles)

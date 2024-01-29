@@ -6,8 +6,6 @@ import { FaShippingFast } from 'react-icons/fa'
 import { ImHeadphones } from 'react-icons/im'
 import { TbDiscountCheckFilled } from 'react-icons/tb'
 import { BsFillCreditCard2BackFill } from 'react-icons/bs'
-// import 'swiper/css/pagination'
-// import 'swiper/css'
 
 import Category from './Category'
 import Banner from './Banner/Banner'
@@ -17,6 +15,7 @@ import OnSale from './BestSeller/OnSale'
 import BlogSlider from './BlogSlider/BlogSlider'
 import * as imagesHotDeal from '~/assets/imagesHotDeal'
 import HotDeal from './HotDeal/HotDeal'
+import AllProduct from './AllProduct'
 
 const cx = classNames.bind(styles)
 
@@ -72,6 +71,11 @@ function Home() {
                   </div>
                ))}
             </Marquee>
+         </section>
+
+         <section className={cx('popular')}>
+            <h1 className="mb-4 text-start text-capitalize fs-1 fw-bold">Products</h1>
+            <AllProduct />
          </section>
 
          <section className={cx('popular')}>

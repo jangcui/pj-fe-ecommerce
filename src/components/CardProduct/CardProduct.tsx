@@ -12,7 +12,7 @@ import Image from '~/components/Image'
 import Button from '~/components/Button'
 import StarRatingCustom from '../StarRatingCustom'
 import images from '~/assets/images'
-import { openModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
+import { openModalLogin } from '~/redux/features/modals/modalSlice'
 import { getUserWishList, toggleWWishListProduct } from '~/redux/features/user/wishList/wishListService'
 
 const cx = classNames.bind(styles)
@@ -39,6 +39,7 @@ function CardProduct({ data, isSort = false }: { data: ProductType; isSort?: boo
       })
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
+
    return (
       <div className={cx('wrapper')}>
          <div className={cx('container', isSort && 'sort')}>
@@ -75,15 +76,15 @@ function CardProduct({ data, isSort = false }: { data: ProductType; isSort?: boo
                   {data?.discountCode ? (
                      <>
                         {' '}
-                        <s className="fw-bold "> ${data.price.toFixed(2)}</s>
-                        <p className={cx('origin-price')}> ${data?.price_after_discount.toFixed(2)}</p>
+                        <s className="fw-bold "> ${data.price}</s>
+                        <p className={cx('origin-price')}> ${data?.price_after_discount}</p>
                      </>
                   ) : (
-                     <p className={cx('origin-price')}> ${data.price.toFixed(2)}</p>
+                     <p className={cx('origin-price')}> ${data.price}</p>
                   )}
                </div>
                <div className={cx('rating')}>
-                  <StarRatingCustom initStar={data.totalRating as number} readOnly size={24} />
+                  <StarRatingCustom initStar={data.totalRating} readOnly size={24} />
                </div>
             </div>
          </div>

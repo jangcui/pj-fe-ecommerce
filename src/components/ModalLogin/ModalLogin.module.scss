@@ -4,13 +4,13 @@
    inset: 0;
    display: flex;
    justify-content: center;
-   padding-top: 100px;
+   padding-top: 50px;
 
    .overlay {
       position: absolute;
       background-color: var(--gray);
       inset: 0;
-      z-index: 100;
+      z-index: 999;
    }
 
    .btn-close {
@@ -38,7 +38,10 @@
    }
    .container {
       position: relative;
+      width: 50%;
       z-index: 999;
+      margin-inline: auto;
+      margin-top: 50px;
    }
 }
 .open {

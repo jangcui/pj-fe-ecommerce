@@ -1,20 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { addToCart, emptyCart, getCart, removeProductFromCart, updateQuantityProductFromCart } from './cartService'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { addToCart, emptyCart, getCart, removeProductFromCart, updateQuantityProduct } from './cartService'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { toast } from 'react-toastify'
 
 export type CartType = {
    _id: string
    quantity: number
-   price: number
-   productId: {
+   inCart: boolean
+   total: number
+   product: {
       _id: string
       slug: string
       title: string
       price_after_discount: number
       price: number
       discountCode?: string
-      image: string
+      thumb: string
    }
    color: {
       title: string
@@ -26,6 +26,7 @@ interface InitialState {
    productList: CartType[]
    quantity: number
    totalPrice: number
+
    isError: boolean
    isLoading: boolean
    isSuccess: boolean
@@ -40,7 +41,16 @@ const initialState: InitialState = {
    isSuccess: false,
 }
 
-export const authSlice = createSlice({
+const convertInteger = (num1: number, num2: number) => {
+   let total = num1 * num2
+
+   if (!Number.isInteger(total)) {
+      total = parseFloat(total.toFixed(2)) // convert integer to decimal
+   }
+   return total
+}
+
+export const cartSlice = createSlice({
    name: 'cart',
    initialState,
    reducers: {},
@@ -65,34 +75,40 @@ export const authSlice = createSlice({
             state.isLoading = true
          })
          .addCase(getCart.fulfilled, (state, action: PayloadAction<any>) => {
-            if (action.payload) {
-               state.isError = false
-               state.isLoading = false
-               state.isSuccess = true
-               const result = action?.payload?.map((data: any) => {
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            const payload = action?.payload?.metadata
+            if (payload) {
+               const results = payload?.cart_products?.map((data: CartType) => {
                   const filterData = {
-                     _id: data?._id,
-                     price: data?.price,
+                     _id: data?._id ? data?._id : 'GUEST',
                      quantity: data?.quantity,
-                     productId: {
-                        _id: data?.productId?._id,
-                        title: data?.productId?.title,
-                        slug: data?.productId?.slug,
-                        price_after_discount: data?.productId?.price_after_discount,
-                        price: data?.productId?.price,
-                        image: data?.productId?.images[0]?.url,
+                     total: data?.product?.discountCode
+                        ? convertInteger(data?.quantity, data?.product?.price_after_discount)
+                        : convertInteger(data?.quantity, data?.product?.price),
+                     product: {
+                        _id: data?.product?._id,
+                        title: data?.product?.title,
+                        discountCode: data?.product?.discountCode,
+                        slug: data?.product?.slug,
+                        price_after_discount: data?.product?.price_after_discount,
+                        price: data?.product?.price,
+                        thumb: data?.product?.thumb,
                      },
-                     color: { _id: data?.color?._id, title: data?.color?.title },
+                     color: {
+                        _id: data?.color?._id,
+                        title: data?.color?.title,
+                     },
                   }
                   return filterData
                })
-               state.productList = [...result]
+               state.productList = [...results]
+               state.totalPrice = convertInteger(1, payload?.total_price)
+               state.quantity = payload?.total_quantity || payload?.cart_products.length
+            } else {
+               return state
             }
-            state.totalPrice = action?.payload?.reduce((accumulator: number, item: CartType) => {
-               const totalOrigin = item?.productId?.price * item?.quantity
-               const totalAfterDiscount = item?.productId?.price_after_discount * item?.quantity
-               return accumulator + (item?.productId?.discountCode ? totalAfterDiscount : totalOrigin)
-            }, 0)
          })
          .addCase(getCart.rejected, (state) => {
             state.isError = true
@@ -131,15 +147,15 @@ export const authSlice = createSlice({
             state.isLoading = false
             toast.error('Something went wrong')
          })
-         .addCase(updateQuantityProductFromCart.pending, (state) => {
+         .addCase(updateQuantityProduct.pending, (state) => {
             state.isLoading = true
          })
-         .addCase(updateQuantityProductFromCart.fulfilled, (state) => {
+         .addCase(updateQuantityProduct.fulfilled, (state) => {
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
          })
-         .addCase(updateQuantityProductFromCart.rejected, (state) => {
+         .addCase(updateQuantityProduct.rejected, (state) => {
             state.isError = true
             state.isSuccess = false
             state.isLoading = false
@@ -147,4 +163,4 @@ export const authSlice = createSlice({
    },
 })
 
-export default authSlice.reducer
+export default cartSlice.reducer

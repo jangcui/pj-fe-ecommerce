@@ -8,7 +8,6 @@ import { AppDispatch, RootState } from '~/redux/store/store'
 import { useEffect, useState } from 'react'
 import Button from '~/components/Button'
 import Loading from '~/components/Loading/Loading'
-import ModalCustom from '~/components/ModalCustom'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineClose } from 'react-icons/ai'
 import { getUserWishList, toggleWWishListProduct } from '~/redux/features/user/wishList/wishListService'
@@ -117,12 +116,12 @@ function WishList() {
                   })}
                </>
             )}
-            <ModalCustom
+            {/* <ModalCustom
                title={'Remove to wishlist '}
                open={open}
                onOk={() => handleRemoveProduct({ index: value.index, id: value.id })}
                onCancel={() => setOpen(false)}
-            />
+            /> */}
          </div>
       </>
    )

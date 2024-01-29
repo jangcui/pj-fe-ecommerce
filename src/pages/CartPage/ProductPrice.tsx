@@ -3,139 +3,153 @@ import classNames from 'classnames/bind'
 import { useDispatch } from 'react-redux'
 import debounce from 'lodash.debounce'
 import { FiMinus } from 'react-icons/fi'
-import { BiPlus } from 'react-icons/bi'
 import styles from './CartPage.module.scss'
-import { AiFillDelete } from 'react-icons/ai'
+import { AiFillDelete, AiOutlinePlus } from 'react-icons/ai'
 
 import Image from '~/components/Image'
 import { AppDispatch } from '~/redux/store/store'
+
 import images from '~/assets/images'
 import Button from '~/components/Button'
 import { CartType } from '~/redux/features/user/cart/cartSlice'
-import { getCart, removeProductFromCart, updateQuantityProductFromCart } from '~/redux/features/user/cart/cartService'
+import { getCart, removeProductFromCart, updateQuantityProduct } from '~/redux/features/user/cart/cartService'
+import { openModalConfirm } from '~/redux/features/modals/modalSlice'
+import InputCustom from '~/components/InputCustom'
 
 const cx = classNames.bind(styles)
 
 function ProductPrice({ data }: { data: CartType }) {
    const dispatch = useDispatch<AppDispatch>()
-   const [quantity, setQuantity] = useState<number>(0)
-   const [total, setTotal] = useState<number>(0)
+   const [quantity, setQuantity] = useState<number>(data.quantity)
+   const [isInputFocused, setIsInputFocused] = useState(false)
 
    const handleRemoveProduct = debounce(async () => {
-      await dispatch(removeProductFromCart(data?._id as string))
+      await dispatch(removeProductFromCart({ colorId: data.color._id, productId: data.product._id }))
       await dispatch(getCart())
    }, 800)
 
-   useEffect(() => {
-      if (data.quantity) {
-         setQuantity(data.quantity)
+   const handleQuantityChange = (event: number) => {
+      if (!isNaN(event)) {
+         setQuantity(event)
+         setIsInputFocused(true)
       }
+   }
+
+   const handleOpenModal = () => {
+      dispatch(
+         openModalConfirm({
+            title: 'Remove product from cart? ',
+            onConfirm: () => handleRemoveProduct(),
+            type: 'danger',
+         }),
+      )
+   }
+
+   const handleIncrease = () => {
+      setQuantity((prevQuantity) => {
+         const newQuantity = prevQuantity + 1
+         return newQuantity
+      })
+   }
+
+   const handleDecrease = () => {
+      if (quantity > 1) {
+         setQuantity((prevQuantity) => {
+            const newQuantity = prevQuantity - 1
+            return newQuantity
+         })
+      }
+   }
+   const handleUpdateQuantity = async () => {
+      await dispatch(updateQuantityProduct({ colorId: data.color._id, productId: data.product._id, quantity }))
+      await dispatch(getCart())
+   }
+
+   useEffect(() => {
+      setQuantity(() => data.quantity)
    }, [data])
 
    useEffect(() => {
-      const totalOrigin = data?.productId?.price * data?.quantity
-      const totalAfterDiscount = data?.productId?.price_after_discount * data?.quantity
-      setTotal(data?.productId?.price_after_discount ? totalAfterDiscount : totalOrigin)
-   }, [quantity, data])
-
-   useEffect(() => {
-      const debouncedUpdateQuantity = debounce(async (cartItemId, quantity) => {
-         await dispatch(updateQuantityProductFromCart({ cartItemId, quantity }))
-      }, 1000)
-      const priceOrigin = data?.productId?.price * quantity
-      const priceAfterDiscount = data?.productId?.price_after_discount * quantity
-      if (data?.productId && data?._id) {
-         debouncedUpdateQuantity(data._id, quantity)
-         setTotal(data?.productId?.price_after_discount ? priceAfterDiscount : priceOrigin)
+      if (isInputFocused) return
+      const debouncedUpdateQuantity = debounce(() => {
+         handleUpdateQuantity()
+      }, 2000)
+      if (data?.product && data?._id) {
+         debouncedUpdateQuantity()
       }
-
       return () => {
          debouncedUpdateQuantity.cancel()
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [quantity, dispatch])
-   console.log(data)
+   }, [quantity, dispatch, isInputFocused])
+
    return (
       <>
          <div className="col-8 d-flex justify-content-between">
-            <div className={cx('product-detail')}>
+            <div className="d-flex">
                <div className={cx('info', 'row')}>
-                  <Button className="col-3" text to={`/product/${data?.productId?.slug}`}>
+                  <Button className="col-3" text to={`/product/${data?.product?.slug}`}>
                      <Image
                         className={cx('img')}
-                        src={data?.productId?.image ? data?.productId?.image : images.errorImage}
+                        src={data?.product?.thumb ? data?.product?.thumb : images.errorImage}
                      />
                   </Button>
                   <div className="col-8">
-                     <Button text to={`/product/${data?.productId?.slug}`}>
+                     <Button text to={`/product/${data?.product?.slug}`}>
                         {' '}
-                        <h3 className={cx('content')}>{data?.productId?.title}</h3>
+                        <h3 className={cx('content')}>{data?.product?.title}</h3>
                      </Button>
-                     <p>
-                        <span
-                           className={cx('color')}
-                           style={{ backgroundColor: data?.color.title ? data?.color.title : ' ' }}
-                        ></span>
-                     </p>
-                     {data?.productId?.price_after_discount ? (
+
+                     {data?.product?.price_after_discount ? (
                         <div className="d-flex gap-2" style={{ color: '#99a2aa' }}>
-                           <s className="fs-3">${data?.productId?.price.toFixed(2)}</s>{' '}
+                           <s className="fs-3">${data?.product?.price}</s>{' '}
                            <span className="fs-3 fw-bolder" style={{ color: '#dd551b' }}>
-                              ${data?.productId?.price_after_discount.toFixed(2)}
+                              ${data?.product?.price_after_discount}
                            </span>
                         </div>
                      ) : (
-                        <p className="fs-3 ">${data?.productId?.price.toFixed(2)}</p>
+                        <p className="fs-3">${data?.product?.price}</p>
                      )}
+
+                     <span
+                        className={cx('color', 'my-2')}
+                        style={{ backgroundColor: data?.color ? data?.color.title : ' ' }}
+                     ></span>
                   </div>
                </div>
             </div>
             <div className={cx('price', 'd-none d-md-flex')}>
-               $
-               {data.productId?.price_after_discount
-                  ? data.productId?.price_after_discount.toFixed(2)
-                  : data.productId?.price.toFixed(2)}
+               ${data.product?.price_after_discount ? data.product?.price_after_discount : data.product?.price}
             </div>
          </div>
          <div className="col-3 d-flex flex-column flex-md-row justify-content-around justify-content-md-between">
-            <div className="d-flex align-items-center">
-               <div className="w-100 d-flex flex-row-reverse flex-md-column justify-content-between">
-                  <Button
-                     text
-                     className={cx('btn-quantity', 'col-2 col-md-4')}
-                     onClick={() => {
-                        setQuantity(quantity + 1)
-                     }}
-                  >
-                     <BiPlus className={cx('icon')} />
-                  </Button>
-                  <input
-                     className="col-3 col-md-4"
-                     type="number"
-                     onChange={() => setQuantity}
+            <div className="d-flex align-items-center gap-3 justify-content-center">
+               <span className="col-4 col-md-4 fs-3 fw-bold ">
+                  {' '}
+                  <InputCustom
                      value={quantity}
-                     min={0}
-                     step={1}
-                     max={1000}
+                     onChange={handleQuantityChange}
+                     onBlur={() => setIsInputFocused(false)}
+                     type={'number'}
                   />
-                  <Button
-                     text
-                     className={cx('btn-quantity', 'col-2 col-md-4')}
-                     onClick={() => {
-                        if (quantity > 0) {
-                           setQuantity(quantity - 1)
-                        }
-                     }}
-                  >
-                     <FiMinus className={cx('icon')} />
-                  </Button>
+               </span>
+               <div className="w-full d-flex flex-column gap-3">
+                  <Button className="border round-2 p-2" text onClick={handleIncrease}>
+                     <AiOutlinePlus className="fs-2" />
+                  </Button>{' '}
+                  {quantity > 1 ? (
+                     <Button text className="border round-2 p-2" onClick={handleDecrease}>
+                        <FiMinus className="fs-2" />
+                     </Button>
+                  ) : (
+                     <Button text className="p-2" onClick={handleOpenModal}>
+                        <AiFillDelete className="fs-2" />
+                     </Button>
+                  )}
                </div>
             </div>
             <div className="d-flex flex-row-reverse flex-md-row justify-content-between align-items-center">
-               <Button text className={cx('btn-delete')} onClick={() => handleRemoveProduct()}>
-                  <AiFillDelete className={cx('icon')} />
-               </Button>
-               <span className="fs-2 fs-md-3 fw-bold ms-2"> ${total}</span>
+               <span className="fs-2 fs-md-3 fw-bold ms-2"> ${data.total}</span>
             </div>
          </div>
       </>

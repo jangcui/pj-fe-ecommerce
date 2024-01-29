@@ -12,7 +12,6 @@ import { useNavigate } from 'react-router-dom'
 import images from '~/assets/images'
 import Button from '~/components/Button'
 import Image from '~/components/Image'
-import ModalCustom from '~/components/ModalCustom'
 import { getAllProdCates } from '~/redux/features/prodCategories/productCateService'
 import { AppDispatch, RootState } from '~/redux/store/store'
 import config from '~/routes/config/config'
@@ -22,6 +21,7 @@ import MenuDrawer from './MenuDrawer'
 import MenuHeader from './MenuHeader/MenuHeader'
 import { getCart } from '~/redux/features/user/cart/cartService'
 import { logout } from '~/redux/features/user/auth/authService'
+import { openModalConfirm, openModalLogin } from '~/redux/features/modals/modalSlice'
 
 const cx = classNames.bind(styles)
 
@@ -38,7 +38,6 @@ function Header() {
    const [isDropDown, setIsDropDown] = useState<boolean>(false)
    const [openNavBar, setOpenNavBar] = useState<boolean>(false)
    const [productOpt, setProductOpt] = useState<SearchProductType[]>([])
-   const [openModal, setOpenModal] = useState(false)
    const [isScroll, setIsScroll] = useState(false)
 
    const dropdownRef = useRef<HTMLDivElement>(null)
@@ -84,17 +83,26 @@ function Header() {
       setProductOpt(data)
    }, [productList])
 
-   const handleLogout = () => {
-      dispatch(logout())
-      setOpenModal(false)
-      // window.location.reload()
+   const handleLogin = () => {
+      dispatch(openModalLogin())
+   }
+   const handleLogOut = async () => {
+      await dispatch(logout())
+      await dispatch(getCart())
    }
 
+   const handleOpenModal = () => {
+      dispatch(
+         openModalConfirm({
+            title: 'Log out?',
+            onConfirm: handleLogOut,
+            type: 'danger',
+         }),
+      )
+   }
    return (
       <div className={cx('wrapper', 'row d-flex justify-content-center w-100')}>
          <div className={cx('container', 'col-12')}>
-            <ModalCustom title={'Log Out'} open={openModal} onOk={handleLogout} onCancel={() => setOpenModal(false)} />
-
             <MenuDrawer data={productOpt} isOpen={openNavBar} setIsOpen={setOpenNavBar} />
 
             <div className={cx('contact', 'row d-flex justify-content-center')}>
@@ -156,52 +164,47 @@ function Header() {
                                  <p className={cx('name', 'fs-4 mb-0')}>Wishlist</p>
                               </div>
                            </Button>
-                           {!isLogin ? (
+
+                           <div className={cx('option', isDropDown && 'active')} ref={dropdownRef}>
                               <Button
-                                 className={cx('btn-action')}
                                  text
+                                 className={cx('btn-action')}
                                  leftIcon={<AiOutlineUser className={cx('icon')} />}
-                                 to={config.routes.login}
+                                 onClick={() => setIsDropDown(!isDropDown)}
                               >
-                                 <div className={cx('text', 'mb-0 d-none d-lg-block')}>
-                                    <p className={cx('name', 'fs-4 mb-0 text-light ms-2')}>Log In</p>
+                                 <div className={cx('text', 'mb-0 ms-2 d-none d-lg-block')}>
+                                    <p className={cx('name', 'fs-4 mb-0')}>{user?.first_name}</p>
+                                    <p className={cx('name', 'fs-4 mb-0')}>{user?.last_name}</p>
                                  </div>
                               </Button>
-                           ) : (
-                              <>
-                                 <div className={cx('option', isDropDown && 'active')} ref={dropdownRef}>
+                              <div className={cx('drop-down')}>
+                                 {isLogin ? (
+                                    <Button className={cx('drop-element')} text onClick={handleOpenModal}>
+                                       Log Out
+                                       <BiLogOut className={cx('icon')} />
+                                    </Button>
+                                 ) : (
+                                    <Button className={cx('drop-element')} text onClick={handleLogin}>
+                                       Log In
+                                       <AiOutlineUser className={cx('icon')} />
+                                    </Button>
+                                 )}
+                                 {isLogin && (
                                     <Button
                                        text
-                                       className={cx('btn-action')}
-                                       leftIcon={<AiOutlineUser className={cx('icon')} />}
-                                       onClick={() => setIsDropDown(!isDropDown)}
+                                       className={cx('drop-element')}
+                                       onClick={() => setIsDropDown(false)}
+                                       to={config.routes.profile}
                                     >
-                                       <div className={cx('text', 'mb-0 ms-2 d-none d-lg-block')}>
-                                          <p className={cx('name', 'fs-4 mb-0')}>{user.first_name}</p>
-                                          <p className={cx('name', 'fs-4 mb-0')}>{user.last_name}</p>
-                                       </div>
+                                       Edit profile
+                                       <CgProfile className={cx('icon')} />
                                     </Button>
-                                    <div className={cx('drop-down')}>
-                                       <Button className={cx('drop-element')} text onClick={() => setOpenModal(true)}>
-                                          Log Out
-                                          <BiLogOut className={cx('icon')} />
-                                       </Button>
-                                       <Button
-                                          text
-                                          className={cx('drop-element')}
-                                          onClick={() => setIsDropDown(false)}
-                                          to={config.routes.profile}
-                                       >
-                                          Go to profile
-                                          <CgProfile className={cx('icon')} />
-                                       </Button>{' '}
-                                    </div>
-                                 </div>
-                                 <div className={cx('option')}>
-                                    <MenuCart />
-                                 </div>
-                              </>
-                           )}
+                                 )}
+                              </div>
+                           </div>
+                           <div className={cx('option')}>
+                              <MenuCart />
+                           </div>
                         </>
                      </div>
                   </div>

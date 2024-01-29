@@ -7,7 +7,9 @@ function Login() {
       <>
          <ChangeTitle title={'Login'} />
          <BreadCrumb title={'Login'} />
-         <LoginComp />
+         <div className="col-10 col-md-8 col-lg-6">
+            <LoginComp />
+         </div>
       </>
    )
 }

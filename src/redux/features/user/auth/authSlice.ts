@@ -45,6 +45,8 @@ export const authSlice = createSlice({
             state.isLogin = false
             toast.info('Logged Out')
             localStorage.removeItem('TOKEN')
+            state.user = initialState.user
+            state.token = initialState.token
          })
          .addCase(logout.rejected, (state, action: PayloadAction<any>) => {
             state.isError = true
@@ -156,7 +158,7 @@ export const authSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            toast.success('Successfully, passWord changed.')
+            toast.success('Successfully, password changed.')
          })
          .addCase(resetPwdToken.rejected, (state) => {
             state.isError = true

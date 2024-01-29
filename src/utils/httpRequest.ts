@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const base_url = process.env.REACT_APP_API_KEY
-// const base_url = 'http://localhost:4000/api/'
+// const base_url = process.env.REACT_APP_API_KEY
+const base_url = 'http://localhost:4000/api/'
 
 export const getToken = () => {
    const token = localStorage.getItem('TOKEN')

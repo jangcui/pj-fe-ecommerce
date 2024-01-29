@@ -12,6 +12,7 @@ import Header from '../components/Header'
 import styles from './DefaultLayout.module.scss'
 import { getAllProducts } from '~/redux/features/products/productsService'
 import { checkIsLogin } from '~/redux/features/user/auth/authService'
+import { getCart } from '~/redux/features/user/cart/cartService'
 
 const cx = classNames.bind(styles)
 
@@ -23,6 +24,7 @@ function DefaultLayout({ children }: { children: ReactNode }) {
       dispatch(checkIsLogin())
       dispatch(getAllProducts({}))
       dispatch(getAllBlogs())
+      dispatch(getCart())
    }, [dispatch])
 
    const handleButtonClick = () => {

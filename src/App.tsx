@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify'
 import DefaultLayout from './layouts/DefaultLayout'
 import ScrollTopWhenPageChange from './hook/ScrollTop'
 import ModalLogin from './components/ModalLogin/ModalLogin'
+import ModalCustom from './components/ModalCustom'
 
 const App: FC = () => {
    return (
@@ -25,6 +26,7 @@ const App: FC = () => {
                   className="fw-bold"
                   theme="light"
                />
+               <ModalCustom />
                <Routes>
                   <>
                      {routeCustom.map((route, i) => {

@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from 'yup'
@@ -9,10 +10,9 @@ import Button from '~/components/Button'
 import config from '~/routes/config/config'
 import InputCustom from '~/components/InputCustom'
 import styles from './Login.module.scss'
-import { useNavigate } from 'react-router-dom'
 import { AppDispatch, RootState } from '~/redux/store/store'
 import { login } from '~/redux/features/user/auth/authService'
-import { closeModalLogin } from '~/redux/features/modalLogin/modalLoginSlice'
+import { closeModalLogin } from '~/redux/features/modals/modalSlice'
 
 const cx = classNames.bind(styles)
 const loginSchema = Yup.object().shape({
@@ -47,10 +47,16 @@ function Login() {
          }
       },
    })
+
+   const handleForgotPw = () => {
+      navigate(config.routes.forgotPwd)
+      dispatch(closeModalLogin())
+   }
+
    return (
       <>
-         <div className={cx('wrapper', 'row w-100 mt-4')}>
-            <div className="col-10 col-md-8 col-lg-6 col-xl-4">
+         <div className={cx('wrapper', 'w-100 col-10 col-md-8 col-lg-6')}>
+            <div className="row mt-4 w-100">
                <form className={cx('container')} onSubmit={formik.handleSubmit}>
                   <h3 className="fs-2 fw-bold text-center mb-4"> Login</h3>
                   <div className={cx('error')}>{isError ? message : ''}</div>
@@ -81,7 +87,7 @@ function Login() {
                         <span className={cx('error')}>{formik.errors.password}</span>
                      ) : null}
                   </div>
-                  <Button to={config.routes.forgotPwd} text className={cx('sub')} type={'button'}>
+                  <Button onClick={handleForgotPw} text className={cx('sub')} type={'button'}>
                      <p className="fs-5">Forgot your password?</p>
                   </Button>
                   <div className="text-center mt-3">

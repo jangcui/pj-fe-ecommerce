@@ -3,7 +3,6 @@
    "version": "0.1.0",
    "private": true,
    "dependencies": {
-      "@ant-design/charts": "^1.4.2",
       "@ant-design/icons": "^4.6.0",
       "@babel/core": "^7.21.3",
       "@babel/preset-env": "^7.20.2",
@@ -20,7 +19,6 @@
       "@types/react-dom": "^18.0.11",
       "@types/react-google-recaptcha": "^2.1.5",
       "@types/react-helmet": "^6.1.6",
-      "@types/react-image-magnify": "^2.7.1",
       "@types/react-redux": "^7.1.25",
       "@types/react-slick": "^0.23.10",
       "@types/swiper": "^6.0.0",
@@ -56,7 +54,6 @@
       "moment": "^2.29.4",
       "prettier": "^2.8.6",
       "react": "^18.2.0",
-      "react-app-rewired": "^2.2.1",
       "react-bootstrap-typeahead": "^6.2.2",
       "react-dom": "^18.2.0",
       "react-dropzone": "^14.2.3",
@@ -64,7 +61,7 @@
       "react-google-recaptcha": "^3.1.0",
       "react-helmet": "^6.1.0",
       "react-icons": "^4.10.1",
-      "react-image-magnify": "^2.7.4",
+      "react-paginate": "^8.2.0",
       "react-quill": "^2.0.0",
       "react-rating-stars-component": "^2.2.0",
       "react-redux": "^8.0.5",
@@ -119,6 +116,10 @@
    "devDependencies": {
       "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
       "@types/lodash.debounce": "^4.0.7",
-      "ajv": "^7.2.4"
+      "@types/react-image-magnify": "^2.7.4",
+      "ajv": "^7.2.4",
+      "immutable": "^5.0.0-beta.4",
+      "react-app-rewired": "^2.2.1",
+      "react-image-magnify": "^2.7.4"
    }
 }

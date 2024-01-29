@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import debounce from 'lodash.debounce'
 import { AiFillCaretDown } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
+// import Pagination from '~/components/Pagination'
 
 import BreadCrumb from '~/components/BreadCrumb'
 import Button from '~/components/Button'
@@ -16,6 +17,7 @@ import styles from './OurStore.module.scss'
 import CardProduct from '~/components/CardProduct'
 import { getAllProducts } from '~/redux/features/products/productsService'
 import { getAllBrands } from '~/redux/features/brands/brandService'
+
 const cx = classNames.bind(styles)
 
 function OurStore() {
@@ -24,6 +26,8 @@ function OurStore() {
    const categoryList = useSelector((state: RootState) => state.prodCates.categoriesList)
    const { brandList } = useSelector((state: RootState) => state.brands)
    const [sortClass, setSortClass] = useState<string>('')
+   //    const [currentPage, setCurrentPage] = useState<number>(0)
+
    const [sortBtn, setSortBtn] = useState([
       {
          id: 0,
@@ -136,6 +140,13 @@ function OurStore() {
       const newValue = +e.target.value
       setMaxPrice(newValue)
    }, 1000)
+   //    const handlePageChange = (selectedItem: { selected: number }) => {
+   //       setCurrentPage(selectedItem.selected)
+   //    }
+   //    const startIndex = currentPage * itemsPerPage
+   //    const endIndex = startIndex + itemsPerPage
+
+   //    const visibleProducts = productList.slice(startIndex, endIndex)
 
    return (
       <>
@@ -280,6 +291,12 @@ function OurStore() {
                         ) : (
                            <h1 className="text-center mt-5 w-100">No data.</h1>
                         )}
+                        {/* <div className="w-100 d-flex justify-content-center">
+                  <Pagination
+                     pageCount={Math.ceil(productList.length / itemsPerPage)}
+                     onPageChange={handlePageChange}
+                  />
+               </div>{' '} */}
                      </>
                   )}
                </div>

@@ -10,15 +10,16 @@ import { BsArrowLeft } from 'react-icons/bs'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import * as httpRequest from '~/untils/httpRequest'
+import * as httpRequest from '~/utils/httpRequest'
 import Image from '~/components/Image/Image'
 import config from '~/routes/config/config'
 import { AppDispatch, RootState } from '~/redux/store'
 import images from '~/assets/images'
 import logo from '~/assets/images/logo.png'
 import InputCustom from '~/components/InputCustom'
-import { emptyCart, getCart } from '~/redux/features/user/cart/cartService'
+import { getCart } from '~/redux/features/user/cart/cartService'
 import { OrderType, checkOut, createOrder } from '~/redux/features/user/order/orderService'
+import { openModalLogin } from '~/redux/features/modals/modalSlice'
 
 const cx = classNames.bind(styles)
 
@@ -33,34 +34,32 @@ const checkOutSchema = Yup.object().shape({
    country: Yup.string().required('Country is required'),
 })
 
+const SHIPPING_FEE = 5 // $$$
+
 function CheckOut() {
    const dispatch = useDispatch<AppDispatch>()
    const { isLogin, user } = useSelector((state: RootState) => state.auth)
    const { productList, totalPrice } = useSelector((state: RootState) => state.cartData)
-   const [shippingPrice, setShippingPrice] = useState<number>(5)
+   const [price, setPrice] = useState<number>(0)
    const [isLoading, setIsLoading] = useState<boolean>(false)
+   const [orderItem, setOrderItem] = useState<OrderType[]>([])
 
    const navigate = useNavigate()
 
-   const [orderItem, setOrderItem] = useState<OrderType[]>([])
-
-   useEffect(() => {
-      if (!isLogin) {
-         navigate('/login')
-      } else {
-         dispatch(getCart())
-      }
-   }, [isLogin, navigate, dispatch])
-
    useEffect(() => {
       const itemOrder = productList?.map((item) => ({
-         productId: item.productId?._id,
-         color: item.color._id,
+         productId: item.product?._id,
+         colorId: item.color._id,
          quantity: item.quantity,
-         price: item.price,
+         total: item.total,
       }))
       setOrderItem([...itemOrder])
-   }, [productList])
+   }, [])
+
+   useEffect(() => {
+      const total = orderItem?.reduce((total, selectedItem) => total + selectedItem.total, 0)
+      setPrice(total)
+   }, [orderItem])
 
    const formik = useFormik({
       initialValues: {
@@ -75,10 +74,16 @@ function CheckOut() {
       },
       validationSchema: checkOutSchema,
       onSubmit: async () => {
-         setIsLoading(true)
-         await handleCheckOut()
+         if (!isLogin) {
+            dispatch(openModalLogin())
+            toast.info('Please login fist')
+         } else {
+            setIsLoading(true)
+            await handleCheckOut()
+         }
       },
    })
+
    function loadScript(src: any) {
       return new Promise((resolve) => {
          const script = document.createElement('script')
@@ -99,18 +104,21 @@ function CheckOut() {
          alert('Razorpay SDK failed to load. Are you online?')
          return
       }
-      const result = await dispatch(checkOut({ amount: totalPrice + shippingPrice }))
+      const result = await dispatch(checkOut({ amount: price + SHIPPING_FEE }))
       if (!result) {
          toast.error('Some thing went wrong, please try again')
          return
       }
-      const { amount, id: order_id, currency } = result.payload.order
+      console.log('result:', result)
+
+      const { id: order_id, currency } = result.payload.order
+      setIsLoading(false)
 
       const options = {
          key: 'rzp_test_ROJNShWydm5owR',
-         amount: amount,
+         amount: price + SHIPPING_FEE,
          currency: currency,
-         name: 'Digitic.',
+         name: 'E-commerce.',
          description: 'Test Transaction',
          image: { logo },
          order_id: order_id,
@@ -120,23 +128,22 @@ function CheckOut() {
                razor_pay_payment_id: response.razorpay_payment_id,
                razor_pay_order_id: response.razorpay_order_id,
             }
-            await httpRequest.post('user/order/payment-verify', data)
+            await httpRequest.post('user/payment-verify', data)
             const result = await dispatch(
                createOrder({
-                  total_price: totalPrice,
-                  total_price_after_discount: totalPrice,
+                  total_price: price + SHIPPING_FEE,
+                  total_price_after_discount: price + SHIPPING_FEE,
                   shippingInfo: formik.values,
                   orderItems: orderItem,
                   paymentInfo: data,
                }),
             )
+            console.log('result::', result)
             if (result.payload.success === true) {
                formik.resetForm()
                navigate('/order')
-               dispatch(emptyCart())
                dispatch(getCart())
             }
-            setIsLoading(false)
          },
          prefill: {
             name: 'Tung Phan',
@@ -153,6 +160,7 @@ function CheckOut() {
       const paymentObject: any = new window.Razorpay(options)
       paymentObject.open()
    }
+
    return (
       <>
          <ChangeTitle title={'Check out'} />
@@ -263,7 +271,7 @@ function CheckOut() {
                               onBlur={formik.handleBlur('state')}
                            >
                               <option value="">---Select Country---</option>
-                              <option value="Hanoi">Ha Nội</option>
+                              <option value="Hanoi">Ha Noi</option>
                               <option value="HoChiMinh">Ho Chi Minh</option>
                               <option value="ThaiBinh">Thai Binh</option>
                            </select>
@@ -303,52 +311,83 @@ function CheckOut() {
                </div>
                <div className={cx('product', 'col p-5')}>
                   <div className={cx('wrap-product')}>
-                     {productList &&
+                     {productList.length > 0 ? (
                         productList?.map((item, index) => (
-                           <div className={cx('info')} key={index}>
+                           <label id={`checkbox-${orderItem[index]?.productId}`} className={cx('info')} key={index}>
                               <div className={cx('wrap-img')}>
                                  <Image
-                                    src={item?.productId?.image ? item?.productId?.image : images.errorImage}
+                                    src={item?.product?.thumb ? item?.product?.thumb : images.errorImage}
                                     className={cx('img')}
                                  />
                                  <span className={cx('count')}>{item.quantity}</span>
                                  <span className={cx('wrap-name')}>
-                                    <p className={cx('name-prod')}>{item.productId?.title}</p>
+                                    <p className={cx('name-prod')}>{item.product?.title}</p>
                                     <p className={cx('color')} style={{ backgroundColor: item.color.title }}></p>
-                                    {item?.productId?.discountCode ? (
+                                    {item?.product?.discountCode ? (
                                        <>
-                                          <s className="fs-4">${item?.productId?.price}</s>{' '}
+                                          <s className="fs-4">${item?.product?.price}</s>{' '}
                                           <span className="fs-4 fw-bold" style={{ color: '#dd551b' }}>
-                                             ${item?.productId?.price_after_discount.toFixed(2)}
+                                             ${item?.product?.price_after_discount}
                                           </span>
                                        </>
                                     ) : (
-                                       <p className="fs-4">${item?.productId?.price}</p>
+                                       <p className="fs-4">${item?.product?.price}</p>
                                     )}
-                                 </span>
+                                 </span>{' '}
                               </div>
-                              <span className={cx('price')}>
-                                 $
-                                 {item?.productId?.discountCode
-                                    ? item?.productId?.price_after_discount * item.quantity
-                                    : item?.productId?.price * item.quantity}
-                              </span>
-                           </div>
-                        ))}
+                              <span className={cx('price')}>${item.total}</span>
+
+                              <div className="form-check ms-4">
+                                 <input
+                                    checked={orderItem.some(
+                                       (productOrder) =>
+                                          productOrder.productId === item?.product?._id &&
+                                          productOrder.colorId === item?.color?._id,
+                                    )}
+                                    onChange={(event) => {
+                                       if (event.target.checked) {
+                                          const order = {
+                                             productId: item?.product?._id,
+                                             colorId: item.color._id,
+                                             quantity: item.quantity,
+                                             total: item.total,
+                                          }
+                                          setOrderItem([order, ...orderItem])
+                                       } else {
+                                          setOrderItem((prev) =>
+                                             prev.filter(
+                                                (value) =>
+                                                   value.productId !== item?.product?._id &&
+                                                   value.colorId !== item?.color?._id,
+                                             ),
+                                          )
+                                       }
+                                    }}
+                                    className="form-check-input fs-2 "
+                                    type="checkbox"
+                                    value=""
+                                    id={`checkbox-${orderItem[index]?.productId}`}
+                                 />
+                              </div>
+                           </label>
+                        ))
+                     ) : (
+                        <h1 className="fs-2 fw-bold text-center mt-3">Your cart is currently empty.</h1>
+                     )}
                   </div>
                   <div className={cx('calculate')}>
                      <div className={cx('field')}>
                         <span className={cx('type')}>Subtotal</span>
-                        <span className={cx('price')}>${totalPrice}</span>
+                        <span className={cx('price')}>${price}</span>
                      </div>{' '}
                      <div className={cx('field')}>
                         <span className={cx('type')}>Shipping</span>
-                        <span className={cx('price')}>${shippingPrice}</span>
+                        <span className={cx('price')}>${SHIPPING_FEE}</span>
                      </div>
                   </div>
                   <div className={cx('field')}>
                      <b className={cx('type')}>Total:</b>
-                     <b className={cx('price')}>${(totalPrice as number) + shippingPrice}</b>
+                     <b className={cx('price')}>${price + SHIPPING_FEE}</b>
                   </div>
                </div>
             </div>

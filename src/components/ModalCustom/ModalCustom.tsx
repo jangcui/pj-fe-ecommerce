@@ -1,18 +1,23 @@
 import { Modal } from 'antd'
-import { ModalProps } from 'antd/lib/modal'
-import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { closeModalConfirm, confirmAction } from '~/redux/features/modals/modalSlice'
+import { AppDispatch, RootState } from '~/redux/store'
 
-interface MyModalProps extends Omit<ModalProps, 'visible'> {
-   open: boolean
-   title?: React.ReactNode
-   performAction?: () => void
-}
+function ModalCustom() {
+   const dispatch = useDispatch<AppDispatch>()
+   const { isOpen, title = 'Confirm?', type } = useSelector((state: RootState) => state.modals.confirmModal)
 
-function ModalCustom(props: MyModalProps) {
-   const { open, onOk, onCancel, title = 'Are U Sure?' } = props
+   const handleConfirm = () => {
+      dispatch(confirmAction())
+   }
+
+   const handleCancel = () => {
+      dispatch(closeModalConfirm())
+   }
+
    return (
-      <Modal title={title} open={open} onOk={onOk} onCancel={onCancel} okText="Confirm" cancelText="Cancel">
-         <p> {title}</p>
+      <Modal onOk={handleConfirm} open={isOpen} onCancel={handleCancel} okText="Yes" cancelText="No" okType={type}>
+         <h3>{title}</h3>
       </Modal>
    )
 }

@@ -29,7 +29,6 @@ function MyOrder() {
          dispatch(getMyOrder())
       }
    }, [isLogin, navigate, dispatch])
-   console.log(orderList)
    return (
       <>
          <ChangeTitle title={'Store'} />
